@@ -763,16 +763,13 @@ function drawCard() {
 
   if (!playerTurn || gameOver || waitingForSuit || waitingForAceDecision) return;
 
-  if (multiplayerMode) {
+   if (multiplayerMode) {
 
   if (!playerTurn) return;
 
   socket.emit("drawCard", currentRoomCode);
   return;
 }
-
-
-
   // ===== REFILL BALÍČKA =====
   if (deck.length === 0) {
     refillDeck();
@@ -2018,22 +2015,43 @@ socket.on("roomUpdate", players => {
   updatePlayerList(players);
 });
 
-socket.on("gameStarted", data => {
+  socket.on("gameUpdate", data => {
 
-  document.getElementById("multiplayerLobby").style.display = "none";
-  document.getElementById("game").style.display = "block";
+  console.log("GAME UPDATE:", data);
 
-  // multiplayer init
-  initMultiplayerGame(data);
+  // === SERVER STATE ===
+  multiplayerHands = data.hands;
+  tableCard = data.tableCard;
 
+  forcedSuit = data.forcedSuit ?? null;
+  pendingDraw = data.pendingDraw ?? 0;
+  skipCount = data.skipCount ?? 0;
+
+  // === TURN SYSTEM ===
+  multiplayerTurnPlayer = data.turnPlayer;
+  playerTurn = multiplayerTurnPlayer === socket.id;
+
+  // === RESET LOCAL INPUT ===
+  selected = [];
+  waitingForSuit = false;
+  waitingForAceDecision = false;
+
+  // === EFFECTS FROM SERVER ===
+  if (data.effects?.burn) {
+    showBurnAnimation();
+  }
+
+  // === UI REFRESH ===
+  updateUI();
 });
 
 
-socket.on("errorMessage", msg => {
+
+  socket.on("errorMessage", msg => {
   alert(msg);
-});
+  });
 
-socket.on("kicked", () => {
+  socket.on("kicked", () => {
 
   alert("Bol si vyhodený z miestnosti");
 
@@ -2041,9 +2059,9 @@ socket.on("kicked", () => {
 
   document.getElementById("multiplayerLobby").style.display = "none";
   document.getElementById("menuScreen").style.display = "flex";
-});
+  });
 
-function updatePlayerList(players) {
+  function updatePlayerList(players) {
 
   const list = document.getElementById("playerList");
   if (!list) return;
