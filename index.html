@@ -32,16 +32,80 @@
       Single Player
     </button>
 
-    <button class="menu-btn disabled">
+    <button id="multiplayerBtn" class="menu-btn">
+
       Multiplayer
       <span class="soon">SOON</span>
     </button>
   </div>
 
   <div class="menu-footer">
-    © 2026 – Farár / Mariáš
+    © 2026 – Farár / Mariáš @miroslav_hitka
   </div>
 </div>
+
+<!-- ===============================
+     MULTIPLAYER LOBBY
+================================ -->
+
+<div id="multiplayerLobby" class="lobby-screen" style="display:none;">
+
+  <div class="lobby-box">
+
+    <h2 class="lobby-title">Multiplayer Lobby</h2>
+
+    <!-- NAME INPUT -->
+    <div class="lobby-section">
+      <label>Meno hráča</label>
+      <input id="playerNameInput" type="text" maxlength="16" placeholder="Zadaj meno">
+    </div>
+
+    <!-- ROOM CONTROLS -->
+    <div class="lobby-section buttons">
+
+      <button id="createRoomBtn" class="lobby-btn primary">
+        Vytvoriť miestnosť
+      </button>
+
+      <input id="roomCodeInput" type="text" maxlength="6" placeholder="Kód miestnosti">
+
+      <button id="joinRoomBtn" class="lobby-btn">
+        Pripojiť sa
+      </button>
+
+    </div>
+
+    <!-- ROOM INFO -->
+    <div id="roomInfo" style="display:none;">
+
+      <div class="room-code">
+        ROOM: <span id="roomCodeLabel">----</span>
+      </div>
+
+      <!-- PLAYER LIST -->
+      <div id="playerList" class="player-list"></div>
+
+      <!-- READY -->
+      <button id="readyBtn" class="lobby-btn ready">
+        READY
+      </button>
+
+      <!-- HOST ONLY -->
+      <button id="startGameBtn" class="lobby-btn start" style="display:none;">
+        START GAME
+      </button>
+
+    </div>
+
+    <!-- BACK -->
+    <button id="backFromLobbyBtn" class="lobby-btn back">
+      Späť do menu
+    </button>
+
+  </div>
+
+</div>
+
 
 <!-- ===============================
      GAME

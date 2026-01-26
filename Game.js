@@ -1938,6 +1938,30 @@ document.addEventListener("DOMContentLoaded", () => {
   // =============================
 
   const singleBtn = document.getElementById("singlePlayerBtn");
+  const multiplayerBtn = document.getElementById("multiplayerBtn");
+  if (multiplayerBtn) {
+  multiplayerBtn.onclick = () => {
+
+    document.getElementById("menuScreen").style.display = "none";
+    document.getElementById("multiplayerLobby").style.display = "flex";
+
+  };
+}
+
+const backLobbyBtn = document.getElementById("backFromLobbyBtn");
+
+if (backLobbyBtn) {
+  backLobbyBtn.onclick = () => {
+
+    document.getElementById("multiplayerLobby").style.display = "none";
+    document.getElementById("menuScreen").style.display = "flex";
+
+  };
+}
+
+
+  const multiBtn = document.querySelector(".menu-btn.disabled") || document.getElementById("multiBtn");
+
   const playBtn = document.getElementById("playSelectedBtn");
   const deckBtn = document.getElementById("deck");
   const restartBtn = document.getElementById("restartBtn");
