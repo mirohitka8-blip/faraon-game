@@ -48,6 +48,8 @@ let tableCard = null;
 let freePlay = false;
 let cinematicFinish = false;
 let cinematicLose = false;
+let currentRoomCode = null;
+let isHost = false;
 
 
 let playerTurn = true;
@@ -1914,6 +1916,102 @@ function hideWinOutline(){}
 function hideLoseEdge(){}
 function clearLoseButtonGlow(){}
 
+socket.on("roomJoined", data => {
+
+  currentRoomCode = data.roomCode;
+  isHost = data.isHost;
+
+  document.getElementById("roomInfo").style.display = "block";
+  document.getElementById("roomCodeLabel").textContent = data.roomCode;
+
+  updatePlayerList(data.players);
+
+  const startBtn = document.getElementById("startGameBtn");
+  if (startBtn) {
+    startBtn.style.display = isHost ? "block" : "none";
+  }
+});
+
+socket.on("roomUpdate", players => {
+  updatePlayerList(players);
+});
+
+socket.on("gameStarted", () => {
+
+  document.getElementById("multiplayerLobby").style.display = "none";
+  document.getElementById("game").style.display = "block";
+
+  startGame(); // dočasne spustíme singleplayer logiku
+});
+
+socket.on("errorMessage", msg => {
+  alert(msg);
+});
+
+socket.on("kicked", () => {
+
+  alert("Bol si vyhodený z miestnosti");
+
+  currentRoomCode = null;
+
+  document.getElementById("multiplayerLobby").style.display = "none";
+  document.getElementById("menuScreen").style.display = "flex";
+});
+
+function updatePlayerList(players) {
+
+  const list = document.getElementById("playerList");
+  if (!list) return;
+
+  list.innerHTML = "";
+
+  players.forEach(p => {
+
+    const row = document.createElement("div");
+    row.className = "player-row";
+
+    let name = p.name;
+
+    if (p.id === socket.id) {
+      name += " (TY)";
+    }
+
+    if (p.id === players[0].id) {
+      row.classList.add("player-host");
+      name = "👑 " + name;
+    }
+
+    row.innerHTML = `
+      <span>${name}</span>
+      <span>${p.ready ? "✅" : "⏳"}</span>
+    `;
+
+    // HOST KICK BUTTON
+    if (isHost && p.id !== socket.id) {
+
+      const kickBtn = document.createElement("button");
+      kickBtn.textContent = "❌";
+      kickBtn.style.background = "none";
+      kickBtn.style.border = "none";
+      kickBtn.style.cursor = "pointer";
+
+      kickBtn.onclick = () => {
+        socket.emit("kickPlayer", {
+          code: currentRoomCode,
+          playerId: p.id
+        });
+      };
+
+      row.appendChild(kickBtn);
+    }
+
+    list.appendChild(row);
+  });
+
+}
+
+
+
 /* ==================================================
    EVENTS
 ================================================== */
@@ -1968,6 +2066,62 @@ if (backLobbyBtn) {
   const menuBtn = document.getElementById("menuBtn");
   const acePlayBtn = document.getElementById("playAceBtn");
   const aceStandBtn = document.getElementById("standAceBtn");
+
+  const createRoomBtn = document.getElementById("createRoomBtn");
+  if (createRoomBtn) {
+  createRoomBtn.onclick = () => {
+
+    const name = document.getElementById("playerNameInput").value.trim();
+
+    if (!name) {
+      alert("Zadaj meno");
+      return;
+    }
+
+    socket.emit("createRoom", { name });
+  };
+  }
+
+  const joinRoomBtn = document.getElementById("joinRoomBtn");
+
+if (joinRoomBtn) {
+  joinRoomBtn.onclick = () => {
+
+    const name = document.getElementById("playerNameInput").value.trim();
+    const code = document.getElementById("roomCodeInput").value.trim().toUpperCase();
+
+    if (!name || !code) {
+      alert("Zadaj meno a kód miestnosti");
+      return;
+    }
+
+    socket.emit("joinRoom", { name, code });
+  };
+}
+
+const readyBtn = document.getElementById("readyBtn");
+
+if (readyBtn) {
+  readyBtn.onclick = () => {
+
+    if (!currentRoomCode) return;
+
+    socket.emit("playerReady", currentRoomCode);
+  };
+}
+
+const startGameBtn = document.getElementById("startGameBtn");
+
+if (startGameBtn) {
+  startGameBtn.onclick = () => {
+
+    if (!currentRoomCode) return;
+
+    socket.emit("startGame", currentRoomCode);
+  };
+}
+
+
 
   // =============================
   // BUTTON EVENTS WITH SOUND
