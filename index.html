@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <meta charset="UTF-8">
+  <title>Faraón</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- ===============================
+     GLOBAL EFFECT OVERLAY
+================================ -->
+
+<div id="tableOverlay"></div>
+<div id="darkOverlay"></div>
+
+<!-- ===============================
+     MENU
+================================ -->
+
+<div id="menuScreen" class="menu-screen">
+  <h1 class="menu-title">Faraón</h1>
+
+  <div class="menu-buttons">
+    <button id="singlePlayerBtn" class="menu-btn primary">
+      Single Player
+    </button>
+
+    <button class="menu-btn disabled">
+      Multiplayer
+      <span class="soon">SOON</span>
+    </button>
+  </div>
+
+  <div class="menu-footer">
+    © 2026 – Farár / Mariáš
+  </div>
+</div>
+
+<!-- ===============================
+     GAME
+================================ -->
+
+<div id="game" style="display:none;">
+  <div id="gameInner">
+
+    <!-- PC AREA -->
+    <div id="pcArea">
+      <div id="pcHand"></div>
+    </div>
+
+    <!-- TURN INDICATOR -->
+    <div id="turnIndicator" class="turn-indicator"></div>
+
+    <!-- TABLE -->
+    <div id="table">
+
+      <div id="tableCard"></div>
+
+      <div id="deck">
+        <img src="cards/back.png" alt="Balíček">
+      </div>
+
+      <!-- FORCED SUIT INDICATOR -->
+      <div id="forcedSuitIndicator">
+        Farba:
+        <img id="forcedSuitImg" alt="">
+      </div>
+
+    </div>
+
+    <!-- PLAYER HAND -->
+    <div id="playerCards"></div>
+
+    <!-- CONTROLS -->
+    <div id="controls">
+      <button id="playSelectedBtn" class="action">
+        Vyložiť
+      </button>
+    </div>
+
+    <!-- ACE DECISION -->
+    <div id="aceDecision" class="ace-decision" style="display:none;">
+      <button id="playAceBtn" class="action">Vyložiť eso</button>
+      <button id="standAceBtn" class="action">Stáť</button>
+    </div>
+
+    <!-- SUIT CHOOSER -->
+    <div id="suitChooser" style="display:none;">
+
+      <button onclick="setSuit('♣')">
+        <img src="cards/leaf-icon@medium.png" alt="♣">
+      </button>
+
+      <button onclick="setSuit('♥')">
+        <img src="cards/heart-icon@medium.png" alt="♥">
+      </button>
+
+      <button onclick="setSuit('♦')">
+        <img src="cards/bell-icon@medium.png" alt="♦">
+      </button>
+
+      <button onclick="setSuit('♠')">
+        <img src="cards/acorn-icon@medium.png" alt="♠">
+      </button>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- ===============================
+     END SCREEN (CINEMATIC)
+================================ -->
+
+<div id="endScreen">
+
+  <div class="endBox" id="loseBox">
+
+    <h1 id="endTitle"></h1>
+    <p id="loseReason"></p>
+
+    <div class="endButtons">
+
+      <button id="restartBtn" class="end-btn">
+        Reštart
+      </button>
+
+      <button id="menuBtn" class="end-btn">
+        Menu
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ===============================
+     GAME SCRIPT
+================================ -->
+
+<script src="Game.js" defer></script>
+
+</body>
+</html>

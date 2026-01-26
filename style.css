@@ -1,0 +1,660 @@
+/* ===============================
+   RESET
+=============================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --card-gap: 14px;
+  --card-scale: 1;
+  --card-width: 90px;
+  --card-height: 130px;
+}
+
+body {
+  background: radial-gradient(circle at top, #0b3d2e, #02140e);
+  font-family: system-ui, Arial, sans-serif;
+  color: white;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ===============================
+   EFFECT OVERLAY
+=============================== */
+
+#tableOverlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99999;
+}
+
+/* ===============================
+   MENU
+=============================== */
+
+.menu-screen {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-title {
+  font-size: 64px;
+  margin-bottom: 40px;
+}
+
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.menu-btn {
+  padding: 14px 40px;
+  border-radius: 14px;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.menu-btn.primary {
+  background: #22c55e;
+  color: #062312;
+}
+
+.menu-btn.disabled {
+  background: #555;
+  opacity: .5;
+}
+
+.menu-footer {
+  margin-top: 40px;
+  opacity: .5;
+}
+
+/* ===============================
+   GAME LAYOUT
+=============================== */
+
+#game {
+  width: 100%;
+  height: 100vh;
+}
+
+#gameInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 1200px;
+  margin: auto;
+  display: grid;
+  grid-template-rows: auto 40px 1fr auto auto;
+  padding: 20px;
+}
+
+/* ===============================
+   PC AREA
+=============================== */
+
+#pcArea {
+  display: flex;
+  justify-content: center;
+}
+
+#pcHand {
+  display: flex;
+  gap: 8px;
+}
+
+.pc-card {
+  width: 60px;
+  height: 90px;
+  background: url("cards/back.png") center/cover no-repeat;
+  border-radius: 8px;
+}
+
+/* ===============================
+   TURN INDICATOR
+=============================== */
+
+.turn-indicator {
+  text-align: center;
+  font-size: 18px;
+  opacity: .85;
+}
+
+/* ===============================
+   TABLE
+=============================== */
+
+#table {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 60px;
+  position: relative;
+}
+
+#tableCard img {
+  width: 110px;
+}
+
+#deck img {
+  width: 80px;
+  cursor: pointer;
+}
+
+/* ===============================
+   FORCED SUIT INDICATOR
+=============================== */
+
+#forcedSuitIndicator {
+  position: absolute;
+  top: 110px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: none;
+  align-items: center;
+  gap: 8px;
+}
+
+#forcedSuitImg {
+  width: 42px;
+}
+
+/* ===============================
+   PLAYER HAND
+=============================== */
+
+#playerCards {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: var(--card-gap);
+  margin-top: 12px;
+  margin-bottom: 90px;
+  overflow: visible;
+}
+
+/* ===============================
+   CARD
+=============================== */
+
+.card {
+  width: var(--card-width);
+  height: var(--card-height);
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1;
+
+  transition: transform .16s ease;
+  will-change: transform;
+}
+
+/* CARD IMAGE */
+
+.card img {
+  width: 100%;
+  height: auto;
+  transform: scale(var(--card-scale));
+  transition: transform .16s ease;
+  backface-visibility: hidden;
+  image-rendering: crisp-edges;
+}
+
+/* HOVER */
+
+.card:hover {
+  transform: translateY(-10px) scale(1.02);
+}
+
+/* SELECTED */
+
+.card.selected {
+  transform: translateY(-28px) scale(1.05);
+  z-index: 10;
+}
+
+/* GOLD HALO */
+
+.card.selected::before {
+  content: "";
+  position: absolute;
+  inset: -20px;
+  border-radius: 18px;
+
+  background: radial-gradient(
+    circle,
+    rgba(255,220,80,.9),
+    rgba(255,170,0,.55),
+    rgba(255,140,0,.25),
+    transparent 75%
+  );
+
+  filter: blur(12px);
+  z-index: -1;
+
+  animation: goldGlowPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes goldGlowPulse {
+  0% { opacity:.75; transform:scale(1); }
+  50% { opacity:1; transform:scale(1.12); }
+  100% { opacity:.75; transform:scale(1); }
+}
+
+/* ===============================
+   CONTROLS
+=============================== */
+
+#controls {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  z-index: 2000;
+
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(6px);
+
+  padding: 8px 18px;
+  border-radius: 16px;
+
+  box-shadow: 0 0 25px rgba(34,197,94,.3);
+}
+
+.action {
+  padding: 12px 28px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+
+  background: linear-gradient(135deg,#22c55e,#16a34a);
+  color: #052e16;
+
+  box-shadow: 0 4px 12px rgba(0,0,0,.4);
+
+  transition: transform .15s ease;
+}
+
+.action:hover {
+  transform: translateY(-2px) scale(1.05);
+}
+
+.action:active {
+  transform: scale(.96);
+}
+
+/* ===============================
+   ACE DECISION
+=============================== */
+
+.ace-decision {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  z-index: 6000;
+}
+
+/* ===============================
+   SUIT CHOOSER
+=============================== */
+
+#suitChooser {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  align-items: center;
+  z-index: 6000;
+}
+
+#suitChooser button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+#suitChooser img {
+  width: 80px;
+  transition: transform .15s ease, filter .15s ease;
+}
+
+#suitChooser img:hover {
+  transform: scale(1.18);
+  filter: drop-shadow(0 0 16px gold);
+}
+
+/* ===============================
+   END SCREEN
+=============================== */
+
+#endScreen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: 0.4s ease;
+  z-index: 100;
+}
+
+#endScreen.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+
+.endBox {
+  background: #041d16;
+  padding: 32px 48px;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.endBox h1 {
+  margin-bottom: 20px;
+  font-size: 36px;
+}
+
+/* BUTTONS */
+
+.endButtons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+/* RESTART + MENU */
+
+#restartBtn,
+#menuBtn {
+  padding: 14px 36px;
+  font-size: 18px;
+  font-weight: 800;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+}
+
+/* WIN */
+
+.win-pulse {
+  animation: winPulse 1.2s ease-in-out infinite;
+  text-shadow:
+    0 0 15px rgba(255,215,0,.9),
+    0 0 45px rgba(255,180,0,.8),
+    0 0 100px rgba(255,140,0,.7);
+}
+
+@keyframes winPulse {
+
+  0% {
+    transform: scale(1);
+    text-shadow:
+      0 0 12px rgba(255,215,0,.7),
+      0 0 30px rgba(255,180,0,.5);
+  }
+
+  50% {
+    transform: scale(1.06);
+    text-shadow:
+      0 0 30px rgba(255,215,0,1),
+      0 0 80px rgba(255,180,0,.95),
+      0 0 160px rgba(255,140,0,.85);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+
+
+#restartBtn.win,
+#menuBtn.win {
+  background: linear-gradient(135deg,#ffd700,#ffae00);
+  color: #3a2400;
+  box-shadow: 0 0 20px gold;
+}
+
+/* LOSE */
+
+#restartBtn.lose,
+#menuBtn.lose {
+  background: linear-gradient(135deg,#ef4444,#b91c1c);
+  color: white;
+  box-shadow: 0 0 20px red;
+}
+
+/* ===============================
+   PENALTY
+=============================== */
+
+#penaltyPop {
+  pointer-events: none;
+}
+
+/* ===============================
+   SHAKE
+=============================== */
+
+.shake-light { animation: shakeLight .35s; }
+.shake-medium {
+  animation: shakeMedium .5s;
+}
+
+.shake-strong {
+  animation: shakeStrong .7s;
+}
+
+
+@keyframes shakeLight {
+  0% { transform: translate3d(0,0,0); }
+  20% { transform: translate3d(-6px,4px,0); }
+  40% { transform: translate3d(6px,-4px,0); }
+  60% { transform: translate3d(-5px,4px,0); }
+  80% { transform: translate3d(5px,-3px,0); }
+  100% { transform: translate3d(0,0,0); }
+}
+
+#loseBox {
+  transform: scale(0.6);
+  opacity: 0;
+}
+
+#endScreen.active #loseBox {
+  animation: loseImpact 0.5s cubic-bezier(.2,1.4,.4,1) forwards;
+}
+
+@keyframes loseImpact {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+
+@keyframes shakeMedium {
+  0% { transform: translate3d(0,0,0); }
+
+  20% { transform: translate3d(-10px,7px,0); }
+  40% { transform: translate3d(10px,-7px,0); }
+  60% { transform: translate3d(-8px,6px,0); }
+  80% { transform: translate3d(8px,-6px,0); }
+
+  100% { transform: translate3d(0,0,0); }
+}
+
+
+@keyframes shakeStrong {
+  0% { transform: translate3d(0,0,0); }
+
+  12% { transform: translate3d(-20px,14px,0); }
+  25% { transform: translate3d(20px,-14px,0); }
+
+  37% { transform: translate3d(-18px,12px,0); }
+  50% { transform: translate3d(18px,-12px,0); }
+
+  65% { transform: translate3d(-14px,10px,0); }
+  80% { transform: translate3d(14px,-10px,0); }
+
+  100% { transform: translate3d(0,0,0); }
+}
+
+
+
+/* ===============================
+   CONFETTI
+=============================== */
+
+.confetti {
+  position: fixed;
+  pointer-events: none;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* ===============================
+   MOBILE
+=============================== */
+
+@media (max-width:700px) {
+
+  .menu-title { font-size: 42px; }
+
+  #tableCard img { width: 90px; }
+
+  .pc-card { width: 48px; height: 72px; }
+
+  .card img { width: 70px; }
+
+}
+
+.slowmo * {
+  transition-duration: 0.35s !important;
+  animation-duration: 0.35s !important;
+}
+
+
+#darkOverlay {
+  position: fixed;
+  inset: 0;
+  background: black;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.4s ease;
+  z-index: 90;
+}
+
+#darkOverlay.active {
+  opacity: 0.55;
+}
+
+
+.loseBox {
+  animation: loseImpact 0.5s cubic-bezier(.2,1.4,.4,1);
+}
+
+@keyframes loseImpact {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes screenShake {
+  0% { transform: translate(0); }
+  25% { transform: translate(-6px, 4px); }
+  50% { transform: translate(6px, -4px); }
+  75% { transform: translate(-4px, -2px); }
+  100% { transform: translate(0); }
+}
+
+.shake {
+  animation: screenShake 0.25s ease;
+}
+
+.lose-pulse {
+  animation: losePulse 1.2s ease-in-out infinite;
+  text-shadow:
+    0 0 12px rgba(255,0,0,.9),
+    0 0 40px rgba(255,0,0,.7),
+    0 0 90px rgba(180,0,0,.6);
+}
+
+@keyframes losePulse {
+
+  0% {
+    transform: scale(1);
+    text-shadow:
+      0 0 12px rgba(255,0,0,.7),
+      0 0 30px rgba(255,0,0,.5);
+  }
+
+  50% {
+    transform: scale(1.05);
+    text-shadow:
+      0 0 25px rgba(255,0,0,1),
+      0 0 70px rgba(255,0,0,.9),
+      0 0 140px rgba(180,0,0,.7);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+
+.card,
+.pc-card,
+#tableCard img {
+  will-change: transform;
+}
+
+/* ===== ACORN SIZE FIX ===== */
+
+/* suit chooser (výber farby) */
+#suitChooser img[src*="acorn"] {
+  transform: scale(0.78);
+}
+
+/* forced suit indicator (indikátor pod stolom) */
+#forcedSuitImg[src*="acorn"] {
+  transform: scale(0.78);
+}
+
