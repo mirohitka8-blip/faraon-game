@@ -232,6 +232,17 @@ function playSelected() {
   if (!playerTurn || waitingForAceDecision || waitingForSuit || gameOver) return;
   if (!selected.length) return;
 
+  if (multiplayerMode) {
+  socket.emit("playCard", {
+    room: currentRoomCode,
+    cards: selected.map(i => playerHand[i])
+  });
+
+  selected = [];
+  return;
+}
+
+
   // ===== VYBRANÉ KARTY =====
   const cards = selected.map(i => playerHand[i]);
 
@@ -1369,6 +1380,7 @@ function standAce() {
 }
 
 
+
 function showGreenFlash(){
   const f=document.createElement("div");
   f.style.position="fixed";
@@ -1901,6 +1913,39 @@ function showEndScreenDelayed(won, delay = 1000) {
 
 }
 
+let multiplayerMode = false;
+let multiplayerHands = {};
+let multiplayerTurnPlayer = null;
+
+function initMultiplayerGame(data) {
+
+  multiplayerMode = true;
+
+  multiplayerHands = data.hands;
+  tableCard = data.tableCard;
+  multiplayerTurnPlayer = data.turnPlayer;
+
+  playerHand = multiplayerHands[socket.id];
+
+  playerTurn = multiplayerTurnPlayer === socket.id;
+
+  updateUI();
+}
+
+socket.on("gameUpdate", data => {
+
+  multiplayerHands = data.hands;
+  tableCard = data.tableCard;
+  multiplayerTurnPlayer = data.turnPlayer;
+
+  playerHand = multiplayerHands[socket.id];
+  playerTurn = multiplayerTurnPlayer === socket.id;
+
+  updateUI();
+});
+
+
+
 
 /* ==================================================
    HELPERS
@@ -1936,13 +1981,16 @@ socket.on("roomUpdate", players => {
   updatePlayerList(players);
 });
 
-socket.on("gameStarted", () => {
+socket.on("gameStarted", data => {
 
   document.getElementById("multiplayerLobby").style.display = "none";
   document.getElementById("game").style.display = "block";
 
-  startGame(); // dočasne spustíme singleplayer logiku
+  // multiplayer init
+  initMultiplayerGame(data);
+
 });
+
 
 socket.on("errorMessage", msg => {
   alert(msg);
