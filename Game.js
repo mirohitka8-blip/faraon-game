@@ -233,6 +233,9 @@ function playSelected() {
   if (!selected.length) return;
 
   if (multiplayerMode) {
+
+  if (!playerTurn) return;
+
   socket.emit("playCard", {
     room: currentRoomCode,
     cards: selected.map(i => playerHand[i])
@@ -241,6 +244,7 @@ function playSelected() {
   selected = [];
   return;
 }
+
 
 
   // ===== VYBRANÉ KARTY =====
@@ -339,6 +343,16 @@ function playSelected() {
   setTimeout(pcTurn, 700);
   validateDeckIntegrity();
 }
+
+socket.on("gameOver", data => {
+
+  multiplayerMode = false;
+
+  const won = data.winner === socket.id;
+
+  showEndScreen(won);
+});
+
 
 
 function showBurnAnimation() {
@@ -748,6 +762,16 @@ function debugCardCount() {
 function drawCard() {
 
   if (!playerTurn || gameOver || waitingForSuit || waitingForAceDecision) return;
+
+  if (multiplayerMode) {
+
+  if (!playerTurn) return;
+
+  socket.emit("drawCard", currentRoomCode);
+  return;
+}
+
+
 
   // ===== REFILL BALÍČKA =====
   if (deck.length === 0) {
@@ -1929,20 +1953,33 @@ function initMultiplayerGame(data) {
 
   playerTurn = multiplayerTurnPlayer === socket.id;
 
+  playerTurn = multiplayerTurnPlayer === socket.id;
+selected = [];
+
+
   updateUI();
 }
 
 socket.on("gameUpdate", data => {
 
   multiplayerHands = data.hands;
+
   tableCard = data.tableCard;
+
+  forcedSuit = data.forcedSuit;
+  pendingDraw = data.pendingDraw;
+  skipCount = data.skipCount;
+
   multiplayerTurnPlayer = data.turnPlayer;
 
   playerHand = multiplayerHands[socket.id];
   playerTurn = multiplayerTurnPlayer === socket.id;
 
+  selected = [];
+
   updateUI();
 });
+
 
 
 
