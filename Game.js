@@ -1957,30 +1957,6 @@ selected = [];
   updateUI();
 }
 
-socket.on("gameUpdate", data => {
-
-  multiplayerHands = data.hands;
-
-  tableCard = data.tableCard;
-
-  forcedSuit = data.forcedSuit;
-  pendingDraw = data.pendingDraw;
-  skipCount = data.skipCount;
-
-  multiplayerTurnPlayer = data.turnPlayer;
-
-  playerHand = multiplayerHands[socket.id];
-  playerTurn = multiplayerTurnPlayer === socket.id;
-
-  selected = [];
-
-  updateUI();
-});
-
-
-
-
-
 /* ==================================================
    HELPERS
 ================================================== */
@@ -1997,19 +1973,13 @@ function clearLoseButtonGlow(){}
 
 socket.on("roomJoined", data => {
 
-  currentRoomCode = data.roomCode;
-  isHost = data.isHost;
+  currentRoomCode = data.code;
 
   document.getElementById("roomInfo").style.display = "block";
-  document.getElementById("roomCodeLabel").textContent = data.roomCode;
+  document.getElementById("roomCodeLabel").textContent = data.code;
 
-  updatePlayerList(data.players);
-
-  const startBtn = document.getElementById("startGameBtn");
-  if (startBtn) {
-    startBtn.style.display = isHost ? "block" : "none";
-  }
 });
+
 
 socket.on("roomUpdate", data => {
 
@@ -2186,7 +2156,8 @@ if (backLobbyBtn) {
       return;
     }
 
-    socket.emit("createRoom", { name });
+    socket.emit("createRoom", name);
+
   };
   }
 
@@ -2214,7 +2185,8 @@ if (readyBtn) {
 
     if (!currentRoomCode) return;
 
-    socket.emit("playerReady", currentRoomCode);
+    socket.emit("ready", currentRoomCode);
+
   };
 }
 
