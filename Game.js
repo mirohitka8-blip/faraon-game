@@ -2011,9 +2011,12 @@ socket.on("roomJoined", data => {
   }
 });
 
-socket.on("roomUpdate", players => {
-  updatePlayerList(players);
+socket.on("roomUpdate", data => {
+
+  updatePlayerList(data.players);
+
 });
+
 
   socket.on("gameUpdate", data => {
 
@@ -2061,7 +2064,9 @@ socket.on("roomUpdate", players => {
   document.getElementById("menuScreen").style.display = "flex";
   });
 
-  function updatePlayerList(players) {
+  function updatePlayerList(players = []) {
+
+  if (!Array.isArray(players)) return;
 
   const list = document.getElementById("playerList");
   if (!list) return;
