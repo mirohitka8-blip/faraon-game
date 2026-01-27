@@ -210,17 +210,37 @@ function playAce() {
 
   if (!waitingForAceDecision || gameOver) return;
 
-  // nájdi eso v ruke hráča
-  const idx = playerHand.findIndex(c => c.startsWith("A"));
-  if (idx === -1) return;
+  // nájdi eso v ruke
+  const aceIndex = playerHand.findIndex(c => c.startsWith("A"));
+  if (aceIndex === -1) return;
 
-  // priprav vyloženie esa
-  selected = [idx];
+  // =========================
+  // MULTIPLAYER
+  // =========================
 
+  if (multiplayerMode) {
+
+    socket.emit("playCard", {
+      room: currentRoomCode,
+      cards: [ playerHand[aceIndex] ]
+    });
+
+    waitingForAceDecision = false;
+    selected = [];
+
+    return;
+  }
+
+  // =========================
+  // SINGLEPLAYER (pôvodné správanie)
+  // =========================
+
+  selected = [aceIndex];
   waitingForAceDecision = false;
 
   playSelected();
 }
+
 
 
 /* ==================================================
