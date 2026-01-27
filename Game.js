@@ -16,7 +16,7 @@ socket.on("connect", () => {
 const sounds = {};
 
 function loadSound(name, volume = 1) {
-  const audio = new Audio(`sounds/${name}`);
+  const audio = new Audio(`/sounds/${name}`);
   audio.volume = volume;
   audio.preload = "auto";
   sounds[name] = audio;
@@ -1198,7 +1198,7 @@ function updateUI() {
     table.innerHTML = "";
     if (tableCard) {
       const img = document.createElement("img");
-      img.src = "cards/" + cardToFile(tableCard);
+      img.src = "/cards/" + cardToFile(tableCard);
       table.appendChild(img);
     }
   }
@@ -1468,7 +1468,7 @@ function animatePlay(card, fromPlayer = true, delay = 0) {
     el.style.position = "fixed";
     el.style.width = "90px";
     el.style.height = "130px";
-    el.style.background = `url("cards/${cardToFile(card)}") center/cover`;
+    el.style.background = `url("/cards/${cardToFile(card)}") center/cover`;
     el.style.borderRadius = "10px";
     el.style.pointerEvents = "none";
     el.style.zIndex = "9999";
@@ -1786,7 +1786,7 @@ function animateDraw(toPlayer = true, delay = 0) {
     el.style.position = "fixed";
     el.style.width = "70px";
     el.style.height = "100px";
-    el.style.background = 'url("cards/back.png") center/cover';
+    el.style.background = 'url("/cards/back.png") center/cover';
     el.style.borderRadius = "8px";
     el.style.pointerEvents = "none";
     el.style.zIndex = "9999";
