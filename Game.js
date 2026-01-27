@@ -1995,6 +1995,44 @@ socket.on("roomUpdate", data => {
 });
 
 
+socket.on("gameStarted", data => {
+
+  console.log("GAME STARTED", data);
+
+  multiplayerMode = true;
+
+  // skry lobby
+  document.getElementById("multiplayerLobby").style.display = "none";
+
+  // zobraz hru
+  document.getElementById("game").style.display = "block";
+
+  // init multiplayer state
+  multiplayerHands = data.hands;
+  tableCard = data.tableCard;
+
+  forcedSuit = data.forcedSuit ?? null;
+  pendingDraw = data.pendingDraw ?? 0;
+  skipCount = data.skipCount ?? 0;
+
+  multiplayerTurnPlayer = data.order[data.turnIndex];
+
+  playerHand = multiplayerHands[socket.id];
+
+  playerTurn = multiplayerTurnPlayer === socket.id;
+
+  selected = [];
+  waitingForSuit = false;
+  waitingForAceDecision = false;
+
+  gameOver = false;
+
+  updateUI();
+
+});
+
+
+
 
   socket.on("gameUpdate", data => {
 
