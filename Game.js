@@ -1983,9 +1983,17 @@ socket.on("roomJoined", data => {
 
 socket.on("roomUpdate", data => {
 
-  updatePlayerList(data.players);
+  updatePlayerList(data.players, data.host);
+  // === HOST CHECK ===
+  isHost = data.host === socket.id;
+
+  const startBtn = document.getElementById("startGameBtn");
+  if (startBtn) {
+    startBtn.style.display = isHost ? "block" : "none";
+  }
 
 });
+
 
 
   socket.on("gameUpdate", data => {
@@ -2034,7 +2042,7 @@ socket.on("roomUpdate", data => {
   document.getElementById("menuScreen").style.display = "flex";
   });
 
-  function updatePlayerList(players = []) {
+  function updatePlayerList(players = [], hostId) {
 
   if (!Array.isArray(players)) return;
 
@@ -2054,7 +2062,7 @@ socket.on("roomUpdate", data => {
       name += " (TY)";
     }
 
-    if (p.id === players[0].id) {
+    if (p.id === hostId) {
       row.classList.add("player-host");
       name = "👑 " + name;
     }
@@ -2064,7 +2072,6 @@ socket.on("roomUpdate", data => {
       <span>${p.ready ? "✅" : "⏳"}</span>
     `;
 
-    // HOST KICK BUTTON
     if (isHost && p.id !== socket.id) {
 
       const kickBtn = document.createElement("button");
@@ -2085,8 +2092,8 @@ socket.on("roomUpdate", data => {
 
     list.appendChild(row);
   });
-
 }
+
 
 
 
