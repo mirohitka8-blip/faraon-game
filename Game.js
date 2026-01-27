@@ -2069,37 +2069,33 @@ socket.on("gameStarted", data => {
 
   console.log("GAME UPDATE:", data);
 
-  // === SERVER STATE ===
+  // ===== STATE =====
   multiplayerHands = data.hands;
   tableCard = data.tableCard;
 
   forcedSuit = data.forcedSuit ?? null;
   pendingDraw = data.pendingDraw ?? 0;
-  if (data.drawPenalty) {
-  showPenalty(pendingDraw);
-}
   skipCount = data.skipCount ?? 0;
 
-  // === APPLY MY HAND FROM SERVER ===
-  playerHand = multiplayerHands[socket.id] || [];
-
-  // === TURN SYSTEM ===
   multiplayerTurnPlayer = data.turnPlayer;
   playerTurn = multiplayerTurnPlayer === socket.id;
 
-  // === RESET LOCAL INPUT ===
+  // ===== RESET INPUT =====
   selected = [];
   waitingForSuit = false;
-  waitingForAceDecision = false;
 
-  // === EFFECTS FROM SERVER ===
+  // ✅ ACE DECISION FROM SERVER
+  waitingForAceDecision = data.aceDecision === true;
+
+  // ===== FX =====
   if (data.effects?.burn) {
     showBurnAnimation();
   }
 
-  // === UI REFRESH ===
+  // ===== UI =====
   updateUI();
 });
+
 
 
 
