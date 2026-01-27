@@ -1372,17 +1372,31 @@ function restartGame() {
 
 function setSuit(suit) {
 
+  if (gameOver) return;
+
+  /* =========================
+     MULTIPLAYER
+  ========================= */
+
   if (multiplayerMode) {
 
-  socket.emit("setSuit", {
-    room: currentRoomCode,
-    suit
-  });
+    socket.emit("setSuit", {
+      room: currentRoomCode,
+      suit
+    });
 
-  waitingForSuit = false;
-  return;
-}
-  if (gameOver) return;
+    // lokálne len zavri UI
+    waitingForSuit = false;
+
+    const chooser = document.getElementById("suitChooser");
+    if (chooser) chooser.style.display = "none";
+
+    return;
+  }
+
+  /* =========================
+     SINGLEPLAYER (PC MODE)
+  ========================= */
 
   forcedSuit = suit;
   waitingForSuit = false;
@@ -1390,12 +1404,13 @@ function setSuit(suit) {
   const chooser = document.getElementById("suitChooser");
   if (chooser) chooser.style.display = "none";
 
-  // hráč dohral Q → ide PC
+  // ide PC
   playerTurn = false;
   updateUI();
 
   setTimeout(pcTurn, 600);
 }
+
 
 function standAce() {
 
