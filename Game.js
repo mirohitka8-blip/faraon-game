@@ -56,7 +56,7 @@ let playerTurn = true;
 let gameOver = false;
 
 let forcedSuit = null;
-waitingForSuit = data.queenDecision === true;
+
 
 
 let pendingDraw = 0;
@@ -2090,9 +2090,9 @@ socket.on("gameStarted", data => {
 
   console.log("GAME UPDATE:", data);
 
-  // =========================
-  // SERVER STATE
-  // =========================
+  /* =========================
+     SERVER STATE
+  ========================= */
 
   multiplayerHands = data.hands;
   tableCard = data.tableCard;
@@ -2101,45 +2101,54 @@ socket.on("gameStarted", data => {
   pendingDraw = data.pendingDraw ?? 0;
   skipCount = data.skipCount ?? 0;
 
-  multiplayerTurnPlayer = data.turnPlayer;
+  /* =========================
+     TURN SYSTEM
+  ========================= */
 
-  // =========================
-  // APPLY MY HAND FROM SERVER
-  // =========================
+  multiplayerTurnPlayer = data.turnPlayer;
+  playerTurn = multiplayerTurnPlayer === socket.id;
+
+  /* =========================
+     APPLY MY HAND
+  ========================= */
 
   playerHand = multiplayerHands[socket.id] || [];
 
-  // =========================
-  // TURN SYSTEM
-  // =========================
-
-  playerTurn = multiplayerTurnPlayer === socket.id;
-
-  // =========================
-  // INPUT RESET
-  // =========================
+  /* =========================
+     INPUT RESET
+  ========================= */
 
   selected = [];
-  waitingForSuit = false;
 
+  /* =========================
+     SPECIAL STATES
+  ========================= */
+
+  // ESO decision UI (len hráč na rade)
   waitingForAceDecision =
     data.aceDecision === true &&
     multiplayerTurnPlayer === socket.id;
 
-  // =========================
-  // FX
-  // =========================
+  // HORNÍK suit picker (len hráč na rade)
+  waitingForSuit =
+    data.queenDecision === true &&
+    multiplayerTurnPlayer === socket.id;
+
+  /* =========================
+     FX FROM SERVER
+  ========================= */
 
   if (data.effects?.burn) {
     showBurnAnimation();
   }
 
-  // =========================
-  // UI REFRESH
-  // =========================
+  /* =========================
+     UI REFRESH
+  ========================= */
 
   updateUI();
 });
+
 
 
 
