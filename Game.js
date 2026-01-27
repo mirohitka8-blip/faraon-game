@@ -234,18 +234,15 @@ function playSelected() {
 
   if (multiplayerMode) {
 
-  if (!playerTurn || !selected.length) return;
-
   socket.emit("playCard", {
     room: currentRoomCode,
     cards: selected.map(i => playerHand[i])
   });
 
-  // ⚠️ nič NEMAŽ lokálne
   selected = [];
-
   return;
 }
+
 
 
 
@@ -764,9 +761,7 @@ function debugCardCount() {
 
 function drawCard() {
 
-  if (!playerTurn || gameOver || waitingForSuit || waitingForAceDecision) return;
-
-   if (multiplayerMode) {
+  if (multiplayerMode) {
 
   if (!playerTurn) return;
 
@@ -775,6 +770,8 @@ function drawCard() {
   // ⚠️ nič nepridávaj lokálne
   return;
 }
+
+  if (!playerTurn || gameOver || waitingForSuit || waitingForAceDecision) return;
 
   // ===== REFILL BALÍČKA =====
   if (deck.length === 0) {
