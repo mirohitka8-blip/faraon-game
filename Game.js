@@ -2095,6 +2095,7 @@ socket.on("gameStarted", data => {
 
   socket.on("gameUpdate", data => {
 
+  console.log("QUEEN FLAG:", data.queenDecision);
   console.log("GAME UPDATE:", data);
 
   /* =========================
