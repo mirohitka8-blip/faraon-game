@@ -2051,6 +2051,9 @@ socket.on("gameStarted", data => {
 
   forcedSuit = data.forcedSuit ?? null;
   pendingDraw = data.pendingDraw ?? 0;
+  if (data.drawPenalty) {
+  showPenalty(pendingDraw);
+}
   skipCount = data.skipCount ?? 0;
 
   // === APPLY MY HAND FROM SERVER ===
