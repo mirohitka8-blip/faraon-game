@@ -2239,7 +2239,7 @@ const startGameBtn = document.getElementById("startGameBtn");
 
 if (startGameBtn) {
   startGameBtn.onclick = () => {
-
+    console.log("START GAME CLICK", currentRoomCode);
     if (!currentRoomCode) return;
 
     socket.emit("startGame", currentRoomCode);
