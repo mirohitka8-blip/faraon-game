@@ -56,7 +56,8 @@ let playerTurn = true;
 let gameOver = false;
 
 let forcedSuit = null;
-let waitingForSuit = false;
+waitingForSuit = data.queenDecision === true;
+
 
 let pendingDraw = 0;
 let skipCount = 0;
@@ -1375,6 +1376,20 @@ function restartGame() {
 
 function setSuit(suit) {
 
+  if (multiplayerMode) {
+
+    socket.emit("chooseSuit", {
+      room: currentRoomCode,
+      suit
+    });
+
+    waitingForSuit = false;
+
+    const chooser = document.getElementById("suitChooser");
+    if (chooser) chooser.style.display = "none";
+
+    return;
+  }
   if (gameOver) return;
 
   forcedSuit = suit;
