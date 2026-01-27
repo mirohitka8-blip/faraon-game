@@ -2059,7 +2059,10 @@ socket.on("gameStarted", data => {
 
   console.log("GAME UPDATE:", data);
 
-  // ===== STATE =====
+  // =========================
+  // SERVER STATE
+  // =========================
+
   multiplayerHands = data.hands;
   tableCard = data.tableCard;
 
@@ -2068,23 +2071,41 @@ socket.on("gameStarted", data => {
   skipCount = data.skipCount ?? 0;
 
   multiplayerTurnPlayer = data.turnPlayer;
+
+  // =========================
+  // TURN SYSTEM
+  // =========================
+
   playerTurn = multiplayerTurnPlayer === socket.id;
 
-  // ===== RESET INPUT =====
+  // =========================
+  // INPUT RESET
+  // =========================
+
   selected = [];
   waitingForSuit = false;
 
-  // ✅ ACE DECISION FROM SERVER
-  waitingForAceDecision = data.aceDecision === true;
+  // ACE decision only if server says so AND it's your turn
+  waitingForAceDecision =
+    data.aceDecision === true &&
+    multiplayerTurnPlayer === socket.id;
 
-  // ===== FX =====
+  // =========================
+  // FX FROM SERVER
+  // =========================
+
   if (data.effects?.burn) {
     showBurnAnimation();
   }
 
-  // ===== UI =====
+  // =========================
+  // UI UPDATE
+  // =========================
+
   updateUI();
+
 });
+
 
 
 
