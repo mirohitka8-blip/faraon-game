@@ -189,6 +189,7 @@ body {
 =============================== */
 
 .card {
+  backface-visibility: hidden;
   width: var(--card-width);
   height: var(--card-height);
   position: relative;

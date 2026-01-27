@@ -2084,73 +2084,82 @@ socket.on("gameStarted", data => {
 });
 
 
-
+  let lastServerState = null;
 
   socket.on("gameUpdate", data => {
 
   console.log("GAME UPDATE:", data);
 
-  multiplayerHands = data.hands;
-  tableCard = data.tableCard;
+  /* =========================
+     SERVER STATE SYNC
+  ========================= */
+
+  multiplayerHands = data.hands || {};
+  tableCard = data.tableCard || null;
 
   forcedSuit = data.forcedSuit ?? null;
   pendingDraw = data.pendingDraw ?? 0;
   skipCount = data.skipCount ?? 0;
 
-  multiplayerTurnPlayer = data.turnPlayer;
-  playerTurn = multiplayerTurnPlayer === socket.id;
+  multiplayerTurnPlayer = data.turnPlayer || null;
+
+  /* =========================
+     APPLY MY HAND
+  ========================= */
 
   playerHand = multiplayerHands[socket.id] || [];
 
+  /* =========================
+     TURN SYSTEM
+  ========================= */
+
+  playerTurn = multiplayerTurnPlayer === socket.id;
+
+  /* =========================
+     RESET INPUT STATE
+  ========================= */
+
   selected = [];
 
-  // =========================
-  // QUEEN (HORNÍK)
-  // =========================
+  // reset selectors by default
+  waitingForSuit = false;
+  waitingForAceDecision = false;
 
+  /* =========================
+     SPECIAL DECISIONS
+  ========================= */
+
+  // ESO decision
+  if (data.aceDecision === true && playerTurn) {
+    waitingForAceDecision = true;
+  }
+
+  // QUEEN (HORNÍK) decision
   if (data.queenDecision === true && playerTurn) {
-
     waitingForSuit = true;
 
     const chooser = document.getElementById("suitChooser");
-
-    if (chooser) {
-      chooser.style.display = "flex";
-      console.log("OPENING SUIT CHOOSER");
-    }
-
+    if (chooser) chooser.style.display = "flex";
   } else {
-
-    waitingForSuit = false;
-
     const chooser = document.getElementById("suitChooser");
     if (chooser) chooser.style.display = "none";
   }
 
-  // =========================
-  // ACE
-  // =========================
-
-  waitingForAceDecision =
-    data.aceDecision === true && playerTurn;
-
-  // =========================
-  // FX
-  // =========================
+  /* =========================
+     EFFECTS
+  ========================= */
 
   if (data.effects?.burn) {
     showBurnAnimation();
   }
 
+  /* =========================
+     UI REFRESH
+  ========================= */
+
   updateUI();
-});
 
-
-
-
-
-
-
+  });
 
 
   socket.on("errorMessage", msg => {
