@@ -1980,6 +1980,8 @@ function clearLoseButtonGlow(){}
 
 socket.on("roomJoined", data => {
 
+console.log("ROOM JOINED RAW:", data);
+
   currentRoomCode = data.code;
 
   document.getElementById("roomInfo").style.display = "block";
