@@ -209,16 +209,12 @@ function toggleSelect(i) {
 
 function playAce() {
 
-  console.log("PLAY ACE CLICK");
-
   if (!waitingForAceDecision || gameOver) return;
 
   const aceIndex = playerHand.findIndex(c => c.startsWith("A"));
   if (aceIndex === -1) return;
 
   if (multiplayerMode) {
-
-    console.log("SENDING PLAY ACE");
 
     socket.emit("playCard", {
       room: currentRoomCode,
