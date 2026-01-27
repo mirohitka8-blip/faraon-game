@@ -232,25 +232,30 @@ function playSelected() {
   if (!playerTurn || waitingForAceDecision || waitingForSuit || gameOver) return;
   if (!selected.length) return;
 
+  // =========================
+  // MULTIPLAYER
+  // =========================
+
   if (multiplayerMode) {
 
-  socket.emit("playCard", {
-    room: currentRoomCode,
-    cards: selected.map(i => playerHand[i])
-  });
+    socket.emit("playCard", {
+      room: currentRoomCode,
+      cards: selected.map(i => playerHand[i])
+    });
 
-  selected = [];
-  return;
-}
+    // okamžite zruš výber (server pošle nový stav)
+    selected = [];
+    updateUI();
 
+    return;
+  }
 
+  // =========================
+  // SINGLEPLAYER
+  // =========================
 
-
-
-  // ===== VYBRANÉ KARTY =====
   const cards = selected.map(i => playerHand[i]);
 
-  // ===== VALIDÁCIA KOMBINÁCIE =====
   const sameValue = cards.every(
     c => c.slice(0,-1) === cards[0].slice(0,-1)
   );
@@ -264,33 +269,27 @@ function playSelected() {
     return;
   }
 
-  // ===== SPÁLENÁ =====
   const isBurned = sameValue && cards.length === 4;
 
-  // ===== HRATEĽNOSŤ =====
   if (!isBurned && !canPlay(cards[0])) {
     alert("Spodná karta nemôže ísť na stôl");
     return;
   }
 
-  // ===== ANIMÁCIA =====
   cards.forEach((card, i) => {
     animatePlay(card, true, i * 120);
   });
 
-  // ===== ODSTRÁNENIE Z RUKY =====
   selected.sort((a,b)=>b-a).forEach(i => {
     playerHand.splice(i,1);
   });
 
   selected = [];
 
-  // ===== APLIKÁCIA EFEKTOV =====
   for (const card of cards) {
     applyPlayedCard(card, true);
   }
 
-  // ===== SPÁLENÁ LOGIKA =====
   if (isBurned) {
 
     freePlay = true;
@@ -302,7 +301,6 @@ function playSelected() {
     showBurnAnimation();
 
     if (playerHand.length === 0) {
-
       cinematicFinish = true;
       showEndScreenDelayed(true, 1300);
       return;
@@ -313,11 +311,9 @@ function playSelected() {
     return;
   }
 
-  // ===== VÝHRA (LAST CARD) =====
   if (playerHand.length === 0) {
 
     cinematicFinish = true;
-
     playerTurn = false;
     updateUI();
 
@@ -325,7 +321,6 @@ function playSelected() {
     return;
   }
 
-  // ===== HORNÍK =====
   const lastCard = cards[cards.length - 1];
 
   if (lastCard.slice(0,-1) === "Q") {
@@ -341,8 +336,10 @@ function playSelected() {
   playerTurn = false;
   updateUI();
   setTimeout(pcTurn, 700);
+
   validateDeckIntegrity();
 }
+
 
 socket.on("gameOver", data => {
 
@@ -761,38 +758,33 @@ function debugCardCount() {
 
 function drawCard() {
 
-  if (multiplayerMode) {
-
-  if (!playerTurn) return;
-
-  socket.emit("drawCard", currentRoomCode);
-
-  // ⚠️ nič nepridávaj lokálne
-  return;
-}
-
   if (!playerTurn || gameOver || waitingForSuit || waitingForAceDecision) return;
 
-  // ===== REFILL BALÍČKA =====
+  // ===== MULTIPLAYER =====
+  if (multiplayerMode) {
+
+    socket.emit("drawCard", currentRoomCode);
+    return;
+  }
+
+  // ===== SINGLEPLAYER =====
+
+  // REFILL
   if (deck.length === 0) {
     refillDeck();
   }
 
   if (deck.length === 0) {
+    triggerLoseSequence();
+    return;
+  }
 
-  triggerLoseSequence();
-  return;
-}
-
-
-  // ===== ESO STOP FIX =====
-  // stopka sa spotrebuje, ale hráč smie ťahať
+  // ESO STOP FIX
   if (skipCount > 0) {
-    console.log("STOP consumed — draw allowed");
     skipCount = 0;
   }
 
-  // ===== +3 PENALTY =====
+  // +3 PENALTY
   if (pendingDraw > 0) {
 
     for (let i = 0; i < pendingDraw && deck.length; i++) {
@@ -810,7 +802,7 @@ function drawCard() {
     return;
   }
 
-  // ===== NORMAL DRAW =====
+  // NORMAL DRAW
   animateDraw(true);
   playerHand.push(deck.pop());
 
@@ -820,6 +812,7 @@ function drawCard() {
 
   validateDeckIntegrity();
 }
+
 
 
 window.testConfetti = function() {
