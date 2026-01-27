@@ -1384,18 +1384,21 @@ function standAce() {
 
   if (!waitingForAceDecision || gameOver) return;
 
-  // hráč sa rozhodol stáť
   waitingForAceDecision = false;
 
-  // uvoľni stopku
-  skipCount--;
+  if (multiplayerMode) {
 
-  // ide PC
+    socket.emit("standAce", currentRoomCode);
+    return;
+  }
+
+  // SINGLEPLAYER fallback
+  skipCount--;
   playerTurn = false;
   updateUI();
-
   setTimeout(pcTurn, 600);
 }
+
 
 
 
