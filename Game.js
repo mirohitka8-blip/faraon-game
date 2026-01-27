@@ -1418,7 +1418,9 @@ function standAce() {
 
   if (multiplayerMode) {
 
-    socket.emit("standAce", currentRoomCode);
+    socket.emit("standAce", {
+      room: currentRoomCode
+    });
 
     waitingForAceDecision = false;
     return;
@@ -1426,11 +1428,10 @@ function standAce() {
 
   // singleplayer fallback
   waitingForAceDecision = false;
-  skipCount = 0;
+  skipCount--;
 
   playerTurn = false;
   updateUI();
-
   setTimeout(pcTurn, 600);
 }
 
