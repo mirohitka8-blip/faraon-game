@@ -210,13 +210,8 @@ function playAce() {
 
   if (!waitingForAceDecision || gameOver) return;
 
-  // nájdi eso v ruke
   const aceIndex = playerHand.findIndex(c => c.startsWith("A"));
   if (aceIndex === -1) return;
-
-  // =========================
-  // MULTIPLAYER
-  // =========================
 
   if (multiplayerMode) {
 
@@ -227,19 +222,14 @@ function playAce() {
 
     waitingForAceDecision = false;
     selected = [];
-
     return;
   }
 
-  // =========================
-  // SINGLEPLAYER (pôvodné správanie)
-  // =========================
-
   selected = [aceIndex];
   waitingForAceDecision = false;
-
   playSelected();
 }
+
 
 
 
@@ -1407,12 +1397,11 @@ function standAce() {
   waitingForAceDecision = false;
 
   if (multiplayerMode) {
-
     socket.emit("standAce", currentRoomCode);
     return;
   }
 
-  // SINGLEPLAYER fallback
+  // singleplayer fallback
   skipCount--;
   playerTurn = false;
   updateUI();
