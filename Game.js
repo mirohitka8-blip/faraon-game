@@ -209,6 +209,8 @@ function toggleSelect(i) {
 
 function playAce() {
 
+  console.log("PLAY ACE CLICK");
+
   if (!waitingForAceDecision || gameOver) return;
 
   const aceIndex = playerHand.findIndex(c => c.startsWith("A"));
@@ -216,20 +218,18 @@ function playAce() {
 
   if (multiplayerMode) {
 
+    console.log("SENDING PLAY ACE");
+
     socket.emit("playCard", {
       room: currentRoomCode,
       cards: [ playerHand[aceIndex] ]
     });
 
     waitingForAceDecision = false;
-    selected = [];
     return;
   }
-
-  selected = [aceIndex];
-  waitingForAceDecision = false;
-  playSelected();
 }
+
 
 
 
@@ -1414,9 +1414,13 @@ function setSuit(suit) {
 
 function standAce() {
 
+  console.log("STAND ACE CLICK");
+
   if (!waitingForAceDecision || gameOver) return;
 
   if (multiplayerMode) {
+
+    console.log("SENDING STAND ACE");
 
     socket.emit("standAce", {
       room: currentRoomCode
@@ -1425,14 +1429,6 @@ function standAce() {
     waitingForAceDecision = false;
     return;
   }
-
-  // singleplayer fallback
-  waitingForAceDecision = false;
-  skipCount--;
-
-  playerTurn = false;
-  updateUI();
-  setTimeout(pcTurn, 600);
 }
 
 
