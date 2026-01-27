@@ -1394,17 +1394,21 @@ function standAce() {
 
   if (!waitingForAceDecision || gameOver) return;
 
-  waitingForAceDecision = false;
-
   if (multiplayerMode) {
+
     socket.emit("standAce", currentRoomCode);
+
+    waitingForAceDecision = false;
     return;
   }
 
   // singleplayer fallback
-  skipCount--;
+  waitingForAceDecision = false;
+  skipCount = 0;
+
   playerTurn = false;
   updateUI();
+
   setTimeout(pcTurn, 600);
 }
 
