@@ -2095,12 +2095,7 @@ socket.on("gameStarted", data => {
 
   socket.on("gameUpdate", data => {
 
-  console.log("QUEEN FLAG:", data.queenDecision);
   console.log("GAME UPDATE:", data);
-
-  /* =========================
-     SERVER STATE
-  ========================= */
 
   multiplayerHands = data.hands;
   tableCard = data.tableCard;
@@ -2109,53 +2104,54 @@ socket.on("gameStarted", data => {
   pendingDraw = data.pendingDraw ?? 0;
   skipCount = data.skipCount ?? 0;
 
-  /* =========================
-     TURN SYSTEM
-  ========================= */
-
   multiplayerTurnPlayer = data.turnPlayer;
   playerTurn = multiplayerTurnPlayer === socket.id;
 
-  /* =========================
-     APPLY MY HAND
-  ========================= */
-
   playerHand = multiplayerHands[socket.id] || [];
-
-  /* =========================
-     INPUT RESET
-  ========================= */
 
   selected = [];
 
-  /* =========================
-     SPECIAL STATES
-  ========================= */
+  // =========================
+  // QUEEN (HORNÍK)
+  // =========================
 
-  // ESO decision UI (len hráč na rade)
+  if (data.queenDecision === true && playerTurn) {
+
+    waitingForSuit = true;
+
+    const chooser = document.getElementById("suitChooser");
+
+    if (chooser) {
+      chooser.style.display = "flex";
+      console.log("OPENING SUIT CHOOSER");
+    }
+
+  } else {
+
+    waitingForSuit = false;
+
+    const chooser = document.getElementById("suitChooser");
+    if (chooser) chooser.style.display = "none";
+  }
+
+  // =========================
+  // ACE
+  // =========================
+
   waitingForAceDecision =
-    data.aceDecision === true &&
-    multiplayerTurnPlayer === socket.id;
+    data.aceDecision === true && playerTurn;
 
-  // HORNÍK suit picker (len hráč na rade)
-  waitingForSuit =
-    data.queenDecision === true &&
-    multiplayerTurnPlayer === socket.id;
-
-  /* =========================
-     FX FROM SERVER
-  ========================= */
+  // =========================
+  // FX
+  // =========================
 
   if (data.effects?.burn) {
     showBurnAnimation();
   }
 
-  /* =========================
-     UI REFRESH
-  ========================= */
-
   updateUI();
 });
+
 
 
 
