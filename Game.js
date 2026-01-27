@@ -234,16 +234,19 @@ function playSelected() {
 
   if (multiplayerMode) {
 
-  if (!playerTurn) return;
+  if (!playerTurn || !selected.length) return;
 
   socket.emit("playCard", {
     room: currentRoomCode,
     cards: selected.map(i => playerHand[i])
   });
 
+  // ⚠️ nič NEMAŽ lokálne
   selected = [];
+
   return;
 }
+
 
 
 
@@ -768,8 +771,11 @@ function drawCard() {
   if (!playerTurn) return;
 
   socket.emit("drawCard", currentRoomCode);
+
+  // ⚠️ nič nepridávaj lokálne
   return;
 }
+
   // ===== REFILL BALÍČKA =====
   if (deck.length === 0) {
     refillDeck();
@@ -844,6 +850,7 @@ window.testConfetti = function() {
 
 function pcTurn() {
 
+  if (multiplayerMode) return;
   if (gameOver) return;
 
   // ===== PC NEMÁ KARTY (PREHRA HRÁČA) =====
@@ -2046,6 +2053,9 @@ socket.on("gameStarted", data => {
   pendingDraw = data.pendingDraw ?? 0;
   skipCount = data.skipCount ?? 0;
 
+  // === APPLY MY HAND FROM SERVER ===
+  playerHand = multiplayerHands[socket.id] || [];
+
   // === TURN SYSTEM ===
   multiplayerTurnPlayer = data.turnPlayer;
   playerTurn = multiplayerTurnPlayer === socket.id;
@@ -2063,6 +2073,7 @@ socket.on("gameStarted", data => {
   // === UI REFRESH ===
   updateUI();
 });
+
 
 
 
