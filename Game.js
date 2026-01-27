@@ -1980,14 +1980,36 @@ function clearLoseButtonGlow(){}
 
 socket.on("roomJoined", data => {
 
-console.log("ROOM JOINED RAW:", data);
+  console.log("ROOM JOINED RAW:", data);
 
-  currentRoomCode = data.code;
+  // SAFE READ
+  const code = data.roomCode;
 
-  document.getElementById("roomInfo").style.display = "block";
-  document.getElementById("roomCodeLabel").textContent = data.code;
+  currentRoomCode = code;
+  isHost = data.isHost;
+
+  // UI SHOW
+  const lobby = document.getElementById("multiplayerLobby");
+  const roomInfo = document.getElementById("roomInfo");
+  const codeLabel = document.getElementById("roomCodeLabel");
+
+  if (lobby) lobby.style.display = "flex";
+  if (roomInfo) roomInfo.style.display = "block";
+
+  if (codeLabel) {
+    codeLabel.textContent = code;
+  }
+
+  updatePlayerList(data.players || []);
+
+  // HOST BUTTON
+  const startBtn = document.getElementById("startGameBtn");
+  if (startBtn) {
+    startBtn.style.display = isHost ? "block" : "none";
+  }
 
 });
+
 
 
 socket.on("roomUpdate", data => {
