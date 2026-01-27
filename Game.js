@@ -2264,13 +2264,22 @@ if (joinRoomBtn) {
 const readyBtn = document.getElementById("readyBtn");
 
 if (readyBtn) {
+  const readyBtn = document.getElementById("readyBtn");
+
+if (readyBtn) {
   readyBtn.onclick = () => {
 
-    if (!currentRoomCode) return;
+    if (!currentRoomCode) {
+      console.warn("NO ROOM CODE");
+      return;
+    }
 
-    socket.emit("ready", currentRoomCode);
+    console.log("READY CLICK:", currentRoomCode);
 
+    socket.emit("playerReady", currentRoomCode);
   };
+}
+
 }
 
 const startGameBtn = document.getElementById("startGameBtn");
