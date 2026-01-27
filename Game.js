@@ -1370,26 +1370,18 @@ function restartGame() {
   startGame();
 }
 
-
-
-
-
 function setSuit(suit) {
 
   if (multiplayerMode) {
 
-    socket.emit("chooseSuit", {
-      room: currentRoomCode,
-      suit
-    });
+  socket.emit("setSuit", {
+    room: currentRoomCode,
+    suit
+  });
 
-    waitingForSuit = false;
-
-    const chooser = document.getElementById("suitChooser");
-    if (chooser) chooser.style.display = "none";
-
-    return;
-  }
+  waitingForSuit = false;
+  return;
+}
   if (gameOver) return;
 
   forcedSuit = suit;
