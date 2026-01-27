@@ -2073,6 +2073,12 @@ socket.on("gameStarted", data => {
   multiplayerTurnPlayer = data.turnPlayer;
 
   // =========================
+  // APPLY MY HAND FROM SERVER
+  // =========================
+
+  playerHand = multiplayerHands[socket.id] || [];
+
+  // =========================
   // TURN SYSTEM
   // =========================
 
@@ -2085,13 +2091,12 @@ socket.on("gameStarted", data => {
   selected = [];
   waitingForSuit = false;
 
-  // ACE decision only if server says so AND it's your turn
   waitingForAceDecision =
     data.aceDecision === true &&
     multiplayerTurnPlayer === socket.id;
 
   // =========================
-  // FX FROM SERVER
+  // FX
   // =========================
 
   if (data.effects?.burn) {
@@ -2099,12 +2104,12 @@ socket.on("gameStarted", data => {
   }
 
   // =========================
-  // UI UPDATE
+  // UI REFRESH
   // =========================
 
   updateUI();
-
 });
+
 
 
 
