@@ -207,17 +207,20 @@ function toggleSelect(i) {
   updateUI();
 }
 
-function playAce() {
-  console.log("PLAY ACE CLICK");
+  function playAce() {
 
-  console.log("waiting:", waitingForAceDecision,
-              "turn:", playerTurn,
-              "gameOver:", gameOver);
+  console.log("PLAY ACE CLICK");
 
   if (!waitingForAceDecision || gameOver) return;
 
   const aceIndex = playerHand.findIndex(c => c.startsWith("A"));
   if (aceIndex === -1) return;
+
+  waitingForAceDecision = false;
+
+  /* =========================
+     MULTIPLAYER
+  ========================= */
 
   if (multiplayerMode) {
 
@@ -226,10 +229,32 @@ function playAce() {
       cards: [ playerHand[aceIndex] ]
     });
 
-    waitingForAceDecision = false;
     return;
   }
+
+  /* =========================
+     SINGLEPLAYER
+  ========================= */
+
+  const card = playerHand.splice(aceIndex, 1)[0];
+
+  animatePlay(card, true);
+  applyPlayedCard(card, true);
+
+  // WIN CHECK
+  if (playerHand.length === 0) {
+
+    cinematicFinish = true;
+    showEndScreenDelayed(true, 1200);
+    return;
+  }
+
+  playerTurn = false;
+  updateUI();
+
+  setTimeout(pcTurn, 600);
 }
+
 
 
 
@@ -1170,25 +1195,33 @@ else {
 
 
 
-function updateUI() {
+ function updateUI() {
 
   // ===== ESO DECISION =====
-  if (waitingForAceDecision && !gameOver) {
-    const box = document.getElementById("aceDecision");
-    const playBtn = document.getElementById("playAceBtn");
+const aceBox = document.getElementById("aceDecision");
+const playAceBtn = document.getElementById("playAceBtn");
+const standAceBtn = document.getElementById("standAceBtn");
 
-    if (box) box.style.display = "flex";
-    if (playBtn) {
-      playBtn.style.display =
-        playerHand.some(c => c.startsWith("A"))
-          ? "inline-block"
-          : "none";
-    }
+if (waitingForAceDecision && playerTurn && !gameOver) {
 
-  } else {
-    const box = document.getElementById("aceDecision");
-    if (box) box.style.display = "none";
+  if (aceBox) aceBox.style.display = "flex";
+
+  if (playAceBtn) {
+    playAceBtn.style.display =
+      playerHand.some(c => c.startsWith("A"))
+        ? "inline-block"
+        : "none";
   }
+
+  if (standAceBtn) {
+    standAceBtn.style.display = "inline-block";
+  }
+
+} else {
+
+  if (aceBox) aceBox.style.display = "none";
+}
+
 
   // ===== PC HAND =====
   const pc = document.getElementById("pcHand");
@@ -1414,28 +1447,39 @@ function setSuit(suit) {
 
 
 function standAce() {
-  console.log("PLAY ACE CLICK");
-
-  console.log("waiting:", waitingForAceDecision,
-              "turn:", playerTurn,
-              "gameOver:", gameOver);
 
   console.log("STAND ACE CLICK");
 
   if (!waitingForAceDecision || gameOver) return;
 
-  if (multiplayerMode) {
+  waitingForAceDecision = false;
 
-    console.log("SENDING STAND ACE");
+  /* =========================
+     MULTIPLAYER
+  ========================= */
+
+  if (multiplayerMode) {
 
     socket.emit("standAce", {
       room: currentRoomCode
     });
 
-    waitingForAceDecision = false;
     return;
   }
+
+  /* =========================
+     SINGLEPLAYER
+  ========================= */
+
+  // spotrebuj stopku
+  skipCount = Math.max(0, skipCount - 1);
+
+  playerTurn = false;
+  updateUI();
+
+  setTimeout(pcTurn, 600);
 }
+
 
 
 
