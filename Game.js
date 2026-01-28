@@ -208,7 +208,13 @@ function toggleSelect(i) {
 }
 
 function playAce() {
-
+   // v Robote 
+   console.log("PLAY ACE CLICK")
+   console.log ("waiting", waitingForAceDecision,
+               ""turn:", playerTurn,
+               "gameOver:", gameOver);
+   //
+   
   if (!waitingForAceDecision || gameOver) return;
 
   const aceIndex = playerHand.findIndex(c => c.startsWith("A"));
@@ -1409,9 +1415,13 @@ function setSuit(suit) {
 
 
 function standAce() {
-
-  console.log("STAND ACE CLICK");
-
+   // v robote 
+   console.log("STAND ACE CLICK");
+   console.log ("waiting", waitingForAceDecision,
+               ""turn:", playerTurn,
+               "gameOver:", gameOver);
+   // v robote 
+   
   if (!waitingForAceDecision || gameOver) return;
 
   if (multiplayerMode) {
@@ -2409,6 +2419,7 @@ if (startGameBtn) {
   }
 
 });
+
 
 
 
