@@ -211,7 +211,7 @@ function playAce() {
    // v Robote 
    console.log("PLAY ACE CLICK")
    console.log ("waiting", waitingForAceDecision,
-               ""turn:", playerTurn,
+               "turn:", playerTurn,
                "gameOver:", gameOver);
    //
    
@@ -1418,7 +1418,7 @@ function standAce() {
    // v robote 
    console.log("STAND ACE CLICK");
    console.log ("waiting", waitingForAceDecision,
-               ""turn:", playerTurn,
+               "turn:", playerTurn,
                "gameOver:", gameOver);
    // v robote 
    
@@ -2419,6 +2419,7 @@ if (startGameBtn) {
   }
 
 });
+
 
 
 
