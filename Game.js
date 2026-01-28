@@ -208,29 +208,40 @@ function toggleSelect(i) {
 }
 
 function playAce() {
-   // v Robote 
-   console.log("PLAY ACE CLICK")
-   console.log ("waiting", waitingForAceDecision,
-               "turn:", playerTurn,
-               "gameOver:", gameOver);
-   //
-   
-  if (!waitingForAceDecision || gameOver) return;
 
-  const aceIndex = playerHand.findIndex(c => c.startsWith("A"));
-  if (aceIndex === -1) return;
+   console.log("PLAY ACE CLICK");
+   if (!waitingForAceDecision || gameOver) return;
+   const aceIndex = playerHand.findIndex(c => c.startsWith("A"));
+   if (aceIndex === -1) return;
+   waitingForAceDecision = false;
+   /* =========================
+   MULTIPLAYER
+   ========================= */
+   if (!singleplayerMode) {
+   socket.emit("playCard", {
+   room: currentRoomCode,
+   cards: [playerHand[aceIndex]]
+   });
+   return;
+   }
 
-  if (multiplayerMode) {
+   /* =========================
+   SINGLEPLAYER (DIRECT PLAY)
+   ========================= */
+   const card = playerHand.splice(aceIndex, 1)[0];
+   animatePlay(card, true);
+   applyPlayedCard(card, true);
+   // win check
+   if (playerHand.length === 0) {
+   cinematicFinish = true;
+   showEndScreenDelayed(true, 1200);
+   return;
+   }
+   playerTurn = false;
+   updateUI();
+   setTimeout(pcTurn, 600);
+   }
 
-    socket.emit("playCard", {
-      room: currentRoomCode,
-      cards: [ playerHand[aceIndex] ]
-    });
-
-    waitingForAceDecision = false;
-    return;
-  }
-}
 
 
 
@@ -2419,6 +2430,7 @@ if (startGameBtn) {
   }
 
 });
+
 
 
 
