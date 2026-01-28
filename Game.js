@@ -208,6 +208,11 @@ function toggleSelect(i) {
 }
 
 function playAce() {
+  console.log("PLAY ACE CLICK");
+
+  console.log("waiting:", waitingForAceDecision,
+              "turn:", playerTurn,
+              "gameOver:", gameOver);
 
   if (!waitingForAceDecision || gameOver) return;
 
@@ -1409,6 +1414,11 @@ function setSuit(suit) {
 
 
 function standAce() {
+  console.log("PLAY ACE CLICK");
+
+  console.log("waiting:", waitingForAceDecision,
+              "turn:", playerTurn,
+              "gameOver:", gameOver);
 
   console.log("STAND ACE CLICK");
 
