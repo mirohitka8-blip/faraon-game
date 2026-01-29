@@ -2148,21 +2148,23 @@ socket.on("gameStarted", data => {
   console.log("GAME UPDATE:", data);
 
   /* =========================
-     ANIMATION DETECTION
-  ========================= */
+   PLAY CARD ANIMATION
+========================= */
 
-  if (
-    multiplayerInitialized &&
-    lastTableCard &&
-    data.tableCard &&
-    data.tableCard !== lastTableCard
-  ) {
+if (
+  multiplayerInitialized &&
+  data.tableCard !== lastTableCard
+) {
+
+  // null → karta = ignore (initial sync)
+  if (data.tableCard) {
 
     const fromMe = multiplayerTurnPlayer === socket.id;
 
     animatePlay(data.tableCard, fromMe);
     playSound("card");
   }
+}
 
   // DRAW DETECT (only my hand)
   if (
@@ -2189,17 +2191,17 @@ socket.on("gameStarted", data => {
 
   multiplayerTurnPlayer = data.turnPlayer || null;
 
-  /* =========================
-     APPLY MY HAND
-  ========================= */
-
   playerHand = multiplayerHands[socket.id] || [];
+  playerTurn = multiplayerTurnPlayer === socket.id;
 
   /* =========================
-     TURN SYSTEM
+     FIRST SYNC FLAG
   ========================= */
 
-  playerTurn = multiplayerTurnPlayer === socket.id;
+  if (!multiplayerInitialized) {
+    multiplayerInitialized = true;
+  }
+
 
   /* =========================
      RESET INPUT STATE
@@ -2254,7 +2256,6 @@ socket.on("gameStarted", data => {
   lastTableCard = tableCard;
   lastHands = JSON.parse(JSON.stringify(multiplayerHands));
 
-  multiplayerInitialized = true;
 
 });
 
