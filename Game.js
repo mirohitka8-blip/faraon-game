@@ -2144,7 +2144,8 @@ socket.on("gameStarted", data => {
   let lastServerState = null;
 
  socket.on("gameUpdate", data => {
-
+  
+  console.log("FX:", data.effects);
   console.log("GAME UPDATE:", data);
 
   /* =========================
