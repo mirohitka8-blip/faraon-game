@@ -2244,9 +2244,12 @@ socket.on("gameStarted", data => {
 // ===== +3 PENALTY FX =====
 if (data.effects?.seven) {
 
-  showPenalty(data.effects.penalty || pendingDraw);
+  const value = data.effects.penaltyValue;
+
+  showPenalty(value);
   playSound("hit");
 }
+
 
 // ===== GREEN JACK FX =====
 if (data.effects?.greenJack) {
