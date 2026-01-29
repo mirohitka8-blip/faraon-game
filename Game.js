@@ -2144,7 +2144,7 @@ socket.on("gameStarted", data => {
   let lastServerState = null;
 
  socket.on("gameUpdate", data => {
-  
+
   console.log("FX:", data.effects);
   console.log("GAME UPDATE:", data);
 
@@ -2175,7 +2175,7 @@ socket.on("gameStarted", data => {
   }
 
   /* =========================
-     DRAW ANIMATION (ONLY MY HAND)
+     DRAW ANIMATION
   ========================= */
 
   if (
@@ -2205,7 +2205,7 @@ socket.on("gameStarted", data => {
   playerTurn = multiplayerTurnPlayer === socket.id;
 
   /* =========================
-     RESET INPUT STATE
+     RESET INPUT
   ========================= */
 
   selected = [];
@@ -2216,12 +2216,10 @@ socket.on("gameStarted", data => {
      SPECIAL DECISIONS
   ========================= */
 
-  // ACE
   if (data.aceDecision === true && playerTurn) {
     waitingForAceDecision = true;
   }
 
-  // QUEEN
   const chooser = document.getElementById("suitChooser");
 
   if (data.queenDecision === true && playerTurn) {
@@ -2232,43 +2230,36 @@ socket.on("gameStarted", data => {
   }
 
   /* =========================
-     EFFECTS
+     UI UPDATE FIRST
   ========================= */
 
+  updateUI();
+
+  /* =========================
+     EFFECTS AFTER UI
+  ========================= */
+
+  // BURN
   if (data.effects?.burn) {
-
-    if (data.effects?.burn) {
-  showBurnAnimation();
-  playSound("fire");
-}
-
-// ===== +3 PENALTY FX =====
-if (data.effects?.seven) {
-
-  const value = data.effects.penaltyValue;
-
-  showPenalty(value);
-  playSound("hit");
-}
-
-
-// ===== GREEN JACK FX =====
-if (data.effects?.greenJack) {
-
-  showGreenFlash();
-  greenWave();
-  playSound("fire");
-}
-
     showBurnAnimation();
     playSound("fire");
   }
 
-  /* =========================
-     UI
-  ========================= */
+  // +3 STACK
+  if (data.effects?.seven) {
 
-  updateUI();
+    console.log("PENALTY FX TRIGGER", data.effects.penaltyValue);
+
+    showPenalty(data.effects.penaltyValue);
+    playSound("hit");
+  }
+
+  // GREEN JACK
+  if (data.effects?.greenJack) {
+    showGreenFlash();
+    greenWave();
+    playSound("fire");
+  }
 
   /* =========================
      SAVE LAST STATE
@@ -2279,6 +2270,7 @@ if (data.effects?.greenJack) {
   lastTurnPlayer = multiplayerTurnPlayer;
 
 });
+
 
   socket.on("errorMessage", msg => {
   alert(msg);
