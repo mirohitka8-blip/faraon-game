@@ -54,6 +54,7 @@ let lastTableCard = null;
 let lastHands = {};
 let multiplayerInitialized = false;
 let lastTurnPlayer = null;
+let playerNames = {};
 
 let playerTurn = true;
 let gameOver = false;
@@ -1312,16 +1313,30 @@ if (indicator && suitImg) {
 
   // ===== TURN INDICATOR =====
   const turn = document.getElementById("turnIndicator");
-  if (turn) {
-    turn.textContent =
-      gameOver
-        ? "Koniec hry"
-        : waitingForAceDecision
-        ? "⏸ Rozhodni sa (ESO)"
-        : playerTurn
-        ? "🟢 Tvoj ťah"
-        : "🤖 Ťah PC";
+
+if (turn) {
+
+  if (gameOver) {
+    turn.textContent = "Koniec hry";
+
+  } else if (waitingForAceDecision) {
+    turn.textContent = "⏸ Rozhodni sa (ESO)";
+
+  } else if (playerTurn) {
+    turn.textContent = "🟢 Tvoj ťah";
+
+  } else {
+
+    if (multiplayerMode) {
+      const name = playerNames[multiplayerTurnPlayer] || "Hráč";
+      turn.textContent = "🔵 Ťah: " + name;
+    } else {
+      turn.textContent = "🤖 Ťah PC";
+    }
+
   }
+}
+
   adjustHandLayout();
 
 
@@ -2091,6 +2106,13 @@ socket.on("roomJoined", data => {
 
 
 socket.on("roomUpdate", data => {
+
+  playerNames = {};
+
+room.players.forEach(p => {
+  playerNames[p.id] = p.name;
+});
+
 
   updatePlayerList(data.players, data.host);
   // === HOST CHECK ===
