@@ -2143,40 +2143,9 @@ socket.on("gameStarted", data => {
 
   let lastServerState = null;
 
-  socket.on("gameUpdate", data => {
+ socket.on("gameUpdate", data => {
 
   console.log("GAME UPDATE:", data);
-
-  /* =========================
-   PLAY CARD ANIMATION
-========================= */
-
-if (
-  multiplayerInitialized &&
-  data.tableCard !== lastTableCard
-) {
-
-  // null → karta = ignore (initial sync)
-  if (data.tableCard) {
-
-    const fromMe = multiplayerTurnPlayer === socket.id;
-
-    animatePlay(data.tableCard, fromMe);
-    playSound("card");
-  }
-}
-
-  // DRAW DETECT (only my hand)
-  if (
-    multiplayerInitialized &&
-    lastHands[socket.id] &&
-    data.hands[socket.id] &&
-    data.hands[socket.id].length > lastHands[socket.id].length
-  ) {
-
-    animateDraw(true);
-    playSound("draw");
-  }
 
   /* =========================
      SERVER STATE SYNC
@@ -2198,10 +2167,42 @@ if (
      FIRST SYNC FLAG
   ========================= */
 
+  const firstSync = !multiplayerInitialized;
+
   if (!multiplayerInitialized) {
     multiplayerInitialized = true;
   }
 
+  /* =========================
+     PLAY CARD ANIMATION
+  ========================= */
+
+  if (
+    !firstSync &&
+    tableCard !== lastTableCard &&
+    tableCard
+  ) {
+
+    const fromMe = multiplayerTurnPlayer === socket.id;
+
+    animatePlay(tableCard, fromMe);
+    playSound("card");
+  }
+
+  /* =========================
+     DRAW ANIMATION
+  ========================= */
+
+  if (
+    !firstSync &&
+    lastHands[socket.id] &&
+    multiplayerHands[socket.id] &&
+    multiplayerHands[socket.id].length > lastHands[socket.id].length
+  ) {
+
+    animateDraw(true);
+    playSound("draw");
+  }
 
   /* =========================
      RESET INPUT STATE
@@ -2226,7 +2227,6 @@ if (
   if (data.queenDecision === true && playerTurn) {
 
     waitingForSuit = true;
-
     if (chooser) chooser.style.display = "flex";
 
   } else {
@@ -2256,8 +2256,8 @@ if (
   lastTableCard = tableCard;
   lastHands = JSON.parse(JSON.stringify(multiplayerHands));
 
-
 });
+
 
 
 
