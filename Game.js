@@ -53,7 +53,7 @@ let isHost = false;
 let lastTableCard = null;
 let lastHands = {};
 let multiplayerInitialized = false;
-
+let lastTurnPlayer = null;
 
 let playerTurn = true;
 let gameOver = false;
@@ -2148,6 +2148,46 @@ socket.on("gameStarted", data => {
   console.log("GAME UPDATE:", data);
 
   /* =========================
+     FIRST SYNC CHECK
+  ========================= */
+
+  const firstSync = !multiplayerInitialized;
+
+  if (!multiplayerInitialized) {
+    multiplayerInitialized = true;
+  }
+
+  /* =========================
+     PLAY CARD ANIMATION
+  ========================= */
+
+  if (
+    !firstSync &&
+    data.tableCard &&
+    data.tableCard !== lastTableCard
+  ) {
+
+    const fromMe = lastTurnPlayer === socket.id;
+
+    animatePlay(data.tableCard, fromMe);
+    playSound("card");
+  }
+
+  /* =========================
+     DRAW ANIMATION (ONLY MY HAND)
+  ========================= */
+
+  if (
+    !firstSync &&
+    lastHands[socket.id] &&
+    data.hands[socket.id] &&
+    data.hands[socket.id].length > lastHands[socket.id].length
+  ) {
+    animateDraw(true);
+    playSound("draw");
+  }
+
+  /* =========================
      SERVER STATE SYNC
   ========================= */
 
@@ -2164,47 +2204,6 @@ socket.on("gameStarted", data => {
   playerTurn = multiplayerTurnPlayer === socket.id;
 
   /* =========================
-     FIRST SYNC FLAG
-  ========================= */
-
-  const firstSync = !multiplayerInitialized;
-
-  if (!multiplayerInitialized) {
-    multiplayerInitialized = true;
-  }
-
-  /* =========================
-     PLAY CARD ANIMATION
-  ========================= */
-
-  if (
-    !firstSync &&
-    tableCard !== lastTableCard &&
-    tableCard
-  ) {
-
-    const fromMe = multiplayerTurnPlayer === socket.id;
-
-    animatePlay(tableCard, fromMe);
-    playSound("card");
-  }
-
-  /* =========================
-     DRAW ANIMATION
-  ========================= */
-
-  if (
-    !firstSync &&
-    lastHands[socket.id] &&
-    multiplayerHands[socket.id] &&
-    multiplayerHands[socket.id].length > lastHands[socket.id].length
-  ) {
-
-    animateDraw(true);
-    playSound("draw");
-  }
-
-  /* =========================
      RESET INPUT STATE
   ========================= */
 
@@ -2216,21 +2215,18 @@ socket.on("gameStarted", data => {
      SPECIAL DECISIONS
   ========================= */
 
-  // ESO decision
+  // ACE
   if (data.aceDecision === true && playerTurn) {
     waitingForAceDecision = true;
   }
 
-  // QUEEN (HORNÍK) decision
+  // QUEEN
   const chooser = document.getElementById("suitChooser");
 
   if (data.queenDecision === true && playerTurn) {
-
     waitingForSuit = true;
     if (chooser) chooser.style.display = "flex";
-
   } else {
-
     if (chooser) chooser.style.display = "none";
   }
 
@@ -2244,7 +2240,7 @@ socket.on("gameStarted", data => {
   }
 
   /* =========================
-     UI REFRESH
+     UI
   ========================= */
 
   updateUI();
@@ -2255,11 +2251,9 @@ socket.on("gameStarted", data => {
 
   lastTableCard = tableCard;
   lastHands = JSON.parse(JSON.stringify(multiplayerHands));
+  lastTurnPlayer = multiplayerTurnPlayer;
 
 });
-
-
-
 
   socket.on("errorMessage", msg => {
   alert(msg);
