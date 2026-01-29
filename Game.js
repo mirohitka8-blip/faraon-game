@@ -2109,12 +2109,14 @@ socket.on("roomUpdate", data => {
 
   playerNames = {};
 
-room.players.forEach(p => {
-  playerNames[p.id] = p.name;
-});
-
+  if (data.players) {
+    data.players.forEach(p => {
+      playerNames[p.id] = p.name;
+    });
+  }
 
   updatePlayerList(data.players, data.host);
+
   // === HOST CHECK ===
   isHost = data.host === socket.id;
 
@@ -2124,6 +2126,7 @@ room.players.forEach(p => {
   }
 
 });
+
 
 
 socket.on("gameStarted", data => {
