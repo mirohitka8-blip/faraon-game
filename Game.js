@@ -2235,6 +2235,27 @@ socket.on("gameStarted", data => {
   ========================= */
 
   if (data.effects?.burn) {
+
+    if (data.effects?.burn) {
+  showBurnAnimation();
+  playSound("fire");
+}
+
+// ===== +3 PENALTY FX =====
+if (data.effects?.seven) {
+
+  showPenalty(data.effects.penalty || pendingDraw);
+  playSound("hit");
+}
+
+// ===== GREEN JACK FX =====
+if (data.effects?.greenJack) {
+
+  showGreenFlash();
+  greenWave();
+  playSound("fire");
+}
+
     showBurnAnimation();
     playSound("fire");
   }
