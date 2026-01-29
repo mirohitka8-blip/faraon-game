@@ -50,6 +50,9 @@ let cinematicFinish = false;
 let cinematicLose = false;
 let currentRoomCode = null;
 let isHost = false;
+let lastTableCard = null;
+let lastHands = {};
+
 
 
 let playerTurn = true;
@@ -2145,66 +2148,62 @@ socket.on("gameStarted", data => {
   console.log("GAME UPDATE:", data);
 
   /* =========================
-     SERVER STATE SYNC
+     DETECT PLAY CARD ANIMATION
   ========================= */
 
-  multiplayerHands = data.hands || {};
-  tableCard = data.tableCard || null;
+  if (lastTableCard && data.tableCard !== lastTableCard) {
+
+    const playedCard = data.tableCard;
+
+    const fromMe = multiplayerTurnPlayer === socket.id;
+
+    animatePlay(playedCard, fromMe);
+    playSound("card.wav");
+  }
+
+  /* =========================
+     DETECT DRAW
+  ========================= */
+
+  if (lastHands[socket.id] &&
+      data.hands[socket.id] &&
+      data.hands[socket.id].length > lastHands[socket.id].length) {
+
+    animateDraw(true);
+    playSound("draw.wav");
+  }
+
+  /* =========================
+     SERVER STATE APPLY
+  ========================= */
+
+  multiplayerHands = data.hands;
+  tableCard = data.tableCard;
 
   forcedSuit = data.forcedSuit ?? null;
   pendingDraw = data.pendingDraw ?? 0;
   skipCount = data.skipCount ?? 0;
 
-  multiplayerTurnPlayer = data.turnPlayer || null;
-
-  /* =========================
-     APPLY MY HAND
-  ========================= */
+  multiplayerTurnPlayer = data.turnPlayer;
 
   playerHand = multiplayerHands[socket.id] || [];
 
-  /* =========================
-     TURN SYSTEM
-  ========================= */
-
   playerTurn = multiplayerTurnPlayer === socket.id;
 
-  /* =========================
-     RESET INPUT STATE
-  ========================= */
-
   selected = [];
-
-  // reset selectors by default
   waitingForSuit = false;
-  waitingForAceDecision = false;
+
+  waitingForAceDecision =
+    data.aceDecision === true &&
+    multiplayerTurnPlayer === socket.id;
 
   /* =========================
-     SPECIAL DECISIONS
-  ========================= */
-
-  // ESO decision
-  if (data.aceDecision === true && playerTurn) {
-    waitingForAceDecision = true;
-  }
-
-  // QUEEN (HORNÍK) decision
-  if (data.queenDecision === true && playerTurn) {
-    waitingForSuit = true;
-
-    const chooser = document.getElementById("suitChooser");
-    if (chooser) chooser.style.display = "flex";
-  } else {
-    const chooser = document.getElementById("suitChooser");
-    if (chooser) chooser.style.display = "none";
-  }
-
-  /* =========================
-     EFFECTS
+     FX
   ========================= */
 
   if (data.effects?.burn) {
     showBurnAnimation();
+    playSound("fire.wav");
   }
 
   /* =========================
@@ -2213,7 +2212,15 @@ socket.on("gameStarted", data => {
 
   updateUI();
 
-  });
+  /* =========================
+     SAVE LAST STATE
+  ========================= */
+
+  lastTableCard = tableCard;
+  lastHands = JSON.parse(JSON.stringify(multiplayerHands));
+
+});
+
 
 
   socket.on("errorMessage", msg => {
