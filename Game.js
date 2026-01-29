@@ -52,7 +52,7 @@ let currentRoomCode = null;
 let isHost = false;
 let lastTableCard = null;
 let lastHands = {};
-
+let multiplayerInitialized = false;
 
 
 let playerTurn = true;
@@ -2148,62 +2148,97 @@ socket.on("gameStarted", data => {
   console.log("GAME UPDATE:", data);
 
   /* =========================
-     DETECT PLAY CARD ANIMATION
+     ANIMATION DETECTION
   ========================= */
 
-  if (lastTableCard && data.tableCard !== lastTableCard) {
-
-    const playedCard = data.tableCard;
+  if (
+    multiplayerInitialized &&
+    lastTableCard &&
+    data.tableCard &&
+    data.tableCard !== lastTableCard
+  ) {
 
     const fromMe = multiplayerTurnPlayer === socket.id;
 
-    animatePlay(playedCard, fromMe);
-    playSound("card.wav");
+    animatePlay(data.tableCard, fromMe);
+    playSound("card");
   }
 
-  /* =========================
-     DETECT DRAW
-  ========================= */
-
-  if (lastHands[socket.id] &&
-      data.hands[socket.id] &&
-      data.hands[socket.id].length > lastHands[socket.id].length) {
+  // DRAW DETECT (only my hand)
+  if (
+    multiplayerInitialized &&
+    lastHands[socket.id] &&
+    data.hands[socket.id] &&
+    data.hands[socket.id].length > lastHands[socket.id].length
+  ) {
 
     animateDraw(true);
-    playSound("draw.wav");
+    playSound("draw");
   }
 
   /* =========================
-     SERVER STATE APPLY
+     SERVER STATE SYNC
   ========================= */
 
-  multiplayerHands = data.hands;
-  tableCard = data.tableCard;
+  multiplayerHands = data.hands || {};
+  tableCard = data.tableCard || null;
 
   forcedSuit = data.forcedSuit ?? null;
   pendingDraw = data.pendingDraw ?? 0;
   skipCount = data.skipCount ?? 0;
 
-  multiplayerTurnPlayer = data.turnPlayer;
+  multiplayerTurnPlayer = data.turnPlayer || null;
+
+  /* =========================
+     APPLY MY HAND
+  ========================= */
 
   playerHand = multiplayerHands[socket.id] || [];
 
+  /* =========================
+     TURN SYSTEM
+  ========================= */
+
   playerTurn = multiplayerTurnPlayer === socket.id;
+
+  /* =========================
+     RESET INPUT STATE
+  ========================= */
 
   selected = [];
   waitingForSuit = false;
-
-  waitingForAceDecision =
-    data.aceDecision === true &&
-    multiplayerTurnPlayer === socket.id;
+  waitingForAceDecision = false;
 
   /* =========================
-     FX
+     SPECIAL DECISIONS
+  ========================= */
+
+  // ESO decision
+  if (data.aceDecision === true && playerTurn) {
+    waitingForAceDecision = true;
+  }
+
+  // QUEEN (HORNÍK) decision
+  const chooser = document.getElementById("suitChooser");
+
+  if (data.queenDecision === true && playerTurn) {
+
+    waitingForSuit = true;
+
+    if (chooser) chooser.style.display = "flex";
+
+  } else {
+
+    if (chooser) chooser.style.display = "none";
+  }
+
+  /* =========================
+     EFFECTS
   ========================= */
 
   if (data.effects?.burn) {
     showBurnAnimation();
-    playSound("fire.wav");
+    playSound("fire");
   }
 
   /* =========================
@@ -2218,6 +2253,8 @@ socket.on("gameStarted", data => {
 
   lastTableCard = tableCard;
   lastHands = JSON.parse(JSON.stringify(multiplayerHands));
+
+  multiplayerInitialized = true;
 
 });
 
