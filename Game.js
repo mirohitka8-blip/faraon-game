@@ -55,12 +55,9 @@ let lastHands = {};
 let multiplayerInitialized = false;
 let lastTurnPlayer = null;
 let playerNames = {};
-
 let playerTurn = true;
 let gameOver = false;
-
 let forcedSuit = null;
-
 
 
 let pendingDraw = 0;
@@ -646,11 +643,6 @@ function launchWinConfetti() {
 }
 
 
-
-
-
-
-
 function clearPenaltyUI() {
 
   const el = document.querySelector(".penalty-text");
@@ -660,6 +652,9 @@ function clearPenaltyUI() {
 
 
 function backToMenu() {
+
+  multiplayerMode = false;
+multiplayerInitialized = false;
 
   const end = document.getElementById("endScreen");
   const game = document.getElementById("game");
@@ -2231,13 +2226,15 @@ function setMultiSlot(pos, id) {
 
 socket.on("gameStarted", data => {
 
-  if (multiplayerMode) {
+multiplayerMode = true;
 
   document.getElementById("singleGameUI").style.display = "none";
   document.getElementById("multiGameUI").style.display = "block";
 
-}
   console.log("GAME STARTED", data);
+
+  document.getElementById("multiplayerLobby").style.display = "none";
+  document.getElementById("game").style.display = "block";
 
   multiplayerMode = true;
 
@@ -2595,13 +2592,23 @@ if (startGameBtn) {
   // =============================
 
   if (singleBtn) {
-    singleBtn.onclick = () => {
-      playSound("click.wav");
-      document.getElementById("menuScreen").style.display = "none";
-      document.getElementById("game").style.display = "block";
-      startGame();
-    };
-  }
+  singleBtn.onclick = () => {
+
+    playSound("click.wav");
+
+    // ✅ SWITCH TO SINGLE MODE
+    multiplayerMode = false;
+
+    document.getElementById("singleGameUI").style.display = "block";
+    document.getElementById("multiGameUI").style.display = "none";
+
+    document.getElementById("menuScreen").style.display = "none";
+    document.getElementById("game").style.display = "block";
+
+    startGame();
+  };
+}
+
 
   if (playBtn) {
     playBtn.onclick = () => {
