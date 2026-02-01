@@ -1082,6 +1082,11 @@ function finishGame(won){
 }
 
 
+function renderOpponents() {
+
+  if (!multiplayerMode) return;
+
+}
 
 
 function refillDeck() {
@@ -1201,55 +1206,79 @@ else {
 
  function updateUI() {
 
-  // ===== ESO DECISION =====
-const aceBox = document.getElementById("aceDecision");
-const playAceBtn = document.getElementById("playAceBtn");
-const standAceBtn = document.getElementById("standAceBtn");
+  /* =========================
+     ACE DECISION
+  ========================= */
 
-if (waitingForAceDecision && playerTurn && !gameOver) {
+  const aceBox = document.getElementById("aceDecision");
+  const playAceBtn = document.getElementById("playAceBtn");
+  const standAceBtn = document.getElementById("standAceBtn");
 
-  if (aceBox) aceBox.style.display = "flex";
+  if (waitingForAceDecision && playerTurn && !gameOver) {
 
-  if (playAceBtn) {
-    playAceBtn.style.display =
-      playerHand.some(c => c.startsWith("A"))
-        ? "inline-block"
-        : "none";
+    if (aceBox) aceBox.style.display = "flex";
+
+    if (playAceBtn) {
+      playAceBtn.style.display =
+        playerHand.some(c => c.startsWith("A"))
+          ? "inline-block"
+          : "none";
+    }
+
+    if (standAceBtn) {
+      standAceBtn.style.display = "inline-block";
+    }
+
+  } else {
+
+    if (aceBox) aceBox.style.display = "none";
   }
 
-  if (standAceBtn) {
-    standAceBtn.style.display = "inline-block";
-  }
+  /* =========================
+     PC HAND (SINGLEPLAYER ONLY)
+  ========================= */
 
-} else {
+  if (!multiplayerMode) {
 
-  if (aceBox) aceBox.style.display = "none";
-}
+    const pc = document.getElementById("pcHand");
 
+    if (pc) {
 
-  // ===== PC HAND =====
-  const pc = document.getElementById("pcHand");
-  if (pc) {
-    pc.innerHTML = "";
-    pcHand.forEach(() => {
-      const back = document.createElement("div");
-      back.className = "pc-card";
-      pc.appendChild(back);
-    });
-  }
+      pc.innerHTML = "";
 
-  // ===== TABLE CARD =====
-  const table = document.getElementById("tableCard");
-  if (table) {
-    table.innerHTML = "";
-    if (tableCard) {
-      const img = document.createElement("img");
-      img.src = "/cards/" + cardToFile(tableCard);
-      table.appendChild(img);
+      pcHand.forEach(() => {
+
+        const back = document.createElement("div");
+        back.className = "pc-card";
+        pc.appendChild(back);
+
+      });
     }
   }
 
-  // ===== PLAYER HAND =====
+  /* =========================
+     TABLE CARD
+  ========================= */
+
+  const table = document.getElementById("tableCard");
+
+  if (table) {
+
+    table.innerHTML = "";
+
+    if (tableCard) {
+
+      const img = document.createElement("img");
+      img.src = "cards/" + cardToFile(tableCard);
+      table.appendChild(img);
+
+    }
+  }
+
+  /* =========================
+     PLAYER HAND (ME)
+  ========================= */
+
   const playerCards = document.getElementById("playerCards");
   if (!playerCards) return;
 
@@ -1271,9 +1300,14 @@ if (waitingForAceDecision && playerTurn && !gameOver) {
     playerCards.appendChild(btn);
   });
 
-  // ===== PLAY BUTTON =====
+  /* =========================
+     PLAY BUTTON
+  ========================= */
+
   const playBtn = document.getElementById("playSelectedBtn");
+
   if (playBtn) {
+
     playBtn.style.display =
       playerTurn &&
       selected.length &&
@@ -1284,63 +1318,82 @@ if (waitingForAceDecision && playerTurn && !gameOver) {
         : "none";
   }
 
-  // ===== FORCED SUIT =====
- const indicator = document.getElementById("forcedSuitIndicator");
-const suitImg = document.getElementById("forcedSuitImg");
+  /* =========================
+     FORCED SUIT INDICATOR
+  ========================= */
 
-if (indicator && suitImg) {
+  const indicator = document.getElementById("forcedSuitIndicator");
+  const suitImg = document.getElementById("forcedSuitImg");
 
-  if (forcedSuit) {
+  if (indicator && suitImg) {
 
-    indicator.style.display = "flex";
+    // forcedSuit sa v stack mode NEUKAZUJE
+    if (forcedSuit && pendingDraw === 0) {
 
-    const map = {
-      "♣": "leaf-icon@medium.png",
-      "♥": "heart-icon@medium.png",
-      "♦": "bell-icon@medium.png",
-      "♠": "acorn-icon@medium.png"
-    };
+      indicator.style.display = "flex";
 
-    suitImg.src = "cards/" + map[forcedSuit];
+      const map = {
+        "♣": "leaf-icon@medium.png",
+        "♥": "heart-icon@medium.png",
+        "♦": "bell-icon@medium.png",
+        "♠": "acorn-icon@medium.png"
+      };
 
-  } else {
+      suitImg.src = "cards/" + map[forcedSuit];
 
-    indicator.style.display = "none";
+    } else {
 
+      indicator.style.display = "none";
+    }
   }
-}
 
+  /* =========================
+     TURN INDICATOR
+  ========================= */
 
-  // ===== TURN INDICATOR =====
   const turn = document.getElementById("turnIndicator");
 
-if (turn) {
+  if (turn) {
 
-  if (gameOver) {
-    turn.textContent = "Koniec hry";
+    if (gameOver) {
 
-  } else if (waitingForAceDecision) {
-    turn.textContent = "⏸ Rozhodni sa (ESO)";
+      turn.textContent = "Koniec hry";
 
-  } else if (playerTurn) {
-    turn.textContent = "🟢 Tvoj ťah";
+    } else if (waitingForAceDecision) {
 
-  } else {
+      turn.textContent = "⏸ Rozhodni sa (ESO)";
 
-    if (multiplayerMode) {
-      const name = playerNames[multiplayerTurnPlayer] || "Hráč";
-      turn.textContent = "🔵 Ťah: " + name;
+    } else if (playerTurn) {
+
+      turn.textContent = "🟢 Tvoj ťah";
+
     } else {
-      turn.textContent = "🤖 Ťah PC";
-    }
 
+      if (multiplayerMode) {
+
+        const name =
+          playerNames[multiplayerTurnPlayer] || "Hráč";
+
+        turn.textContent = "🔵 Ťah: " + name;
+
+      } else {
+
+        turn.textContent = "🤖 Ťah PC";
+      }
+    }
   }
-}
+
+  /* =========================
+     MULTIPLAYER OPPONENTS
+  ========================= */
+
+  if (multiplayerMode) {
+    renderOpponents();
+  }
 
   adjustHandLayout();
-
-
 }
+
 
 function validateDeckIntegrity() {
 
@@ -2127,10 +2180,63 @@ socket.on("roomUpdate", data => {
 
 });
 
+function updateMultiPlayerUI() {
+
+  if (!multiplayerMode) return;
+
+  const ids = Object.keys(multiplayerHands);
+
+  const myIndex = ids.indexOf(socket.id);
+
+  const order = [
+    ids[(myIndex + 1) % ids.length],
+    ids[(myIndex + 2) % ids.length],
+    ids[(myIndex + 3) % ids.length]
+  ];
+
+  const top = order[0];
+  const left = order[1];
+  const right = order[2];
+
+  setMultiSlot("Top", top);
+  setMultiSlot("Left", left);
+  setMultiSlot("Right", right);
+}
+
+function setMultiSlot(pos, id) {
+
+  const nameEl = document.getElementById("player"+pos+"Name");
+  const cardsEl = document.getElementById("player"+pos+"Cards");
+
+  if (!id || !multiplayerHands[id]) {
+    if (nameEl) nameEl.textContent = "";
+    if (cardsEl) cardsEl.innerHTML = "";
+    return;
+  }
+
+  nameEl.textContent = playerNames[id] || "Hráč";
+
+  cardsEl.innerHTML = "";
+
+  multiplayerHands[id].forEach(() => {
+
+    const back = document.createElement("div");
+    back.className = "pc-card";
+    cardsEl.appendChild(back);
+
+  });
+}
+
 
 
 socket.on("gameStarted", data => {
 
+  if (multiplayerMode) {
+
+  document.getElementById("singleGameUI").style.display = "none";
+  document.getElementById("multiGameUI").style.display = "block";
+
+}
   console.log("GAME STARTED", data);
 
   multiplayerMode = true;
@@ -2168,14 +2274,9 @@ socket.on("gameStarted", data => {
 
   let lastServerState = null;
 
- socket.on("gameUpdate", data => {
+socket.on("gameUpdate", data => {
 
-  console.log("FX:", data.effects);
   console.log("GAME UPDATE:", data);
-
-  /* =========================
-     FIRST SYNC CHECK
-  ========================= */
 
   const firstSync = !multiplayerInitialized;
 
@@ -2184,37 +2285,15 @@ socket.on("gameStarted", data => {
   }
 
   /* =========================
-     PLAY CARD ANIMATION
+     SAVE OLD STATE
   ========================= */
 
-  if (
-    !firstSync &&
-    data.tableCard &&
-    data.tableCard !== lastTableCard
-  ) {
-
-    const fromMe = lastTurnPlayer === socket.id;
-
-    animatePlay(data.tableCard, fromMe);
-    playSound("card");
-  }
+  const prevHands = JSON.parse(JSON.stringify(multiplayerHands || {}));
+  const prevTable = tableCard;
+  const prevTurn = multiplayerTurnPlayer;
 
   /* =========================
-     DRAW ANIMATION
-  ========================= */
-
-  if (
-    !firstSync &&
-    lastHands[socket.id] &&
-    data.hands[socket.id] &&
-    data.hands[socket.id].length > lastHands[socket.id].length
-  ) {
-    animateDraw(true);
-    playSound("draw");
-  }
-
-  /* =========================
-     SERVER STATE SYNC
+     APPLY SERVER STATE
   ========================= */
 
   multiplayerHands = data.hands || {};
@@ -2228,6 +2307,39 @@ socket.on("gameStarted", data => {
 
   playerHand = multiplayerHands[socket.id] || [];
   playerTurn = multiplayerTurnPlayer === socket.id;
+  updateMultiPlayerUI();
+
+
+  /* =========================
+     PLAY CARD ANIMATION
+  ========================= */
+
+  if (
+    !firstSync &&
+    tableCard &&
+    tableCard !== prevTable
+  ) {
+
+    const fromMe = prevTurn === socket.id;
+
+    animatePlay(tableCard, fromMe);
+    playSound("card");
+  }
+
+  /* =========================
+     DRAW ANIMATION
+  ========================= */
+
+  if (
+    !firstSync &&
+    prevHands[socket.id] &&
+    multiplayerHands[socket.id] &&
+    multiplayerHands[socket.id].length > prevHands[socket.id].length
+  ) {
+
+    animateDraw(true);
+    playSound("draw");
+  }
 
   /* =========================
      RESET INPUT
@@ -2238,7 +2350,7 @@ socket.on("gameStarted", data => {
   waitingForAceDecision = false;
 
   /* =========================
-     SPECIAL DECISIONS
+     DECISIONS
   ========================= */
 
   if (data.aceDecision === true && playerTurn) {
@@ -2248,53 +2360,43 @@ socket.on("gameStarted", data => {
   const chooser = document.getElementById("suitChooser");
 
   if (data.queenDecision === true && playerTurn) {
+
     waitingForSuit = true;
     if (chooser) chooser.style.display = "flex";
+
   } else {
+
     if (chooser) chooser.style.display = "none";
   }
 
   /* =========================
-     UI UPDATE FIRST
+     UI UPDATE
   ========================= */
 
   updateUI();
 
   /* =========================
-     EFFECTS AFTER UI
+     EFFECTS
   ========================= */
 
-  // BURN
   if (data.effects?.burn) {
     showBurnAnimation();
     playSound("fire");
   }
 
-  // +3 STACK
   if (data.effects?.seven) {
-
-    console.log("PENALTY FX TRIGGER", data.effects.penaltyValue);
-
     showPenalty(data.effects.penaltyValue);
     playSound("hit");
   }
 
-  // GREEN JACK
   if (data.effects?.greenJack) {
     showGreenFlash();
     greenWave();
     playSound("fire");
   }
 
-  /* =========================
-     SAVE LAST STATE
-  ========================= */
-
-  lastTableCard = tableCard;
-  lastHands = JSON.parse(JSON.stringify(multiplayerHands));
-  lastTurnPlayer = multiplayerTurnPlayer;
-
 });
+
 
 
   socket.on("errorMessage", msg => {

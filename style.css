@@ -840,3 +840,56 @@ body {
 .player-ready {
   color: #4ade80;
 }
+
+#multiGameUI {
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+
+.multi-player {
+  position:absolute;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.multi-player.top {
+  top:12px;
+  left:50%;
+  transform:translateX(-50%);
+  flex-direction:column;
+}
+
+.multi-player.left {
+  left:12px;
+  top:50%;
+  transform:translateY(-50%);
+  flex-direction:column;
+}
+
+.multi-player.right {
+  right:12px;
+  top:50%;
+  transform:translateY(-50%);
+  flex-direction:column;
+}
+
+.card-row {
+  display:flex;
+  gap:4px;
+}
+
+.card-col {
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.name-bar {
+  background:rgba(0,0,0,.6);
+  padding:4px 10px;
+  border-radius:8px;
+  font-weight:700;
+  color:#22c55e;
+}
