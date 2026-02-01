@@ -654,16 +654,20 @@ function clearPenaltyUI() {
 function backToMenu() {
 
   multiplayerMode = false;
-multiplayerInitialized = false;
+  multiplayerInitialized = false;
 
   const end = document.getElementById("endScreen");
   const game = document.getElementById("game");
   const menu = document.getElementById("menuScreen");
 
+  // ===== REMOVE MULTIPLAYER LAYOUT =====
+  if (game) {
+    game.classList.remove("multiplayer");
+  }
+
   // zavri end screen
   if (end) end.classList.remove("active");
-document.getElementById("darkOverlay").classList.remove("active");
-
+  document.getElementById("darkOverlay").classList.remove("active");
 
   // skry hru
   if (game) game.style.display = "none";
@@ -679,6 +683,7 @@ document.getElementById("darkOverlay").classList.remove("active");
     ".confetti, .damage-flash, .rage-flash, #loseDarkOverlay"
   ).forEach(e => e.remove());
 }
+
 
 function impactShake() {
 
@@ -2226,43 +2231,30 @@ function setMultiSlot(pos, id) {
 
 socket.on("gameStarted", data => {
 
-  console.log("GAME STARTED:", data);
+  console.log("GAME STARTED", data);
 
-  // =========================
-  // MODE FLAGS
-  // =========================
-
+  // ===== ZAPNI MULTIPLAYER MODE =====
   multiplayerMode = true;
-  multiplayerInitialized = false;   // reset anim sync
-  lastTableCard = null;
-  lastHands = {};
-  lastTurnPlayer = null;
 
-  // =========================
-  // UI SWITCH
-  // =========================
-
-  // hide lobby
-  const lobby = document.getElementById("multiplayerLobby");
-  if (lobby) lobby.style.display = "none";
-
-  // show game
+  // ===== PRIDAJ MULTIPLAYER CLASS =====
   const game = document.getElementById("game");
-  if (game) game.style.display = "block";
+  if (game) {
+    game.classList.add("multiplayer");
+  }
 
-  // switch layouts
-  const singleUI = document.getElementById("singleGameUI");
-  const multiUI = document.getElementById("multiGameUI");
+  // ===== PREPNI UI =====
+  document.getElementById("singleGameUI").style.display = "none";
+  document.getElementById("multiGameUI").style.display = "block";
 
-  if (singleUI) singleUI.style.display = "block";   // core table stays
-  if (multiUI) multiUI.style.display = "block";     // opponents overlay
+  // ===== SKRY LOBBY =====
+  document.getElementById("multiplayerLobby").style.display = "none";
 
-  // =========================
-  // SERVER STATE INIT
-  // =========================
+  // ===== ZOBRAZ HRU =====
+  document.getElementById("game").style.display = "block";
 
-  multiplayerHands = data.hands || {};
-  tableCard = data.tableCard || null;
+  // ===== INIT STATE =====
+  multiplayerHands = data.hands;
+  tableCard = data.tableCard;
 
   forcedSuit = data.forcedSuit ?? null;
   pendingDraw = data.pendingDraw ?? 0;
@@ -2270,11 +2262,7 @@ socket.on("gameStarted", data => {
 
   multiplayerTurnPlayer = data.order[data.turnIndex];
 
-  // =========================
-  // PLAYER STATE
-  // =========================
-
-  playerHand = multiplayerHands[socket.id] || [];
+  playerHand = multiplayerHands[socket.id];
   playerTurn = multiplayerTurnPlayer === socket.id;
 
   selected = [];
@@ -2283,18 +2271,9 @@ socket.on("gameStarted", data => {
 
   gameOver = false;
 
-  // =========================
-  // MULTI OPPONENT UI
-  // =========================
-
-  updateMultiPlayerUI();
-
-  // =========================
-  // FIRST UI DRAW
-  // =========================
+  multiplayerInitialized = false;
 
   updateUI();
-
 });
 
 
