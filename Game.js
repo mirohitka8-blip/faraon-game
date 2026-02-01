@@ -653,35 +653,51 @@ function clearPenaltyUI() {
 
 function backToMenu() {
 
-
+  // ===== RESET MULTIPLAYER STATE =====
   multiplayerMode = false;
   multiplayerInitialized = false;
 
-  
+  currentRoomCode = null;
+  isHost = false;
+  playerNames = {};
 
   const end = document.getElementById("endScreen");
   const game = document.getElementById("game");
   const menu = document.getElementById("menuScreen");
+
+  const singleUI = document.getElementById("singleGameUI");
+  const multiUI = document.getElementById("multiGameUI");
+  const pcArea = document.getElementById("pcArea");
 
   // ===== REMOVE MULTIPLAYER LAYOUT =====
   if (game) {
     game.classList.remove("multiplayer");
   }
 
-  // zavri end screen
-  if (end) end.classList.remove("active");
-  document.getElementById("darkOverlay").classList.remove("active");
+  // ===== RESET UI =====
+  if (multiUI) multiUI.style.display = "none";
+  if (singleUI) singleUI.style.display = "block";
+  if (pcArea) pcArea.style.display = "block";
 
-  // skry hru
+  // ===== CLOSE END SCREEN =====
+  if (end) end.classList.remove("active");
+
+  const dark = document.getElementById("darkOverlay");
+  if (dark) dark.classList.remove("active");
+
+  // ===== HIDE GAME =====
   if (game) game.style.display = "none";
 
-  // zobraz menu
+  // ===== SHOW MENU =====
   if (menu) menu.style.display = "flex";
 
-  // reset hry
+  // ===== RESET GAME FLAGS =====
   gameOver = false;
+  selected = [];
+  waitingForSuit = false;
+  waitingForAceDecision = false;
 
-  // cleanup efekty
+  // ===== CLEAN FX =====
   document.querySelectorAll(
     ".confetti, .damage-flash, .rage-flash, #loseDarkOverlay"
   ).forEach(e => e.remove());
