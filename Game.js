@@ -194,6 +194,21 @@ function canPlay(card) {
   return v === tv || s === ts;
 }
 
+
+
+socket.on("connect", () => {
+  console.log("SOCKET CONNECTED:", socket.id);
+});
+
+socket.on("disconnect", () => {
+  console.log("SOCKET DISCONNECTED");
+});
+
+
+socket.on("roomJoined", data => {
+  console.log("ROOM JOINED RECEIVED", data);
+});
+
 /* ==================================================
    PLAYER INPUT
 ================================================== */
@@ -2563,16 +2578,22 @@ if (backLobbyBtn) {
   if (createRoomBtn) {
   createRoomBtn.onclick = () => {
 
-    const name = document.getElementById("playerNameInput").value.trim();
+    currentRoomCode = null;
 
-    if (!name) {
-      alert("Zadaj meno");
-      return;
-    }
+  console.log("CREATE ROOM CLICK");
 
-    socket.emit("createRoom", name);
+  const name = document.getElementById("playerNameInput").value.trim();
 
-  };
+  if (!name) {
+    alert("Zadaj meno");
+    return;
+  }
+
+  console.log("SENDING createRoom", name);
+
+  socket.emit("createRoom", name);
+};
+
   }
 
   const joinRoomBtn = document.getElementById("joinRoomBtn");
