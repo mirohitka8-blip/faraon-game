@@ -259,7 +259,7 @@ body {
 =============================== */
 
 #controls {
-  position: fixed;
+  position: static;
   bottom: 12px;
   left: 50%;
   transform: translateX(-50%);
@@ -837,6 +837,7 @@ body {
 
 #game:not(.multiplayer) #table,
 #game:not(.multiplayer) #playerCards,
+
 #game:not(.multiplayer) #controls,
 #game:not(.multiplayer) .turn-indicator {
 
@@ -1012,4 +1013,110 @@ body {
 #game:not(.multiplayer) #gameInner {
   display: grid;
   grid-template-rows: auto 40px 1fr auto auto;
+}
+/* ============================
+   MULTIPLAYER HARD FIX
+============================ */
+
+/* TOP PLAYER — vždy vodorovne */
+
+#game.multiplayer .multi-player.top .card-row {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 8px;
+  transform: scale(0.75);
+}
+
+/* ZABRÁŇ zdedeniu column */
+
+#game.multiplayer .multi-player.top {
+  flex-direction: column !important;
+}
+
+/* ============================
+   SINGLEPLAYER HARD RESET
+============================ */
+
+#game:not(.multiplayer) #gameInner {
+  display: grid !important;
+  grid-template-rows: auto 40px 1fr auto auto !important;
+}
+
+#game:not(.multiplayer) #table,
+#game:not(.multiplayer) #playerCards,
+#game:not(.multiplayer) #controls,
+#game:not(.multiplayer) .turn-indicator {
+
+  position: static !important;
+  transform: none !important;
+}
+
+/* ===============================
+   MULTIPLAYER OVERRIDE
+=============================== */
+
+#game.multiplayer #table {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#game.multiplayer #playerCards {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#game.multiplayer #controls {
+  position: absolute;
+  bottom: 150px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#game.multiplayer .turn-indicator {
+  position: absolute;
+  top: calc(50% - 140px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#game.multiplayer #gameInner {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* ===============================
+   SINGLEPLAYER HARD RESET
+=============================== */
+
+#game:not(.multiplayer) #gameInner {
+  display: grid !important;
+  grid-template-rows: auto 40px 1fr auto auto !important;
+}
+
+#game:not(.multiplayer) #table {
+  position: relative !important;
+  transform: none !important;
+}
+
+#game:not(.multiplayer) #playerCards {
+  position: relative !important;
+  transform: none !important;
+  margin-bottom: 90px;
+}
+
+#game:not(.multiplayer) #controls {
+  position: fixed !important;
+  bottom: 12px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+}
+
+#game:not(.multiplayer) .turn-indicator {
+  position: static !important;
+  transform: none !important;
 }
