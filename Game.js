@@ -2223,20 +2223,52 @@ function updateMultiPlayerUI() {
 
   const myIndex = ids.indexOf(socket.id);
 
-  const order = [
-    ids[(myIndex + 1) % ids.length],
-    ids[(myIndex + 2) % ids.length],
-    ids[(myIndex + 3) % ids.length]
-  ];
+  // ostatní hráči v poradí
+  const others = ids.filter(id => id !== socket.id);
 
-  const top = order[0];
-  const left = order[1];
-  const right = order[2];
+  // reference na sloty
+  const topSlot = document.querySelector(".multi-player.top");
+  const leftSlot = document.querySelector(".multi-player.left");
+  const rightSlot = document.querySelector(".multi-player.right");
 
-  setMultiSlot("Top", top);
-  setMultiSlot("Left", left);
-  setMultiSlot("Right", right);
+  // reset všetkých
+  if (topSlot) topSlot.style.display = "none";
+  if (leftSlot) leftSlot.style.display = "none";
+  if (rightSlot) rightSlot.style.display = "none";
+
+  // ===== 1 súper =====
+  if (others.length === 1) {
+
+    setMultiSlot("Top", others[0]);
+    if (topSlot) topSlot.style.display = "flex";
+
+  }
+
+  // ===== 2 súperi =====
+  else if (others.length === 2) {
+
+    setMultiSlot("Top", others[0]);
+    setMultiSlot("Left", others[1]);
+
+    if (topSlot) topSlot.style.display = "flex";
+    if (leftSlot) leftSlot.style.display = "flex";
+
+  }
+
+  // ===== 3 súperi =====
+  else if (others.length === 3) {
+
+    setMultiSlot("Top", others[0]);
+    setMultiSlot("Left", others[1]);
+    setMultiSlot("Right", others[2]);
+
+    if (topSlot) topSlot.style.display = "flex";
+    if (leftSlot) leftSlot.style.display = "flex";
+    if (rightSlot) rightSlot.style.display = "flex";
+  }
+
 }
+
 
 function setMultiSlot(pos, id) {
 
