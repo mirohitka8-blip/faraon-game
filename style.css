@@ -948,3 +948,49 @@ body {
 #game.multiplayer #multiGameUI {
   display: block !important;
 }
+
+/* LEFT PLAYER — meno nad kartami */
+
+.multi-player.left {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+
+/* RIGHT PLAYER — meno nad kartami */
+
+.multi-player.right {
+  display: flex;
+  flex-direction: column-reverse;
+}
+/* LEFT PLAYER NAME — otoč smerom ku stolu */
+
+.multi-player.left .name-bar {
+  transform: rotate(90deg);
+  transform-origin: center;
+}
+
+
+/* RIGHT PLAYER NAME — opačný smer */
+
+.multi-player.right .name-bar {
+  transform: rotate(-90deg);
+  transform-origin: center;
+}
+.multi-player.left .name-bar {
+  margin-right: -18px;
+}
+
+.multi-player.right .name-bar {
+  margin-left: -18px;
+}
+
+.multi-player.top .name-bar {
+  margin-bottom: -8px;
+}
+.multi-player.left .name-bar,
+.multi-player.right .name-bar {
+  font-size: 13px;
+  letter-spacing: 1px;
+  opacity: 0.9;
+}
