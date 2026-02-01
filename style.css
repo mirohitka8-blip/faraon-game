@@ -875,6 +875,25 @@ body {
   transform:translateY(-50%);
   flex-direction:column;
 }
+/* LEFT + RIGHT hráči — karty vedľa seba */
+
+.multi-player.left .card-col,
+.multi-player.right .card-col {
+
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  transform: scale(0.75);
+  align-items: center;
+}
+.multi-player.left .card-col {
+  transform: rotate(90deg);
+}
+
+.multi-player.right .card-col {
+  transform: rotate(-90deg);
+}
+
 
 .card-row {
   display:flex;
