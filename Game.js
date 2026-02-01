@@ -2575,6 +2575,31 @@ document.addEventListener("DOMContentLoaded", () => {
   // =============================
 
   const singleBtn = document.getElementById("singlePlayerBtn");
+  
+  singleBtn.onclick = () => {
+
+  const game = document.getElementById("game");
+
+  // ===== RESET MULTIPLAYER STATE =====
+  game.classList.remove("multiplayer");
+
+  multiplayerMode = false;
+  multiplayerInitialized = false;
+
+  // ===== SKRY MENU =====
+  document.getElementById("menuScreen").style.display = "none";
+
+  // ===== ZOBRAZ HRU =====
+  document.getElementById("game").style.display = "block";
+
+  // ===== ZAPNI SINGLE UI =====
+  document.getElementById("singleGameUI").style.display = "block";
+  document.getElementById("multiGameUI").style.display = "none";
+
+  // ===== START SINGLEPLAYER =====
+  startGame(); // alebo tvoja singleplayer init funkcia
+};
+
   const multiplayerBtn = document.getElementById("multiplayerBtn");
   if (multiplayerBtn) {
   multiplayerBtn.onclick = () => {
