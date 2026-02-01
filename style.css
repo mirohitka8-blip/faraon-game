@@ -835,6 +835,15 @@ body {
   font-weight: 600;
 }
 
+#game:not(.multiplayer) #table,
+#game:not(.multiplayer) #playerCards,
+#game:not(.multiplayer) #controls,
+#game:not(.multiplayer) .turn-indicator {
+
+  position: static;
+  transform: none;
+}
+
 /* READY STATUS */
 
 .player-ready {
@@ -976,8 +985,11 @@ body {
 }
 
 #game.multiplayer #gameInner {
+  position: relative;
   width: 100vw;
   height: 100vh;
+
+  display: block; 
 }
 
 #game.multiplayer #multiGameUI {
@@ -992,4 +1004,12 @@ body {
   flex-direction: row;
   gap: 6px;
   transform: scale(0.75);
+}
+/* ===========================
+   SINGLEPLAYER RESET
+=========================== */
+
+#game:not(.multiplayer) #gameInner {
+  display: grid;
+  grid-template-rows: auto 40px 1fr auto auto;
 }
