@@ -126,6 +126,7 @@ body {
 =============================== */
 
 .turn-indicator {
+  position: absolute;
   text-align: center;
   font-size: 18px;
   opacity: .85;
@@ -140,7 +141,7 @@ body {
   justify-content: center;
   align-items: center;
   gap: 60px;
-  position: relative;
+  position: absolute;
 }
 
 #tableCard img {
@@ -175,6 +176,7 @@ body {
 =============================== */
 
 #playerCards {
+  position: absolute;
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -259,7 +261,7 @@ body {
 =============================== */
 
 #controls {
-  position: static;
+  position: fixed;
   bottom: 12px;
   left: 50%;
   transform: translateX(-50%);
@@ -1119,4 +1121,40 @@ body {
 #game:not(.multiplayer) .turn-indicator {
   position: static !important;
   transform: none !important;
+}
+
+/* ===============================
+   SINGLEPLAYER FORCE FIX
+=============================== */
+
+#game:not(.multiplayer) {
+
+  #table {
+    position: relative !important;
+    transform: none !important;
+  }
+
+  #playerCards {
+    position: relative !important;
+    transform: none !important;
+    margin-bottom: 90px !important;
+  }
+
+  #controls {
+    position: fixed !important;
+    bottom: 12px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+
+  .turn-indicator {
+    position: static !important;
+    transform: none !important;
+  }
+
+  #gameInner {
+    display: grid !important;
+    grid-template-rows: auto 40px 1fr auto auto !important;
+  }
+
 }
