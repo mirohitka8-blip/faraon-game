@@ -2226,27 +2226,43 @@ function setMultiSlot(pos, id) {
 
 socket.on("gameStarted", data => {
 
-multiplayerMode = true;
+  console.log("GAME STARTED:", data);
 
-  document.getElementById("singleGameUI").style.display = "none";
-  document.getElementById("multiGameUI").style.display = "block";
-
-  console.log("GAME STARTED", data);
-
-  document.getElementById("multiplayerLobby").style.display = "none";
-  document.getElementById("game").style.display = "block";
+  // =========================
+  // MODE FLAGS
+  // =========================
 
   multiplayerMode = true;
+  multiplayerInitialized = false;   // reset anim sync
+  lastTableCard = null;
+  lastHands = {};
+  lastTurnPlayer = null;
 
-  // skry lobby
-  document.getElementById("multiplayerLobby").style.display = "none";
+  // =========================
+  // UI SWITCH
+  // =========================
 
-  // zobraz hru
-  document.getElementById("game").style.display = "block";
+  // hide lobby
+  const lobby = document.getElementById("multiplayerLobby");
+  if (lobby) lobby.style.display = "none";
 
-  // init multiplayer state
-  multiplayerHands = data.hands;
-  tableCard = data.tableCard;
+  // show game
+  const game = document.getElementById("game");
+  if (game) game.style.display = "block";
+
+  // switch layouts
+  const singleUI = document.getElementById("singleGameUI");
+  const multiUI = document.getElementById("multiGameUI");
+
+  if (singleUI) singleUI.style.display = "block";   // core table stays
+  if (multiUI) multiUI.style.display = "block";     // opponents overlay
+
+  // =========================
+  // SERVER STATE INIT
+  // =========================
+
+  multiplayerHands = data.hands || {};
+  tableCard = data.tableCard || null;
 
   forcedSuit = data.forcedSuit ?? null;
   pendingDraw = data.pendingDraw ?? 0;
@@ -2254,8 +2270,11 @@ multiplayerMode = true;
 
   multiplayerTurnPlayer = data.order[data.turnIndex];
 
-  playerHand = multiplayerHands[socket.id];
+  // =========================
+  // PLAYER STATE
+  // =========================
 
+  playerHand = multiplayerHands[socket.id] || [];
   playerTurn = multiplayerTurnPlayer === socket.id;
 
   selected = [];
@@ -2264,9 +2283,20 @@ multiplayerMode = true;
 
   gameOver = false;
 
+  // =========================
+  // MULTI OPPONENT UI
+  // =========================
+
+  updateMultiPlayerUI();
+
+  // =========================
+  // FIRST UI DRAW
+  // =========================
+
   updateUI();
 
 });
+
 
 
   let lastServerState = null;

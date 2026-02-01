@@ -35,7 +35,6 @@
     </button>
 
     <button id="multiplayerBtn" class="menu-btn">
-
       Multiplayer
     </button>
   </div>
@@ -55,13 +54,11 @@
 
     <h2 class="lobby-title">Multiplayer Lobby</h2>
 
-    <!-- NAME INPUT -->
     <div class="lobby-section">
       <label>Meno hráča</label>
       <input id="playerNameInput" type="text" maxlength="16" placeholder="Zadaj meno">
     </div>
 
-    <!-- ROOM CONTROLS -->
     <div class="lobby-section buttons">
 
       <button id="createRoomBtn" class="lobby-btn primary">
@@ -76,29 +73,24 @@
 
     </div>
 
-    <!-- ROOM INFO -->
     <div id="roomInfo" style="display:none;">
 
       <div class="room-code">
         ROOM: <span id="roomCodeLabel">----</span>
       </div>
 
-      <!-- PLAYER LIST -->
       <div id="playerList" class="player-list"></div>
 
-      <!-- READY -->
       <button id="readyBtn" class="lobby-btn ready">
         READY
       </button>
 
-      <!-- HOST ONLY -->
       <button id="startGameBtn" class="lobby-btn start" style="display:none;">
         START GAME
       </button>
 
     </div>
 
-    <!-- BACK -->
     <button id="backFromLobbyBtn" class="lobby-btn back">
       Späť do menu
     </button>
@@ -107,7 +99,6 @@
 
 </div>
 
-
 <!-- ===============================
      GAME
 ================================ -->
@@ -115,89 +106,102 @@
 <div id="game" style="display:none;">
   <div id="gameInner">
 
+    <!-- ===============================
+         MULTIPLAYER OVERLAY
+    ============================== -->
 
-    <!-- MULTIPLAYER TABLE UI -->
-<div id="multiGameUI" style="display:none;">
+    <div id="multiGameUI" style="display:none;">
 
-  <!-- TOP PLAYER -->
-  <div class="multi-player top">
-    <div class="name-bar" id="playerTopName"></div>
-    <div class="card-row" id="playerTopCards"></div>
-  </div>
+      <!-- TOP PLAYER -->
+      <div class="multi-player top">
+        <div class="name-bar" id="playerTopName"></div>
+        <div class="card-row" id="playerTopCards"></div>
+      </div>
 
-  <!-- LEFT PLAYER -->
-  <div class="multi-player left">
-    <div class="card-col" id="playerLeftCards"></div>
-    <div class="name-bar" id="playerLeftName"></div>
-  </div>
+      <!-- LEFT PLAYER -->
+      <div class="multi-player left">
+        <div class="card-col" id="playerLeftCards"></div>
+        <div class="name-bar" id="playerLeftName"></div>
+      </div>
 
-  <!-- RIGHT PLAYER -->
-  <div class="multi-player right">
-    <div class="card-col" id="playerRightCards"></div>
-    <div class="name-bar" id="playerRightName"></div>
-  </div>
-</div>
+      <!-- RIGHT PLAYER -->
+      <div class="multi-player right">
+        <div class="card-col" id="playerRightCards"></div>
+        <div class="name-bar" id="playerRightName"></div>
+      </div>
 
-    <!-- PC AREA -->
-   <div id="singleGameUI">
-  <div id="pcArea">
+    </div>
+
+    <!-- ===============================
+         PC AREA (SINGLEPLAYER ONLY)
+    ============================== -->
+
+    <div id="pcArea">
       <div id="pcHand"></div>
     </div>
 
-    <!-- TURN INDICATOR -->
-    <div id="turnIndicator" class="turn-indicator"></div>
+    <!-- ===============================
+         CORE GAME UI (BOTH MODES)
+    ============================== -->
 
-    <!-- TABLE -->
-    <div id="table">
+    <div id="singleGameUI">
 
-      <div id="tableCard"></div>
+      <!-- TURN INDICATOR -->
+      <div id="turnIndicator" class="turn-indicator"></div>
 
-      <div id="deck">
-        <img src="cards/back.png" alt="Balíček">
+      <!-- TABLE -->
+      <div id="table">
+
+        <div id="tableCard"></div>
+
+        <div id="deck">
+          <img src="cards/back.png" alt="Balíček">
+        </div>
+
+        <!-- FORCED SUIT -->
+        <div id="forcedSuitIndicator">
+          Farba:
+          <img id="forcedSuitImg" alt="">
+        </div>
+
       </div>
 
-      <!-- FORCED SUIT INDICATOR -->
-      <div id="forcedSuitIndicator">
-        Farba:
-        <img id="forcedSuitImg" alt="">
+      <!-- PLAYER HAND -->
+      <div id="playerCards"></div>
+
+      <!-- CONTROLS -->
+      <div id="controls">
+        <button id="playSelectedBtn" class="action">
+          Vyložiť
+        </button>
       </div>
 
-    </div>
+      <!-- ACE DECISION -->
+      <div id="aceDecision" class="ace-decision" style="display:none;">
+        <button id="playAceBtn" class="action">Vyložiť eso</button>
+        <button id="standAceBtn" class="action">Stáť</button>
+      </div>
 
-    <!-- PLAYER HAND -->
-    <div id="playerCards"></div>
+      <!-- SUIT CHOOSER -->
+      <div id="suitChooser" style="display:none;">
 
-    <!-- CONTROLS -->
-    <div id="controls">
-      <button id="playSelectedBtn" class="action">
-        Vyložiť
-      </button>
-    </div>
+        <button onclick="setSuit('♣')">
+          <img src="cards/leaf-icon@medium.png">
+        </button>
 
-    <!-- ACE DECISION -->
-    <div id="aceDecision" class="ace-decision" style="display:none;">
-      <button id="playAceBtn" class="action">Vyložiť eso</button>
-      <button id="standAceBtn" class="action">Stáť</button>
-    </div>
+        <button onclick="setSuit('♥')">
+          <img src="cards/heart-icon@medium.png">
+        </button>
 
-    <!-- SUIT CHOOSER -->
-    <div id="suitChooser" style="display:none;">
+        <button onclick="setSuit('♦')">
+          <img src="cards/bell-icon@medium.png">
+        </button>
 
-      <button onclick="setSuit('♣')">
-        <img src="cards/leaf-icon@medium.png" alt="♣">
-      </button>
+        <button onclick="setSuit('♠')">
+          <img src="cards/acorn-icon@medium.png">
+        </button>
 
-      <button onclick="setSuit('♥')">
-        <img src="cards/heart-icon@medium.png" alt="♥">
-      </button>
-
-      <button onclick="setSuit('♦')">
-        <img src="cards/bell-icon@medium.png" alt="♦">
-      </button>
-
-      <button onclick="setSuit('♠')">
-        <img src="cards/acorn-icon@medium.png" alt="♠">
-      </button>
+      </div>
 
     </div>
 
@@ -205,12 +209,12 @@
 </div>
 
 <!-- ===============================
-     END SCREEN (CINEMATIC)
+     END SCREEN
 ================================ -->
 
 <div id="endScreen">
 
-  <div class="endBox" id="loseBox">
+  <div class="endBox">
 
     <h1 id="endTitle"></h1>
     <p id="loseReason"></p>
