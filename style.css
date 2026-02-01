@@ -841,105 +841,111 @@ body {
   color: #4ade80;
 }
 
-#multiGameUI {
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-}
+/* ============================
+   MULTIPLAYER TABLE LAYOUT
+============================ */
 
-.multi-player {
-  position:absolute;
-  display:flex;
-  align-items:center;
-  gap:8px;
+#multiGameUI {
+  position: absolute;
+  inset: 0;
   pointer-events: none;
 }
 
-.multi-player.top {
-  top:12px;
-  left:50%;
-  transform:translateX(-50%);
-  flex-direction:column;
+/* COMMON PLAYER */
+
+.multi-player {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
+
+/* ============================
+   TOP PLAYER
+============================ */
+
+.multi-player.top {
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  flex-direction: column;
+}
+
+/* ============================
+   LEFT PLAYER
+============================ */
 
 .multi-player.left {
-  left:12px;
-  top:50%;
-  transform:translateY(-50%);
-  flex-direction:column;
-  position: relative;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  flex-direction: row;
 }
+
+/* ============================
+   RIGHT PLAYER
+============================ */
 
 .multi-player.right {
-  right:12px;
-  top:50%;
-  transform:translateY(-50%);
-  flex-direction:column;
-  position: relative;
-}
-
-.multi-player.left .name-bar {
-  position: absolute;
-
-  right: -32px;    
+  right: 12px;
   top: 50%;
-
-  transform:
-    translateY(-50%)
-    rotate(90deg);
-
-  transform-origin: center;
-}
-.multi-player.right .name-bar {
-  position: absolute;
-
-  left: -32px;      
-  top: 50%;
-
-  transform:
-    translateY(-50%)
-    rotate(-90deg);
-
-  transform-origin: center;
+  transform: translateY(-50%);
+  flex-direction: row-reverse;
 }
 
+/* ============================
+   SIDE CARDS
+============================ */
 
-.multi-player.left .card-col,
-.multi-player.right .card-col {
-
+.multi-player.left .card-col {
   display: flex;
   flex-direction: row;
   gap: 6px;
-  transform: scale(0.75);
-  align-items: center;
-}
-.multi-player.left .card-col {
-  transform: rotate(90deg);
+  transform: rotate(90deg) scale(0.75);
 }
 
 .multi-player.right .card-col {
-  transform: rotate(-90deg);
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  transform: rotate(-90deg) scale(0.75);
 }
 
-
-.card-row {
-  display:flex;
-  gap:4px;
-}
-
-.card-col {
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-}
+/* ============================
+   PLAYER NAMES
+============================ */
 
 .name-bar {
-  background:rgba(0,0,0,.6);
-  padding:4px 10px;
-  border-radius:8px;
-  font-weight:700;
-  color:#22c55e;
+
+  background: rgba(0,0,0,.55);
+  padding: 4px 12px;
+  border-radius: 10px;
+
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 1px;
+
+  color: #22c55e;
+  box-shadow: 0 0 10px rgba(0,255,160,.35);
+
+  white-space: nowrap;
 }
+
+/* SIDE NAME ROTATION */
+
+.multi-player.left .name-bar {
+  transform: rotate(90deg);
+  margin-right: -22px;
+}
+
+.multi-player.right .name-bar {
+  transform: rotate(-90deg);
+  margin-left: -22px;
+}
+
+/* ============================
+   MULTIPLAYER CORE POSITIONS
+============================ */
 
 #game.multiplayer #table {
   position: absolute;
@@ -947,18 +953,21 @@ body {
   top: 50%;
   transform: translate(-50%, -50%);
 }
+
 #game.multiplayer #playerCards {
   position: absolute;
   bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
 }
+
 #game.multiplayer #controls {
   position: absolute;
   bottom: 150px;
   left: 50%;
   transform: translateX(-50%);
 }
+
 #game.multiplayer .turn-indicator {
   position: absolute;
   top: calc(50% - 140px);
@@ -967,57 +976,10 @@ body {
 }
 
 #game.multiplayer #gameInner {
-  position: relative;
   width: 100vw;
   height: 100vh;
 }
 
 #game.multiplayer #multiGameUI {
   display: block !important;
-}
-
-/* LEFT PLAYER — meno nad kartami */
-
-.multi-player.left {
-  display: flex;
-  flex-direction: column-reverse;
-}
-
-
-/* RIGHT PLAYER — meno nad kartami */
-
-.multi-player.right {
-  display: flex;
-  flex-direction: column-reverse;
-}
-/* LEFT PLAYER NAME — otoč smerom ku stolu */
-
-.multi-player.left .name-bar {
-  transform: rotate(90deg);
-  transform-origin: center;
-}
-
-
-/* RIGHT PLAYER NAME — opačný smer */
-
-.multi-player.right .name-bar {
-  transform: rotate(-90deg);
-  transform-origin: center;
-}
-.multi-player.left .name-bar {
-  margin-right: -18px;
-}
-
-.multi-player.right .name-bar {
-  margin-left: -18px;
-}
-
-.multi-player.top .name-bar {
-  margin-bottom: -8px;
-}
-.multi-player.left .name-bar,
-.multi-player.right .name-bar {
-  font-size: 13px;
-  letter-spacing: 1px;
-  opacity: 0.9;
 }
