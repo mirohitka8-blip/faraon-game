@@ -983,3 +983,13 @@ body {
 #game.multiplayer #multiGameUI {
   display: block !important;
 }
+/* ============================
+   TOP PLAYER CARDS FIX
+============================ */
+
+.multi-player.top .card-row {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  transform: scale(0.75);
+}
