@@ -918,3 +918,13 @@ body {
   left: 50%;
   transform: translateX(-50%);
 }
+
+#game.multiplayer #gameInner {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+#game.multiplayer #multiGameUI {
+  display: block !important;
+}

@@ -653,8 +653,11 @@ function clearPenaltyUI() {
 
 function backToMenu() {
 
+
   multiplayerMode = false;
   multiplayerInitialized = false;
+
+  
 
   const end = document.getElementById("endScreen");
   const game = document.getElementById("game");
@@ -683,6 +686,7 @@ function backToMenu() {
     ".confetti, .damage-flash, .rage-flash, #loseDarkOverlay"
   ).forEach(e => e.remove());
 }
+
 
 
 function impactShake() {
@@ -2233,26 +2237,34 @@ socket.on("gameStarted", data => {
 
   console.log("GAME STARTED", data);
 
-  // ===== ZAPNI MULTIPLAYER MODE =====
+  // ===== MULTIPLAYER MODE =====
   multiplayerMode = true;
+  multiplayerInitialized = false;
 
-  // ===== PRIDAJ MULTIPLAYER CLASS =====
+  // ===== ENABLE MULTIPLAYER LAYOUT =====
   const game = document.getElementById("game");
-  if (game) {
-    game.classList.add("multiplayer");
-  }
+  game.classList.add("multiplayer");
 
-  // ===== PREPNI UI =====
-  document.getElementById("singleGameUI").style.display = "none";
+  // ===== UI VISIBILITY =====
+
+  // show multiplayer players
   document.getElementById("multiGameUI").style.display = "block";
 
-  // ===== SKRY LOBBY =====
+  // KEEP singleGameUI (contains table + your hand)
+  document.getElementById("singleGameUI").style.display = "block";
+
+  // hide PC only
+  const pcArea = document.getElementById("pcArea");
+  if (pcArea) pcArea.style.display = "none";
+
+  // hide lobby
   document.getElementById("multiplayerLobby").style.display = "none";
 
-  // ===== ZOBRAZ HRU =====
-  document.getElementById("game").style.display = "block";
+  // show game
+  game.style.display = "block";
 
-  // ===== INIT STATE =====
+  // ===== INIT SERVER STATE =====
+
   multiplayerHands = data.hands;
   tableCard = data.tableCard;
 
@@ -2262,7 +2274,7 @@ socket.on("gameStarted", data => {
 
   multiplayerTurnPlayer = data.order[data.turnIndex];
 
-  playerHand = multiplayerHands[socket.id];
+  playerHand = multiplayerHands[socket.id] || [];
   playerTurn = multiplayerTurnPlayer === socket.id;
 
   selected = [];
@@ -2271,10 +2283,12 @@ socket.on("gameStarted", data => {
 
   gameOver = false;
 
-  multiplayerInitialized = false;
-
+  // ===== FIRST RENDER =====
+  updateMultiPlayerUI();
   updateUI();
+
 });
+
 
 
 
