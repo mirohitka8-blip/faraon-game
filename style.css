@@ -852,6 +852,7 @@ body {
   display:flex;
   align-items:center;
   gap:8px;
+  pointer-events: none;
 }
 
 .multi-player.top {
