@@ -1158,3 +1158,64 @@ body {
   }
 
 }
+/* ===========================
+   HARD RESET SINGLEPLAYER UI
+=========================== */
+
+#game:not(.multiplayer) #gameInner {
+
+  display: grid !important;
+  grid-template-rows: auto 40px 1fr auto auto !important;
+
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+
+}
+
+/* TABLE */
+
+#game:not(.multiplayer) #table {
+
+  position: relative !important;
+  left: auto !important;
+  top: auto !important;
+  transform: none !important;
+
+}
+
+/* PLAYER HAND */
+
+#game:not(.multiplayer) #playerCards {
+
+  position: relative !important;
+  bottom: auto !important;
+  left: auto !important;
+  transform: none !important;
+
+  margin-bottom: 90px;
+
+}
+
+/* CONTROLS */
+
+#game:not(.multiplayer) #controls {
+
+  position: fixed !important;
+  bottom: 12px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+
+}
+
+/* TURN INDICATOR */
+
+#game:not(.multiplayer) .turn-indicator {
+
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  transform: none !important;
+
+}
+
