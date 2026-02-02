@@ -1016,46 +1016,17 @@ body {
   display: grid;
   grid-template-rows: auto 40px 1fr auto auto;
 }
-/* ============================
-   MULTIPLAYER HARD FIX
-============================ */
-
-/* TOP PLAYER — vždy vodorovne */
-
-#game.multiplayer .multi-player.top .card-row {
-  display: flex !important;
-  flex-direction: row !important;
-  gap: 8px;
-  transform: scale(0.75);
-}
-
-/* ZABRÁŇ zdedeniu column */
-
-#game.multiplayer .multi-player.top {
-  flex-direction: column !important;
-}
-
-/* ============================
-   SINGLEPLAYER HARD RESET
-============================ */
-
-#game:not(.multiplayer) #gameInner {
-  display: grid !important;
-  grid-template-rows: auto 40px 1fr auto auto !important;
-}
-
-#game:not(.multiplayer) #table,
-#game:not(.multiplayer) #playerCards,
-#game:not(.multiplayer) #controls,
-#game:not(.multiplayer) .turn-indicator {
-
-  position: static !important;
-  transform: none !important;
-}
-
 /* ===============================
-   MULTIPLAYER OVERRIDE
+   CLEAN MODE SWITCH FIX
 =============================== */
+
+/* ---------- MULTIPLAYER ---------- */
+
+#game.multiplayer #gameInner {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+}
 
 #game.multiplayer #table {
   position: absolute;
@@ -1085,137 +1056,32 @@ body {
   transform: translateX(-50%);
 }
 
-#game.multiplayer #gameInner {
-  display: block;
-  width: 100vw;
-  height: 100vh;
-}
-
-/* ===============================
-   SINGLEPLAYER HARD RESET
-=============================== */
+/* ---------- SINGLEPLAYER ---------- */
 
 #game:not(.multiplayer) #gameInner {
-  display: grid !important;
-  grid-template-rows: auto 40px 1fr auto auto !important;
+  display: grid;
+  grid-template-rows: auto 40px 1fr auto auto;
 }
 
 #game:not(.multiplayer) #table {
-  position: relative !important;
-  transform: none !important;
+  position: relative;
+  transform: none;
 }
 
 #game:not(.multiplayer) #playerCards {
-  position: relative !important;
-  transform: none !important;
+  position: relative;
+  transform: none;
   margin-bottom: 90px;
 }
 
 #game:not(.multiplayer) #controls {
-  position: fixed !important;
-  bottom: 12px !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 #game:not(.multiplayer) .turn-indicator {
-  position: static !important;
-  transform: none !important;
+  position: static;
+  transform: none;
 }
-
-/* ===============================
-   SINGLEPLAYER FORCE FIX
-=============================== */
-
-#game:not(.multiplayer) {
-
-  #table {
-    position: relative !important;
-    transform: none !important;
-  }
-
-  #playerCards {
-    position: relative !important;
-    transform: none !important;
-    margin-bottom: 90px !important;
-  }
-
-  #controls {
-    position: fixed !important;
-    bottom: 12px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-  }
-
-  .turn-indicator {
-    position: static !important;
-    transform: none !important;
-  }
-
-  #gameInner {
-    display: grid !important;
-    grid-template-rows: auto 40px 1fr auto auto !important;
-  }
-
-}
-/* ===========================
-   HARD RESET SINGLEPLAYER UI
-=========================== */
-
-#game:not(.multiplayer) #gameInner {
-
-  display: grid !important;
-  grid-template-rows: auto 40px 1fr auto auto !important;
-
-  position: relative !important;
-  width: 100% !important;
-  height: 100% !important;
-
-}
-
-/* TABLE */
-
-#game:not(.multiplayer) #table {
-
-  position: relative !important;
-  left: auto !important;
-  top: auto !important;
-  transform: none !important;
-
-}
-
-/* PLAYER HAND */
-
-#game:not(.multiplayer) #playerCards {
-
-  position: relative !important;
-  bottom: auto !important;
-  left: auto !important;
-  transform: none !important;
-
-  margin-bottom: 90px;
-
-}
-
-/* CONTROLS */
-
-#game:not(.multiplayer) #controls {
-
-  position: fixed !important;
-  bottom: 12px !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-
-}
-
-/* TURN INDICATOR */
-
-#game:not(.multiplayer) .turn-indicator {
-
-  position: relative !important;
-  top: auto !important;
-  left: auto !important;
-  transform: none !important;
-
-}
-
