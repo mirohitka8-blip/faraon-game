@@ -1221,7 +1221,6 @@ body.multi-mode .turn-indicator {
 
 body.multi-mode .multi-player.left,
 body.multi-mode .multi-player.right {
-  width: 64px;              /* ⬅️ ÚZKE */
   min-width: 64px;
   max-width: 64px;
 
@@ -1229,16 +1228,29 @@ body.multi-mode .multi-player.right {
   padding: 12px 6px;
 
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
 body.multi-mode .multi-player.left .name-bar,
 body.multi-mode .multi-player.right .name-bar {
-  writing-mode: vertical-rl;
   text-orientation: mixed;
   margin: 6px 0;
   font-size: 12px;
   opacity: 0.75;
 }
+
+
+body.multi-mode .multi-player.left,
+body.multi-mode .multi-player.right {
+  display: flex;
+  flex-direction: row;          
+  align-items: center;
+  gap: 10px;
+
+  width: 160px;                 
+  padding: 12px;
+
+  border-radius: 14px;
+}
+
