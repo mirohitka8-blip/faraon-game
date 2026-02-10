@@ -1153,6 +1153,15 @@ body.multi-mode .multi-player.top {
   transform: translateX(-50%);
 }
 
+body.multi-mode .multi-player.top .card-row {
+  display: flex;
+  flex-direction: row;      
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+}
+
+
 body.multi-mode .multi-player.left {
   top: 50%;
   left: 25px;
@@ -1165,6 +1174,15 @@ body.multi-mode .multi-player.right {
   right: 25px;
   transform: translateY(-50%);
 }
+
+body.multi-mode .multi-player.left .card-col,
+body.multi-mode .multi-player.right .card-col {
+  display: flex;
+  flex-direction: column;   
+  gap: 6px;
+  align-items: center;
+}
+
 
 body.multi-mode .multi-player.active {
   box-shadow: 0 0 25px rgba(59,130,246,0.6);
