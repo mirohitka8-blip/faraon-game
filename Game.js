@@ -1246,8 +1246,27 @@ else {
 }
 
  function updateUI() {
+
   updateUIController();
+
+  if (multiplayerMode && window.updateMultiUI) {
+    updateMultiUI();
+  }
 }
+
+
+function getPlayerPosition(id) {
+
+  const ids = Object.keys(multiplayerHands);
+  const others = ids.filter(x => x !== socket.id);
+
+  if (id === others[0]) return "top";
+  if (id === others[1]) return "left";
+  if (id === others[2]) return "right";
+
+  return null;
+}
+
 
 
 function validateDeckIntegrity() {
@@ -2179,6 +2198,8 @@ socket.on("gameStarted", data => {
 
 socket.on("gameUpdate", data => {
 
+  multiplayerTurnPlayer = getPlayerPosition(data.turnPlayer);
+
   console.log("GAME UPDATE:", data);
 
   const firstSync = !multiplayerInitialized;
@@ -2229,10 +2250,6 @@ socket.on("gameUpdate", data => {
     playSound("card");
   }
 
-  /* =========================
-     DRAW ANIMATION
-  ========================= */
-
   if (
     !firstSync &&
     prevHands[socket.id] &&
@@ -2244,17 +2261,9 @@ socket.on("gameUpdate", data => {
     playSound("draw");
   }
 
-  /* =========================
-     RESET INPUT
-  ========================= */
-
   selected = [];
   waitingForSuit = false;
   waitingForAceDecision = false;
-
-  /* =========================
-     DECISIONS
-  ========================= */
 
   if (data.aceDecision === true && playerTurn) {
     waitingForAceDecision = true;
@@ -2272,15 +2281,8 @@ socket.on("gameUpdate", data => {
     if (chooser) chooser.style.display = "none";
   }
 
-  /* =========================
-     UI UPDATE
-  ========================= */
-
   updateUI();
 
-  /* =========================
-     EFFECTS
-  ========================= */
 
   if (data.effects?.burn) {
     showBurnAnimation();
