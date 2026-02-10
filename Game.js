@@ -133,12 +133,22 @@ if (title) {
 
   selected = [];
 
-  gameOver = false;
+    gameOver = false;
   playerTurn = true;
+
+  // ===== SET BODY MODE (SINGLE / MULTI) =====
+  document.body.classList.remove("single-mode", "multi-mode");
+
+  if (multiplayerMode) {
+    document.body.classList.add("multi-mode");
+  } else {
+    document.body.classList.add("single-mode");
+  }
 
   // UPDATE UI
   updateUI();
 }
+
 
 
 /* ==================================================
@@ -1235,198 +1245,8 @@ else {
   }
 }
 
-
-
-
-
  function updateUI() {
-
-  /* =========================
-     ACE DECISION
-  ========================= */
-
-  const aceBox = document.getElementById("aceDecision");
-  const playAceBtn = document.getElementById("playAceBtn");
-  const standAceBtn = document.getElementById("standAceBtn");
-
-  if (waitingForAceDecision && playerTurn && !gameOver) {
-
-    if (aceBox) aceBox.style.display = "flex";
-
-    if (playAceBtn) {
-      playAceBtn.style.display =
-        playerHand.some(c => c.startsWith("A"))
-          ? "inline-block"
-          : "none";
-    }
-
-    if (standAceBtn) {
-      standAceBtn.style.display = "inline-block";
-    }
-
-  } else {
-
-    if (aceBox) aceBox.style.display = "none";
-  }
-
-  /* =========================
-     PC HAND (SINGLEPLAYER ONLY)
-  ========================= */
-
-  if (!multiplayerMode) {
-
-    const pc = document.getElementById("pcHand");
-
-    if (pc) {
-
-      pc.innerHTML = "";
-
-      pcHand.forEach(() => {
-
-        const back = document.createElement("div");
-        back.className = "pc-card";
-        pc.appendChild(back);
-
-      });
-    }
-  }
-
-  /* =========================
-     TABLE CARD
-  ========================= */
-
-  const table = document.getElementById("tableCard");
-
-  if (table) {
-
-    table.innerHTML = "";
-
-    if (tableCard) {
-
-      const img = document.createElement("img");
-      img.src = "cards/" + cardToFile(tableCard);
-      table.appendChild(img);
-
-    }
-  }
-
-  /* =========================
-     PLAYER HAND (ME)
-  ========================= */
-
-  const playerCards = document.getElementById("playerCards");
-  if (!playerCards) return;
-
-  playerCards.innerHTML = "";
-
-  playerHand.forEach((card, i) => {
-
-    const btn = document.createElement("button");
-    btn.className = "card";
-
-    if (selected.includes(i)) btn.classList.add("selected");
-
-    const img = document.createElement("img");
-    img.src = "cards/" + cardToFile(card);
-
-    btn.appendChild(img);
-    btn.onclick = () => toggleSelect(i);
-
-    playerCards.appendChild(btn);
-  });
-
-  /* =========================
-     PLAY BUTTON
-  ========================= */
-
-  const playBtn = document.getElementById("playSelectedBtn");
-
-  if (playBtn) {
-
-    playBtn.style.display =
-      playerTurn &&
-      selected.length &&
-      !waitingForAceDecision &&
-      !waitingForSuit &&
-      !gameOver
-        ? "inline-block"
-        : "none";
-  }
-
-  /* =========================
-     FORCED SUIT INDICATOR
-  ========================= */
-
-  const indicator = document.getElementById("forcedSuitIndicator");
-  const suitImg = document.getElementById("forcedSuitImg");
-
-  if (indicator && suitImg) {
-
-    // forcedSuit sa v stack mode NEUKAZUJE
-    if (forcedSuit && pendingDraw === 0) {
-
-      indicator.style.display = "flex";
-
-      const map = {
-        "♣": "leaf-icon@medium.png",
-        "♥": "heart-icon@medium.png",
-        "♦": "bell-icon@medium.png",
-        "♠": "acorn-icon@medium.png"
-      };
-
-      suitImg.src = "cards/" + map[forcedSuit];
-
-    } else {
-
-      indicator.style.display = "none";
-    }
-  }
-
-  /* =========================
-     TURN INDICATOR
-  ========================= */
-
-  const turn = document.getElementById("turnIndicator");
-
-  if (turn) {
-
-    if (gameOver) {
-
-      turn.textContent = "Koniec hry";
-
-    } else if (waitingForAceDecision) {
-
-      turn.textContent = "⏸ Rozhodni sa (ESO)";
-
-    } else if (playerTurn) {
-
-      turn.textContent = "🟢 Tvoj ťah";
-
-    } else {
-
-      if (multiplayerMode) {
-
-        const name =
-          playerNames[multiplayerTurnPlayer] || "Hráč";
-
-        turn.textContent = "🔵 Ťah: " + name;
-
-      } else {
-
-        turn.textContent = "🤖 Ťah PC";
-      }
-    }
-  }
-
-  /* =========================
-     MULTIPLAYER OPPONENTS
-  ========================= */
-
-  if (multiplayerMode) {
-    renderOpponents();
-  }
-
-  adjustHandLayout();
+  updateUIController();
 }
 
 

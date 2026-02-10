@@ -153,23 +153,6 @@ body {
   cursor: pointer;
 }
 
-/* ===============================
-   FORCED SUIT INDICATOR
-=============================== */
-
-#forcedSuitIndicator {
-  position: absolute;
-  top: 110px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: none;
-  align-items: center;
-  gap: 8px;
-}
-
-#forcedSuitImg {
-  width: 42px;
-}
 
 /* ===============================
    PLAYER HAND
@@ -837,16 +820,6 @@ body {
   font-weight: 600;
 }
 
-#game:not(.multiplayer) #table,
-#game:not(.multiplayer) #playerCards,
-
-#game:not(.multiplayer) #controls,
-#game:not(.multiplayer) .turn-indicator {
-
-  position: static;
-  transform: none;
-}
-
 /* READY STATUS */
 
 .player-ready {
@@ -955,133 +928,182 @@ body {
   margin-left: -22px;
 }
 
-/* ============================
-   MULTIPLAYER CORE POSITIONS
-============================ */
 
-#game.multiplayer #table {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-
-#game.multiplayer #playerCards {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-#game.multiplayer #controls {
-  position: absolute;
-  bottom: 150px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-#game.multiplayer .turn-indicator {
-  position: absolute;
-  top: calc(50% - 140px);
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-#game.multiplayer #gameInner {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-
-  display: block; 
-}
-
-#game.multiplayer #multiGameUI {
-  display: block !important;
-}
-/* ============================
-   TOP PLAYER CARDS FIX
-============================ */
-
-.multi-player.top .card-row {
-  display: flex;
-  flex-direction: row;
-  gap: 6px;
-  transform: scale(0.75);
-}
-/* ===========================
-   SINGLEPLAYER RESET
-=========================== */
-
-#game:not(.multiplayer) #gameInner {
-  display: grid;
-  grid-template-rows: auto 40px 1fr auto auto;
-}
 /* ===============================
-   CLEAN MODE SWITCH FIX
+   SINGLEPLAYER LOOK
 =============================== */
 
-/* ---------- MULTIPLAYER ---------- */
-
-#game.multiplayer #gameInner {
-  display: block;
-  width: 100vw;
-  height: 100vh;
+body.single-mode #playerCards {
+  --card-gap: 18px;
+  --card-scale: 1.12;
 }
 
-#game.multiplayer #table {
+
+
+body.single-mode #pcArea {
+  position: fixed;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%) scale(1.2);
+  opacity: 0.65;
+  z-index: 10;
+}
+
+
+body.single-mode .card:hover {
+  transform: translateY(-8px) scale(1.01);
+}
+
+body.single-mode .card.selected {
+  transform: translateY(-26px) scale(1.05);
+}
+
+body.single-mode .turn-indicator {
+  position: fixed;
+  top: 140px;              
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.7;
+  z-index: 15;
+}
+
+
+
+/* ===============================
+   SINGLEPLAYER LAYOUT
+=============================== */
+
+body.single-mode #gameInner {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+body.single-mode #pcArea {
+  position: fixed;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%) scale(1.2);
+  opacity: 0.65;
+  z-index: 10;
+}
+
+body.single-mode #table {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  translate: -50% -55%;   
+  z-index: 20;
+}
+
+body.single-mode .turn-indicator {
+  position: fixed;
+  top: calc(50% - 150px);
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.7;
+  z-index: 25;
+}
+
+body.single-mode #playerCards {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  --card-gap: 18px;
+  --card-scale: 1.12;
+  z-index: 35;
+}
+
+
+body.single-mode #controls {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 35;
+}
+
+/* ===============================
+   FORCED SUIT INDICATOR
+=============================== */
+
+
+#forcedSuitImg {
+  width: 42px;
+}
+
+
+/* =========================================
+   SINGLEPLAYER – FINAL POSITION OVERRIDES
+========================================= */
+
+
+body.single-mode #turnIndicator {
+  position: fixed !important;
+  top: 150px !important;
+  left: 50% !important;
+  bottom: auto !important;
+  transform: translateX(-50%) !important;
+  z-index: 40;
+}
+
+/* FORCED SUIT – NAD TVOJIMI KARTAMI */
+body.single-mode #forcedSuitIndicator {
+  position: fixed !important;
+  top: auto !important;
+  bottom: 180px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 45;
+}
+
+
+
+/* ===============================
+   MULTIPLAYER LAYOUT
+=============================== */
+
+body.multi-mode #gameInner {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+}
+
+body.multi-mode #multiGameUI {
+  display: block;
+}
+
+body.multi-mode #pcArea {
+  display: none;
+}
+
+body.multi-mode #table {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
 }
 
-#game.multiplayer #playerCards {
+body.multi-mode #playerCards {
   position: absolute;
   bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
 }
 
-#game.multiplayer #controls {
+body.multi-mode #controls {
   position: absolute;
   bottom: 150px;
   left: 50%;
   transform: translateX(-50%);
 }
 
-#game.multiplayer .turn-indicator {
+body.multi-mode .turn-indicator {
   position: absolute;
   top: calc(50% - 140px);
   left: 50%;
   transform: translateX(-50%);
-}
-
-/* ---------- SINGLEPLAYER ---------- */
-
-#game:not(.multiplayer) #gameInner {
-  display: grid;
-  grid-template-rows: auto 40px 1fr auto auto;
-}
-
-#game:not(.multiplayer) #table {
-  position: relative;
-  transform: none;
-}
-
-#game:not(.multiplayer) #playerCards {
-  position: relative;
-  transform: none;
-  margin-bottom: 90px;
-}
-
-#game:not(.multiplayer) #controls {
-  position: fixed;
-  bottom: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-#game:not(.multiplayer) .turn-indicator {
-  position: static;
-  transform: none;
 }
