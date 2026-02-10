@@ -1175,3 +1175,10 @@ body.multi-mode .multi-player.left,
 body.multi-mode .multi-player.right {
   scale: 0.9;
 }
+/* FORCE ALL MULTIPLAYER CARDS HORIZONTAL */
+body.multi-mode .multi-player .card-row {
+  flex-direction: row !important;
+}
+body.multi-mode .multi-player .card-col {
+  flex-direction: row !important;
+}
