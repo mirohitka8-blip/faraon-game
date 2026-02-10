@@ -1112,8 +1112,10 @@ body.multi-mode .multi-player.left .card-row {
 }
 
 body.multi-mode .multi-player.left .card-row .card {
-  transform: rotate(90deg);    /* MIERI KU STOLU */
+  transform: rotate(90deg) scaleY(-1);
 }
+
+
 
 /* ===============================
    RIGHT PLAYER
@@ -1146,8 +1148,11 @@ body.multi-mode .multi-player.right .card-row {
 }
 
 body.multi-mode .multi-player.right .card-row .card {
-  transform: rotate(-90deg);   /* MIERI KU STOLU */
+  transform: rotate(-90deg) scaleY(-1);
 }
+
+
+
 
 /* ===============================
    SHARED HUD ELEMENTS
