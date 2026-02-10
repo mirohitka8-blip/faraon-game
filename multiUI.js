@@ -44,5 +44,17 @@ if (active) active.classList.add("active");
 
 };
 
-
 };
+
+function updatePlayerHUD(player, nameEl, cardsEl) {
+  if (!player) return;
+
+  nameEl.innerHTML = `
+    ${player.name}
+    <div class="card-count">🃏 ${player.handCount}</div>
+  `;
+
+  // protihráč nemá viditeľné karty
+  cardsEl.innerHTML = "";
+}
+
