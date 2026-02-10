@@ -1010,51 +1010,122 @@ body.single-mode #forcedSuitIndicator {
 
 
 
-/* =====================================================
-   MULTIPLAYER – FINAL CLEAN LAYOUT (AUTHORITATIVE)
-   TOP = reference
-   LEFT / RIGHT = same design, rotated
-===================================================== */
+/* ===============================
+   MULTIPLAYER LAYOUT – CLEAN
+=============================== */
 
-/* ---------- COMMON PLAYER HUD ---------- */
+body.multi-mode #gameInner {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+body.multi-mode #pcArea {
+  display: none;
+}
+
+body.multi-mode #multiGameUI {
+  display: block;
+}
+
+/* ===============================
+   TABLE & CONTROLS
+=============================== */
+
+body.multi-mode #table {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 50;
+}
+
+body.multi-mode #playerCards {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  --card-gap: 10px;
+  --card-scale: 0.95;
+  z-index: 30;
+}
+
+body.multi-mode #controls {
+  position: fixed;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 35;
+}
+
+/* ===============================
+   TURN INDICATOR
+=============================== */
+
+body.multi-mode .turn-indicator {
+  background: rgba(2, 6, 23, 0.85);
+  border: 1px solid rgba(255,255,255,.1);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.4);
+}
+
+/* ===============================
+   MULTIPLAYER PLAYER HUD (COMMON)
+=============================== */
 
 body.multi-mode .multi-player {
   position: absolute;
 
   display: flex;
-  flex-direction: column;
+  flex-direction: column;        /* 🔥 rovnaké pre TOP / LEFT / RIGHT */
   align-items: center;
   gap: 6px;
 
   padding: 10px 14px;
   border-radius: 16px;
 
-  background: rgba(10, 25, 35, 0.85);
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255,255,255,0.08);
   backdrop-filter: blur(6px);
 
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 10px 30px rgba(0,0,0,.4);
+  opacity: 0.75;
 
-  pointer-events: none; /* HUD only, cards not clickable */
+  transition: opacity .2s ease, box-shadow .2s ease;
+  pointer-events: none;
 }
 
-/* ---------- PLAYER NAME ---------- */
+body.multi-mode .multi-player.active {
+  opacity: 1;
+  box-shadow:
+    0 0 0 2px rgba(59,130,246,.6),
+    0 0 30px rgba(59,130,246,.7);
+}
+
+/* ===============================
+   PLAYER NAME
+=============================== */
 
 body.multi-mode .multi-player .name-bar {
   padding: 4px 10px;
   border-radius: 999px;
 
   background: rgba(0, 180, 120, 0.18);
-  color: #7cffcb;
+  color: #7CFFCB;
 
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.4px;
   text-align: center;
-
   white-space: nowrap;
 }
 
-/* ---------- CARD ROW (USED BY ALL PLAYERS) ---------- */
+/* ===============================
+   CARD ROW (USED BY ALL PLAYERS)
+=============================== */
 
 body.multi-mode .multi-player .card-row {
   display: flex;
@@ -1064,40 +1135,41 @@ body.multi-mode .multi-player .card-row {
   align-items: center;
 }
 
-/* ---------- CARD SIZE ---------- */
-
 body.multi-mode .multi-player .card {
   width: 56px;
   height: auto;
 }
 
-/* ---------- TOP PLAYER (REFERENCE DESIGN) ---------- */
+/* ===============================
+   PLAYER POSITIONS
+=============================== */
 
+/* TOP – referenčný dizajn */
 body.multi-mode .multi-player.top {
-  top: 18px;
+  top: 25px;
   left: 50%;
   transform: translateX(-50%);
 }
 
-/* ---------- LEFT PLAYER (ROTATED HUD) ---------- */
-
+/* LEFT – rovnaký dizajn, otočený ku stolu */
 body.multi-mode .multi-player.left {
   top: 50%;
-  left: 18px;
+  left: 25px;
   transform: translateY(-50%) rotate(90deg);
   transform-origin: center;
 }
 
-/* ---------- RIGHT PLAYER (ROTATED HUD) ---------- */
-
+/* RIGHT – rovnaký dizajn, otočený ku stolu */
 body.multi-mode .multi-player.right {
   top: 50%;
-  right: 18px;
+  right: 25px;
   transform: translateY(-50%) rotate(-90deg);
   transform-origin: center;
 }
 
-/* ---------- OPTIONAL: SLIGHT SCALE FOR SIDE PLAYERS ---------- */
+/* ===============================
+   OPTIONAL SCALE FOR SIDE PLAYERS
+=============================== */
 
 body.multi-mode .multi-player.left,
 body.multi-mode .multi-player.right {
