@@ -856,28 +856,6 @@ body {
   flex-direction: column;
 }
 
-/* ============================
-   LEFT PLAYER
-============================ */
-
-.multi-player.left {
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  flex-direction: row;
-}
-
-/* ============================
-   RIGHT PLAYER
-============================ */
-
-.multi-player.right {
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  flex-direction: row-reverse;
-}
-
 
 /* ============================
    PLAYER NAMES
@@ -1180,19 +1158,6 @@ body.multi-mode .turn-indicator {
    MULTIPLAYER – SIDE HUD SHAPE FIX
 =============================== */
 
-body.multi-mode .multi-player.left,
-body.multi-mode .multi-player.right {
-  min-width: 64px;
-  max-width: 64px;
-
-  height: auto;             /* ⬅️ VÝŠKA PODĽA OBSAHU */
-  padding: 12px 6px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 body.multi-mode .multi-player.left .name-bar,
 body.multi-mode .multi-player.right .name-bar {
   text-orientation: mixed;
@@ -1227,111 +1192,6 @@ body.multi-mode .multi-player.right {
   flex-direction: row-reverse;
 }
 
-body.multi-mode .multi-player.left,
-body.multi-mode .multi-player.right {
-  position: absolute;
-
-  width: 110px;
-  min-height: 260px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  padding: 14px 8px;
-  border-radius: 18px;
-
-  background: rgba(10, 25, 35, 0.85);
-  backdrop-filter: blur(6px);
-}
-
-body.multi-mode .multi-player.left {
-  left: 6%;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-body.multi-mode .multi-player.right {
-  right: 6%;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-
-body.multi-mode .multi-player.left .name-bar,
-body.multi-mode .multi-player.right .name-bar {
-  margin-top: 10px;
-
-  padding: 4px 10px;
-  border-radius: 999px;
-
-  background: rgba(0, 180, 120, 0.15);
-  color: #7CFFCB;
-
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  text-align: center;
-}
-body.multi-mode .multi-player .card.back {
-  transform: scale(0.72);
-}
-
-
-/*
-/* =====================================
-   MULTIPLAYER – SIDE HUD FINAL (CLEAN)
-===================================== */
-
-body.multi-mode .multi-player.left,
-body.multi-mode .multi-player.right {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-
-  width: 120px;
-  min-height: 260px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  padding: 14px 10px;
-  border-radius: 18px;
-
-  background: rgba(10, 25, 35, 0.85);
-  backdrop-filter: blur(6px);
-
-  box-shadow: 0 10px 30px rgba(0,0,0,.4);
-}
-
-/* POZÍCIA */
-body.multi-mode .multi-player.left {
-  left: 6%;
-}
-
-body.multi-mode .multi-player.right {
-  right: 6%;
-}
-
-/* MENO – PILL */
-body.multi-mode .multi-player.left .name-bar,
-body.multi-mode .multi-player.right .name-bar {
-  margin-top: 10px;
-  padding: 4px 10px;
-  border-radius: 999px;
-
-  background: rgba(0, 180, 120, 0.15);
-  color: #7CFFCB;
-
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  text-align: center;
-}
-
 /* TOP – bez rotácie */
 body.multi-mode .multi-player.top {
   top: 25px;
@@ -1339,20 +1199,46 @@ body.multi-mode .multi-player.top {
   transform: translateX(-50%);
 }
 
-/* LEFT – ten istý dizajn, otočený */
+/* =====================================
+   MULTIPLAYER – FINAL CLEAN VERSION
+===================================== */
+
+/* COMMON PLAYER */
+body.multi-mode .multi-player {
+  position: absolute;
+  display: flex;
+  flex-direction: column;   /* 🔴 rovnaké ako TOP */
+  align-items: center;
+  gap: 6px;
+
+  background: rgba(10, 25, 35, 0.85);
+  backdrop-filter: blur(6px);
+  border-radius: 16px;
+  padding: 10px 12px;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,.4);
+}
+
+/* TOP – referenčný dizajn */
+body.multi-mode .multi-player.top {
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* LEFT – ten istý dizajn, otočený ku stolu */
 body.multi-mode .multi-player.left {
   top: 50%;
-  left: 25px;
+  left: 20px;
   transform: translateY(-50%) rotate(90deg);
   transform-origin: center;
 }
 
-/* RIGHT – ten istý dizajn, otočený opačne */
+/* RIGHT – ten istý dizajn, otočený ku stolu */
 body.multi-mode .multi-player.right {
   top: 50%;
-  right: 25px;
+  right: 20px;
   transform: translateY(-50%) rotate(-90deg);
   transform-origin: center;
 }
-
 
