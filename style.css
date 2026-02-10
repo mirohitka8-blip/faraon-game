@@ -1240,17 +1240,37 @@ body.multi-mode .multi-player.right .name-bar {
   opacity: 0.75;
 }
 
-
 body.multi-mode .multi-player.left,
 body.multi-mode .multi-player.right {
   display: flex;
   flex-direction: row;          
   align-items: center;
+  justify-content: center;
   gap: 10px;
 
-  width: 160px;                 
-  padding: 12px;
-
-  border-radius: 14px;
+  padding: 14px 10px;
+  border-radius: 16px;
 }
+
+body.multi-mode .multi-player.left .card-col,
+body.multi-mode .multi-player.right .card-col {
+  display: flex;
+  flex-direction: column;   /* ⬅️ ZVISLO */
+  gap: 6px;
+  align-items: center;
+}
+
+body.multi-mode .multi-player.left .name-bar,
+body.multi-mode .multi-player.right .name-bar {
+  min-width: 36px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+body.multi-mode .multi-player.right {
+  flex-direction: row-reverse;
+}
+
 
