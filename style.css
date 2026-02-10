@@ -1273,4 +1273,60 @@ body.multi-mode .multi-player.right {
   flex-direction: row-reverse;
 }
 
+body.multi-mode .multi-player.left,
+body.multi-mode .multi-player.right {
+  position: absolute;
 
+  width: 110px;
+  min-height: 260px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 14px 8px;
+  border-radius: 18px;
+
+  background: rgba(10, 25, 35, 0.85);
+  backdrop-filter: blur(6px);
+}
+
+body.multi-mode .multi-player.left {
+  left: 6%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+body.multi-mode .multi-player.right {
+  right: 6%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+body.multi-mode .multi-player.left .card-col,
+body.multi-mode .multi-player.right .card-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+}
+
+body.multi-mode .multi-player.left .name-bar,
+body.multi-mode .multi-player.right .name-bar {
+  margin-top: 10px;
+
+  padding: 4px 10px;
+  border-radius: 999px;
+
+  background: rgba(0, 180, 120, 0.15);
+  color: #7CFFCB;
+
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+body.multi-mode .multi-player .card.back {
+  transform: scale(0.72);
+}
