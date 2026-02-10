@@ -1178,7 +1178,7 @@ body.multi-mode .multi-player.right {
 body.multi-mode .multi-player.left .card-col,
 body.multi-mode .multi-player.right .card-col {
   display: flex;
-  flex-direction: column;   
+  flex-direction: row;   
   gap: 6px;
   align-items: center;
 }
