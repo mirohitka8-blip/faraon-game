@@ -1370,16 +1370,26 @@ body.multi-mode .multi-player .card.back {
   transform: scale(0.72);
 }
 
-/* =====================================
-   MULTIPLAYER – ROTATE SIDE PLAYER CARDS
-===================================== */
-
-/* LEFT PLAYER – +90° */
+/* LEFT PLAYER – cards face RIGHT (to table) */
 body.multi-mode .multi-player.left .card {
   transform: rotate(90deg) scale(0.72);
+  transform-origin: center;
 }
 
-/* RIGHT PLAYER – -90° */
+/* RIGHT PLAYER – cards face LEFT (to table) */
 body.multi-mode .multi-player.right .card {
   transform: rotate(-90deg) scale(0.72);
+  transform-origin: center;
+}
+
+/* LEFT PLAYER NAME – vertical, readable from table */
+body.multi-mode .multi-player.left .name-bar {
+  transform: rotate(90deg);
+  transform-origin: center;
+}
+
+/* RIGHT PLAYER NAME – vertical, readable from table */
+body.multi-mode .multi-player.right .name-bar {
+  transform: rotate(-90deg);
+  transform-origin: center;
 }
