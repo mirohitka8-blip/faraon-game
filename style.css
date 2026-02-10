@@ -992,7 +992,7 @@ body.single-mode #forcedSuitIndicator {
 
 
 /* ===============================
-   MULTIPLAYER LAYOUT
+   MULTIPLAYER LAYOUT – FINAL
 =============================== */
 
 body.multi-mode #gameInner {
@@ -1011,7 +1011,7 @@ body.multi-mode #multiGameUI {
 }
 
 /* ===============================
-   TABLE + PLAYER
+   TABLE (STRED)
 =============================== */
 
 body.multi-mode #table {
@@ -1022,13 +1022,15 @@ body.multi-mode #table {
   z-index: 50;
 }
 
+/* ===============================
+   PLAYER (TY)
+=============================== */
+
 body.multi-mode #playerCards {
   position: fixed;
-  bottom: 80px;
+  bottom: 90px;
   left: 50%;
   transform: translateX(-50%);
-  --card-gap: 10px;
-  --card-scale: 0.95;
   z-index: 30;
 }
 
@@ -1041,7 +1043,7 @@ body.multi-mode #controls {
 }
 
 /* ===============================
-   MULTI PLAYER HUD
+   MULTI PLAYER HUD – BASE
 =============================== */
 
 body.multi-mode .multi-player {
@@ -1049,23 +1051,22 @@ body.multi-mode .multi-player {
   background: rgba(15, 23, 42, 0.85);
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 16px;
-  padding: 10px;
+  padding: 12px;
   backdrop-filter: blur(6px);
   box-shadow: 0 10px 30px rgba(0,0,0,.4);
-  opacity: 0.75;
+  opacity: 0.8;
   transition: all .2s ease;
 }
 
 body.multi-mode .multi-player.active {
   opacity: 1;
-  transform: scale(1.06);
   box-shadow:
     0 0 0 2px rgba(59,130,246,.6),
     0 0 30px rgba(59,130,246,.7);
 }
 
 /* ===============================
-   TOP PLAYER (oproti tebe)
+   TOP PLAYER (OPROTI TEBE)
 =============================== */
 
 body.multi-mode .multi-player.top {
@@ -1076,9 +1077,24 @@ body.multi-mode .multi-player.top {
 
 body.multi-mode .multi-player.top .card-row {
   display: flex;
-  flex-direction: row;
   gap: 6px;
   justify-content: center;
+  align-items: center;
+}
+
+/* ===============================
+   SIDE PLAYERS – BASE
+=============================== */
+
+body.multi-mode .multi-player.left,
+body.multi-mode .multi-player.right {
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
 }
 
 /* ===============================
@@ -1086,87 +1102,61 @@ body.multi-mode .multi-player.top .card-row {
 =============================== */
 
 body.multi-mode .multi-player.left {
-  top: 50%;
   left: 25px;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 10px;
 }
 
-/* meno */
-body.multi-mode .multi-player.left .name-bar {
-  min-width: 36px;
-  text-align: center;
-  font-size: 12px;
-  font-weight: 600;
-  opacity: 0.85;
-}
-
-/* karty */
+/* karty pod sebou */
 body.multi-mode .multi-player.left .card-row {
   display: flex;
-  flex-direction: column;      /* POD SEBOU */
+  flex-direction: column;
   gap: 6px;
 }
 
-body.multi-mode .multi-player.left .card-row .card {
-  transform: rotate(90deg) scaleY(-1);
+/* KĽÚČOVÉ: otočenie KAŽDEJ karty ku stolu */
+body.multi-mode .multi-player.left .card {
+  transform: rotate(90deg);
+  transform-origin: center;
 }
-
-
 
 /* ===============================
    RIGHT PLAYER
 =============================== */
 
 body.multi-mode .multi-player.right {
-  top: 50%;
   right: 25px;
-  transform: translateY(-50%);
-  display: flex;
   flex-direction: row-reverse;
-  align-items: center;
-  gap: 10px;
 }
 
-/* meno */
-body.multi-mode .multi-player.right .name-bar {
-  min-width: 36px;
-  text-align: center;
-  font-size: 12px;
-  font-weight: 600;
-  opacity: 0.85;
-}
-
-/* karty */
+/* karty pod sebou */
 body.multi-mode .multi-player.right .card-row {
   display: flex;
-  flex-direction: column;      /* POD SEBOU */
+  flex-direction: column;
   gap: 6px;
 }
 
-body.multi-mode .multi-player.right .card-row .card {
-  transform: rotate(-90deg) scaleY(-1);
+/* KĽÚČOVÉ: otočenie KAŽDEJ karty ku stolu */
+body.multi-mode .multi-player.right .card {
+  transform: rotate(-90deg);
+  transform-origin: center;
 }
 
-
-
-
 /* ===============================
-   SHARED HUD ELEMENTS
+   NAME BAR
 =============================== */
 
 body.multi-mode .name-bar {
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(2, 6, 23, 0.85);
+  border: 1px solid rgba(255,255,255,.1);
+  white-space: nowrap;
 }
 
-body.multi-mode .card-count {
-  font-size: 13px;
-  opacity: 0.7;
-}
+/* ===============================
+   TURN INDICATOR
+=============================== */
 
 body.multi-mode .turn-indicator {
   background: rgba(2, 6, 23, 0.85);
