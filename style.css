@@ -878,23 +878,6 @@ body {
   flex-direction: row-reverse;
 }
 
-/* ============================
-   SIDE CARDS
-============================ */
-
-.multi-player.left .card-col {
-  display: flex;
-  flex-direction: row;
-  gap: 6px;
-  transform: rotate(90deg) scale(0.75);
-}
-
-.multi-player.right .card-col {
-  display: flex;
-  flex-direction: row;
-  gap: 6px;
-  transform: rotate(-90deg) scale(0.75);
-}
 
 /* ============================
    PLAYER NAMES
@@ -914,18 +897,6 @@ body {
   box-shadow: 0 0 10px rgba(0,255,160,.35);
 
   white-space: nowrap;
-}
-
-/* SIDE NAME ROTATION */
-
-.multi-player.left .name-bar {
-  transform: rotate(90deg);
-  margin-right: -22px;
-}
-
-.multi-player.right .name-bar {
-  transform: rotate(-90deg);
-  margin-left: -22px;
 }
 
 
@@ -1327,6 +1298,74 @@ body.multi-mode .multi-player.right .name-bar {
   letter-spacing: 0.5px;
   text-align: center;
 }
+body.multi-mode .multi-player .card.back {
+  transform: scale(0.72);
+}
+
+
+/*
+/* =====================================
+   MULTIPLAYER – SIDE HUD FINAL (CLEAN)
+===================================== */
+
+body.multi-mode .multi-player.left,
+body.multi-mode .multi-player.right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 120px;
+  min-height: 260px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 14px 10px;
+  border-radius: 18px;
+
+  background: rgba(10, 25, 35, 0.85);
+  backdrop-filter: blur(6px);
+
+  box-shadow: 0 10px 30px rgba(0,0,0,.4);
+}
+
+/* POZÍCIA */
+body.multi-mode .multi-player.left {
+  left: 6%;
+}
+
+body.multi-mode .multi-player.right {
+  right: 6%;
+}
+
+/* KARTY – ZVISLO */
+body.multi-mode .multi-player.left .card-col,
+body.multi-mode .multi-player.right .card-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+}
+
+/* MENO – PILL */
+body.multi-mode .multi-player.left .name-bar,
+body.multi-mode .multi-player.right .name-bar {
+  margin-top: 10px;
+  padding: 4px 10px;
+  border-radius: 999px;
+
+  background: rgba(0, 180, 120, 0.15);
+  color: #7CFFCB;
+
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+/* VEĽKOSŤ BACKOV */
 body.multi-mode .multi-player .card.back {
   transform: scale(0.72);
 }
