@@ -1127,13 +1127,6 @@ function finishGame(won){
 }
 
 
-function renderOpponents() {
-
-  if (!multiplayerMode) return;
-
-}
-
-
 function refillDeck() {
 
   // nechávame poslednú kartu na stole
