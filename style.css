@@ -1214,10 +1214,11 @@ body.multi-mode .turn-indicator {
   box-shadow: 0 6px 20px rgba(0,0,0,.4);
 }
 
-body.multi-mode .multi-player.left .name-bar,
-body.multi-mode .multi-player.right .name-bar {
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  margin-bottom: 8px;
-  opacity: 0.8;
+body.multi-mode .multi-player.left,
+body.multi-mode .multi-player.right {
+  flex-direction: column;   /* ⬅️ VERTIKÁLNY PANEL */
+  align-items: center;
+  justify-content: center;
+  padding: 14px 10px;
 }
+
