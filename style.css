@@ -992,7 +992,7 @@ body.single-mode #forcedSuitIndicator {
 
 
 /* ===============================
-   MULTIPLAYER LAYOUT – FINAL
+   MULTIPLAYER BASE
 =============================== */
 
 body.multi-mode #gameInner {
@@ -1010,10 +1010,6 @@ body.multi-mode #multiGameUI {
   display: block;
 }
 
-/* ===============================
-   TABLE (STRED)
-=============================== */
-
 body.multi-mode #table {
   position: fixed;
   top: 50%;
@@ -1022,13 +1018,9 @@ body.multi-mode #table {
   z-index: 50;
 }
 
-/* ===============================
-   PLAYER (TY)
-=============================== */
-
 body.multi-mode #playerCards {
   position: fixed;
-  bottom: 90px;
+  bottom: 80px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 30;
@@ -1043,18 +1035,20 @@ body.multi-mode #controls {
 }
 
 /* ===============================
-   MULTI PLAYER HUD – BASE
+   PLAYER HUD – COMMON
 =============================== */
 
 body.multi-mode .multi-player {
   position: absolute;
   background: rgba(15, 23, 42, 0.85);
   border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 16px;
+  border-radius: 18px;
   padding: 12px;
   backdrop-filter: blur(6px);
   box-shadow: 0 10px 30px rgba(0,0,0,.4);
-  opacity: 0.8;
+  display: flex;
+  gap: 10px;
+  opacity: 0.75;
   transition: all .2s ease;
 }
 
@@ -1066,35 +1060,20 @@ body.multi-mode .multi-player.active {
 }
 
 /* ===============================
-   TOP PLAYER (OPROTI TEBE)
+   TOP PLAYER (oproti)
 =============================== */
 
 body.multi-mode .multi-player.top {
   top: 25px;
   left: 50%;
   transform: translateX(-50%);
+  flex-direction: column;
+  align-items: center;
 }
 
 body.multi-mode .multi-player.top .card-row {
   display: flex;
   gap: 6px;
-  justify-content: center;
-  align-items: center;
-}
-
-/* ===============================
-   SIDE PLAYERS – BASE
-=============================== */
-
-body.multi-mode .multi-player.left,
-body.multi-mode .multi-player.right {
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 12px;
-  padding: 14px;
 }
 
 /* ===============================
@@ -1102,20 +1081,22 @@ body.multi-mode .multi-player.right {
 =============================== */
 
 body.multi-mode .multi-player.left {
+  top: 50%;
   left: 25px;
+  transform: translateY(-50%);
+  flex-direction: row;
+  align-items: center;
 }
 
-/* karty pod sebou */
 body.multi-mode .multi-player.left .card-row {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-/* KĽÚČOVÉ: otočenie KAŽDEJ karty ku stolu */
+/* 👉 OTOČENIE KARIET SMEROM KU STOLU */
 body.multi-mode .multi-player.left .card {
   transform: rotate(90deg);
-  transform-origin: center;
 }
 
 /* ===============================
@@ -1123,21 +1104,22 @@ body.multi-mode .multi-player.left .card {
 =============================== */
 
 body.multi-mode .multi-player.right {
+  top: 50%;
   right: 25px;
+  transform: translateY(-50%);
   flex-direction: row-reverse;
+  align-items: center;
 }
 
-/* karty pod sebou */
 body.multi-mode .multi-player.right .card-row {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-/* KĽÚČOVÉ: otočenie KAŽDEJ karty ku stolu */
+/* 👉 OTOČENIE KARIET SMEROM KU STOLU */
 body.multi-mode .multi-player.right .card {
   transform: rotate(-90deg);
-  transform-origin: center;
 }
 
 /* ===============================
@@ -1147,10 +1129,7 @@ body.multi-mode .multi-player.right .card {
 body.multi-mode .name-bar {
   font-weight: 600;
   font-size: 13px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: rgba(2, 6, 23, 0.85);
-  border: 1px solid rgba(255,255,255,.1);
+  opacity: 0.85;
   white-space: nowrap;
 }
 
