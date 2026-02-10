@@ -1145,3 +1145,21 @@ body.multi-mode .turn-indicator {
   font-size: 14px;
   box-shadow: 0 6px 20px rgba(0,0,0,.4);
 }
+
+/* ===============================
+   MULTIPLAYER – CARD ROTATION FIX
+=============================== */
+
+/* LEFT PLAYER – karty smerujú doprava (ku stolu) */
+body.multi-mode .multi-player.left .card,
+body.multi-mode .multi-player.left .card-back {
+  transform: rotate(90deg);
+  transform-origin: center;
+}
+
+/* RIGHT PLAYER – karty smerujú doľava (ku stolu) */
+body.multi-mode .multi-player.right .card,
+body.multi-mode .multi-player.right .card-back {
+  transform: rotate(-90deg);
+  transform-origin: center;
+}
