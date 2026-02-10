@@ -1081,12 +1081,15 @@ body.multi-mode #multiGameUI {
 }
 
 body.multi-mode #table {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  translate: -50% -50%;
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  translate: -50% -50% !important;
+  transform: none !important;
+  margin: 0 !important;
   z-index: 20;
 }
+
 
 body.multi-mode #playerCards {
   position: fixed;
@@ -1194,3 +1197,4 @@ body.multi-mode .turn-indicator {
   font-size: 14px;
   box-shadow: 0 6px 20px rgba(0,0,0,.4);
 }
+
