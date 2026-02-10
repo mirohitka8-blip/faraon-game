@@ -1163,3 +1163,27 @@ body.multi-mode .multi-player.right .card-back {
   transform: rotate(-90deg);
   transform-origin: center;
 }
+
+/* ===============================
+   MULTIPLAYER – SIDE CARD FIX (FINAL)
+=============================== */
+
+/* ZRUŠ hover/selected animácie pre side hráčov */
+body.multi-mode .multi-player.left .card:hover,
+body.multi-mode .multi-player.left .card.selected,
+body.multi-mode .multi-player.right .card:hover,
+body.multi-mode .multi-player.right .card.selected {
+  transform: none !important;
+}
+
+/* LEFT PLAYER – karty otočené smerom ku stolu */
+body.multi-mode .multi-player.left .card img {
+  transform: rotate(90deg) scale(var(--card-scale)) !important;
+  transform-origin: center;
+}
+
+/* RIGHT PLAYER – karty otočené smerom ku stolu */
+body.multi-mode .multi-player.right .card img {
+  transform: rotate(-90deg) scale(var(--card-scale)) !important;
+  transform-origin: center;
+}
