@@ -31,12 +31,6 @@ function playSound(name) {
   s.play().catch(()=>{});
 }
 
-
-
-/* ==================================================
-   GLOBAL STATE
-================================================== */
-
 const suits = ["♥","♦","♣","♠"];
 const values = ["7","8","9","10","J","Q","K","A"];
 
@@ -2129,6 +2123,11 @@ function setMultiSlot(pos, id) {
 
 
 socket.on("gameStarted", data => {
+
+  // ===== FORCE MULTIPLAYER BODY MODE =====
+document.body.classList.remove("single-mode", "multi-mode");
+document.body.classList.add("multi-mode");
+
 
   console.log("GAME STARTED", data);
 
