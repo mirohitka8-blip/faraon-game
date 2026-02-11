@@ -992,7 +992,7 @@ body.single-mode #forcedSuitIndicator {
 
 
 /* ===============================
-   MULTIPLAYER – ROOT
+   MULTIPLAYER BASE
 =============================== */
 
 body.multi-mode #gameInner {
@@ -1002,16 +1002,11 @@ body.multi-mode #gameInner {
   overflow: hidden;
 }
 
-body.multi-mode #pcArea {
-  display: none;
-}
-
-body.multi-mode #multiGameUI {
-  display: block;
-}
+body.multi-mode #pcArea { display: none; }
+body.multi-mode #multiGameUI { display: block; }
 
 /* ===============================
-   TABLE – CENTER
+   TABLE (CENTER)
 =============================== */
 
 body.multi-mode #table {
@@ -1023,77 +1018,40 @@ body.multi-mode #table {
 }
 
 /* ===============================
-   TURN INDICATOR
+   MY CARDS (BOTTOM)
 =============================== */
 
-body.multi-mode .turn-indicator {
+body.multi-mode #playerCards {
   position: fixed;
-  top: calc(50% - 140px);
+  bottom: 80px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 60;
+  z-index: 40;
+}
 
-  background: rgba(2,6,23,.85);
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-size: 14px;
-  border: 1px solid rgba(255,255,255,.1);
+body.multi-mode #controls {
+  position: fixed;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 45;
 }
 
 /* ===============================
-   FORCED SUIT INDICATOR
-=============================== */
-
-body.multi-mode .forced-suit {
-  position: fixed;
-  top: calc(50% + 160px);
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 60;
-}
-
-/* ===============================
-   PLAYER – BASE
+   PLAYER CONTAINER (COMMON)
 =============================== */
 
 body.multi-mode .multi-player {
   position: absolute;
-  z-index: 40;
-
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  padding: 12px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.4);
   display: flex;
-  flex-direction: column;
   align-items: center;
   gap: 10px;
-
-  padding: 12px;
-  border-radius: 16px;
-
-  background: rgba(15,23,42,.85);
-  border: 1px solid rgba(255,255,255,.08);
-  backdrop-filter: blur(6px);
-
-  box-shadow: 0 10px 30px rgba(0,0,0,.4);
-}
-
-/* ===============================
-   PLAYER NAME
-=============================== */
-
-body.multi-mode .multi-player .name-bar {
-  font-size: 13px;
-  font-weight: 600;
-  opacity: .85;
-  white-space: nowrap;
-}
-
-/* ===============================
-   PLAYER CARDS (STACK)
-=============================== */
-
-body.multi-mode .multi-player .card-row {
-  display: flex;
-  flex-direction: column;   /* POD SEBOU */
-  gap: 6px;
 }
 
 /* ===============================
@@ -1104,11 +1062,12 @@ body.multi-mode .multi-player.top {
   top: 24px;
   left: 50%;
   transform: translateX(-50%);
+  flex-direction: column;
 }
 
-/* TOP – karty vedľa seba */
 body.multi-mode .multi-player.top .card-row {
-  flex-direction: row;
+  display: flex;
+  gap: 8px;
 }
 
 /* ===============================
@@ -1116,10 +1075,24 @@ body.multi-mode .multi-player.top .card-row {
 =============================== */
 
 body.multi-mode .multi-player.left {
+  left: 24px;
   top: 50%;
-  left: 90px;
-  transform: translateY(-50%) rotate(-90deg);
+  transform: translateY(-50%);
+  flex-direction: row;
+}
+
+body.multi-mode .multi-player.left .card-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transform: rotate(90deg);
   transform-origin: center;
+}
+
+body.multi-mode .multi-player.left .name-bar {
+  transform: rotate(90deg);
+  transform-origin: center;
+  white-space: nowrap;
 }
 
 /* ===============================
@@ -1127,38 +1100,53 @@ body.multi-mode .multi-player.left {
 =============================== */
 
 body.multi-mode .multi-player.right {
+  right: 24px;
   top: 50%;
-  right: 90px;
-  transform: translateY(-50%) rotate(90deg);
+  transform: translateY(-50%);
+  flex-direction: row-reverse;
+}
+
+body.multi-mode .multi-player.right .card-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transform: rotate(-90deg);
   transform-origin: center;
 }
 
-/* ===============================
-   ACTIVE PLAYER HIGHLIGHT
-=============================== */
-
-body.multi-mode .multi-player.active {
-  box-shadow:
-    0 0 0 2px rgba(59,130,246,.6),
-    0 0 30px rgba(59,130,246,.7);
+body.multi-mode .multi-player.right .name-bar {
+  transform: rotate(-90deg);
+  transform-origin: center;
+  white-space: nowrap;
 }
 
 /* ===============================
-   YOUR HAND (BOTTOM)
+   NAME BAR
 =============================== */
 
-body.multi-mode #playerCards {
-  position: fixed;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 30;
+body.multi-mode .name-bar {
+  background: rgba(2, 6, 23, 0.85);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6ee7b7;
+  text-align: center;
 }
 
-body.multi-mode #controls {
+/* ===============================
+   TURN INDICATOR
+=============================== */
+
+body.multi-mode .turn-indicator {
   position: fixed;
-  bottom: 25px;
+  top: 46%;
   left: 50%;
-  transform: translateX(-50%);
-  z-index: 35;
+  transform: translate(-50%, -50%);
+  z-index: 60;
+  background: rgba(2, 6, 23, 0.85);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 14px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.4);
 }
