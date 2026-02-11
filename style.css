@@ -989,8 +989,6 @@ body.single-mode #forcedSuitIndicator {
   z-index: 45;
 }
 
-
-
 /* ===============================
    MULTIPLAYER BASE
 =============================== */
@@ -1006,7 +1004,7 @@ body.multi-mode #pcArea { display: none; }
 body.multi-mode #multiGameUI { display: block; }
 
 /* ===============================
-   TABLE (CENTER)
+   TABLE
 =============================== */
 
 body.multi-mode #table {
@@ -1049,6 +1047,7 @@ body.multi-mode .multi-player {
   padding: 12px;
   backdrop-filter: blur(6px);
   box-shadow: 0 10px 30px rgba(0,0,0,.4);
+
   display: flex;
   align-items: center;
   gap: 10px;
@@ -1078,20 +1077,22 @@ body.multi-mode .multi-player.left {
   left: 24px;
   top: 50%;
   transform: translateY(-50%);
-  flex-direction: row;
 }
 
 body.multi-mode .multi-player.left .card-row {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  transform: rotate(90deg);
-  transform-origin: center;
 }
 
+/* ⬅️ OTOČENIE KARIET K STOLU */
+body.multi-mode .multi-player.left .card {
+  transform: rotate(90deg);
+}
+
+/* meno hráča – tiež ku stolu */
 body.multi-mode .multi-player.left .name-bar {
   transform: rotate(90deg);
-  transform-origin: center;
   white-space: nowrap;
 }
 
@@ -1110,13 +1111,16 @@ body.multi-mode .multi-player.right .card-row {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  transform: rotate(-90deg);
-  transform-origin: center;
 }
 
+/* ➡️ OTOČENIE KARIET K STOLU */
+body.multi-mode .multi-player.right .card {
+  transform: rotate(-90deg);
+}
+
+/* meno hráča – tiež ku stolu */
 body.multi-mode .multi-player.right .name-bar {
   transform: rotate(-90deg);
-  transform-origin: center;
   white-space: nowrap;
 }
 
@@ -1140,13 +1144,15 @@ body.multi-mode .name-bar {
 
 body.multi-mode .turn-indicator {
   position: fixed;
-  top: 46%;
+  top: calc(50% - 140px);
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   z-index: 60;
+
   background: rgba(2, 6, 23, 0.85);
   border-radius: 999px;
   padding: 6px 14px;
   font-size: 14px;
+
   box-shadow: 0 6px 20px rgba(0,0,0,.4);
 }
