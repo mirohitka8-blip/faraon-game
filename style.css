@@ -992,7 +992,7 @@ body.single-mode #forcedSuitIndicator {
 
 
 /* ===============================
-   MULTIPLAYER MODE – BASE
+   MULTIPLAYER – ROOT
 =============================== */
 
 body.multi-mode #gameInner {
@@ -1011,7 +1011,7 @@ body.multi-mode #multiGameUI {
 }
 
 /* ===============================
-   TABLE (CENTER)
+   TABLE – CENTER
 =============================== */
 
 body.multi-mode #table {
@@ -1023,7 +1023,128 @@ body.multi-mode #table {
 }
 
 /* ===============================
-   PLAYER HAND (YOU – BOTTOM)
+   TURN INDICATOR
+=============================== */
+
+body.multi-mode .turn-indicator {
+  position: fixed;
+  top: calc(50% - 140px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+
+  background: rgba(2,6,23,.85);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  border: 1px solid rgba(255,255,255,.1);
+}
+
+/* ===============================
+   FORCED SUIT INDICATOR
+=============================== */
+
+body.multi-mode .forced-suit {
+  position: fixed;
+  top: calc(50% + 160px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+}
+
+/* ===============================
+   PLAYER – BASE
+=============================== */
+
+body.multi-mode .multi-player {
+  position: absolute;
+  z-index: 40;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+
+  padding: 12px;
+  border-radius: 16px;
+
+  background: rgba(15,23,42,.85);
+  border: 1px solid rgba(255,255,255,.08);
+  backdrop-filter: blur(6px);
+
+  box-shadow: 0 10px 30px rgba(0,0,0,.4);
+}
+
+/* ===============================
+   PLAYER NAME
+=============================== */
+
+body.multi-mode .multi-player .name-bar {
+  font-size: 13px;
+  font-weight: 600;
+  opacity: .85;
+  white-space: nowrap;
+}
+
+/* ===============================
+   PLAYER CARDS (STACK)
+=============================== */
+
+body.multi-mode .multi-player .card-row {
+  display: flex;
+  flex-direction: column;   /* POD SEBOU */
+  gap: 6px;
+}
+
+/* ===============================
+   TOP PLAYER
+=============================== */
+
+body.multi-mode .multi-player.top {
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* TOP – karty vedľa seba */
+body.multi-mode .multi-player.top .card-row {
+  flex-direction: row;
+}
+
+/* ===============================
+   LEFT PLAYER
+=============================== */
+
+body.multi-mode .multi-player.left {
+  top: 50%;
+  left: 90px;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: center;
+}
+
+/* ===============================
+   RIGHT PLAYER
+=============================== */
+
+body.multi-mode .multi-player.right {
+  top: 50%;
+  right: 90px;
+  transform: translateY(-50%) rotate(90deg);
+  transform-origin: center;
+}
+
+/* ===============================
+   ACTIVE PLAYER HIGHLIGHT
+=============================== */
+
+body.multi-mode .multi-player.active {
+  box-shadow:
+    0 0 0 2px rgba(59,130,246,.6),
+    0 0 30px rgba(59,130,246,.7);
+}
+
+/* ===============================
+   YOUR HAND (BOTTOM)
 =============================== */
 
 body.multi-mode #playerCards {
@@ -1040,109 +1161,4 @@ body.multi-mode #controls {
   left: 50%;
   transform: translateX(-50%);
   z-index: 35;
-}
-
-/* ===============================
-   TURN INDICATOR
-=============================== */
-
-body.multi-mode .turn-indicator {
-  background: rgba(2, 6, 23, 0.85);
-  border: 1px solid rgba(255,255,255,.1);
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-size: 14px;
-  box-shadow: 0 6px 20px rgba(0,0,0,.4);
-}
-
-/* ===============================
-   MULTI PLAYER – BASE CARD
-=============================== */
-
-body.multi-mode .multi-player {
-  position: absolute;
-
-  display: flex;
-  flex-direction: column;        /* 🔑 JEDNOTNÝ LAYOUT */
-  align-items: center;
-  gap: 8px;
-
-  padding: 12px;
-  border-radius: 16px;
-
-  background: rgba(15, 23, 42, 0.85);
-  border: 1px solid rgba(255,255,255,0.08);
-  backdrop-filter: blur(6px);
-
-  box-shadow: 0 10px 30px rgba(0,0,0,.4);
-  opacity: 0.9;
-
-  transition: transform .2s ease, opacity .2s ease;
-}
-
-body.multi-mode .multi-player.active {
-  opacity: 1;
-  box-shadow:
-    0 0 0 2px rgba(59,130,246,.6),
-    0 0 30px rgba(59,130,246,.7);
-}
-
-/* ===============================
-   PLAYER NAME
-=============================== */
-
-body.multi-mode .multi-player .name-bar {
-  font-size: 13px;
-  font-weight: 600;
-  opacity: .85;
-  white-space: nowrap;
-}
-
-/* ===============================
-   CARD STACK (DEFAULT)
-=============================== */
-
-body.multi-mode .multi-player .card-row {
-  display: flex;
-  flex-direction: column;     /* karty POD SEBOU */
-  gap: 6px;
-}
-
-/* ===============================
-   TOP PLAYER (OPPOSITE)
-=============================== */
-
-body.multi-mode .multi-player.top {
-  top: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-/* ===============================
-   LEFT PLAYER (ROTATED AS WHOLE)
-=============================== */
-
-body.multi-mode .multi-player.left {
-  top: 50%;
-  left: 90px;
-  transform: translateY(-50%) rotate(-90deg);
-}
-
-/* ===============================
-   RIGHT PLAYER (ROTATED AS WHOLE)
-=============================== */
-
-body.multi-mode .multi-player.right {
-  top: 50%;
-  right: 90px;
-  transform: translateY(-50%) rotate(90deg);
-}
-
-/* ===============================
-   TRANSFORM ORIGIN
-=============================== */
-
-body.multi-mode .multi-player.left,
-body.multi-mode .multi-player.right {
-  transform-origin: center;
 }
