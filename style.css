@@ -1187,3 +1187,21 @@ body.multi-mode .multi-player.right .card img {
   transform: rotate(-90deg) scale(var(--card-scale)) !important;
   transform-origin: center;
 }
+
+/* ===============================
+   MULTIPLAYER – SIDE CARD ROTATION FIX
+=============================== */
+
+/* ľavý hráč – karty smerujú k stolu */
+body.multi-mode .multi-player.left .card,
+body.multi-mode .multi-player.left .pc-card {
+  transform: rotate(90deg);
+  transform-origin: center;
+}
+
+/* pravý hráč – karty smerujú k stolu */
+body.multi-mode .multi-player.right .card,
+body.multi-mode .multi-player.right .pc-card {
+  transform: rotate(-90deg);
+  transform-origin: center;
+}
