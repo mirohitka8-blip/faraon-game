@@ -1023,7 +1023,7 @@ body.multi-mode #table {
 }
 
 /* ===============================
-   PLAYER HAND (BOTTOM – YOU)
+   PLAYER HAND (YOU – BOTTOM)
 =============================== */
 
 body.multi-mode #playerCards {
@@ -1063,7 +1063,7 @@ body.multi-mode .multi-player {
   position: absolute;
 
   display: flex;
-  flex-direction: column;     /* 🔑 JEDNOTNÝ LAYOUT */
+  flex-direction: column;        /* 🔑 JEDNOTNÝ LAYOUT */
   align-items: center;
   gap: 8px;
 
@@ -1075,7 +1075,7 @@ body.multi-mode .multi-player {
   backdrop-filter: blur(6px);
 
   box-shadow: 0 10px 30px rgba(0,0,0,.4);
-  opacity: 0.85;
+  opacity: 0.9;
 
   transition: transform .2s ease, opacity .2s ease;
 }
@@ -1099,11 +1099,12 @@ body.multi-mode .multi-player .name-bar {
 }
 
 /* ===============================
-   CARD ROW (DEFAULT = TOP PLAYER)
+   CARD STACK (DEFAULT)
 =============================== */
 
 body.multi-mode .multi-player .card-row {
   display: flex;
+  flex-direction: column;     /* karty POD SEBOU */
   gap: 6px;
 }
 
@@ -1118,66 +1119,27 @@ body.multi-mode .multi-player.top {
 }
 
 /* ===============================
-   LEFT PLAYER (ROTATED)
+   LEFT PLAYER (ROTATED AS WHOLE)
 =============================== */
 
 body.multi-mode .multi-player.left {
   top: 50%;
-  left: 80px;
-  transform:
-    translateY(-50%)
-    rotate(-90deg);
+  left: 90px;
+  transform: translateY(-50%) rotate(-90deg);
 }
 
 /* ===============================
-   RIGHT PLAYER (ROTATED)
+   RIGHT PLAYER (ROTATED AS WHOLE)
 =============================== */
 
 body.multi-mode .multi-player.right {
   top: 50%;
-  right: 80px;
-  transform:
-    translateY(-50%)
-    rotate(90deg);
+  right: 90px;
+  transform: translateY(-50%) rotate(90deg);
 }
 
 /* ===============================
-   SIDE PLAYERS – CARDS STACK
-   (cards under each other)
-=============================== */
-
-body.multi-mode .multi-player.left .card-row,
-body.multi-mode .multi-player.right .card-row {
-  flex-direction: column;
-}
-
-/* ===============================
-   SIDE PLAYERS – CARD ORIENTATION
-   (cards face the table)
-=============================== */
-
-body.multi-mode .multi-player.left .card,
-body.multi-mode .multi-player.right .card {
-  transform: rotate(90deg);
-}
-
-/* ak používaš card-back namiesto .card */
-body.multi-mode .multi-player.left .card-back,
-body.multi-mode .multi-player.right .card-back {
-  transform: rotate(90deg);
-}
-
-/* ===============================
-   SIDE PLAYERS – NAME ORIENTATION
-=============================== */
-
-body.multi-mode .multi-player.left .name-bar,
-body.multi-mode .multi-player.right .name-bar {
-  transform: rotate(180deg);
-}
-
-/* ===============================
-   SMALL POLISH
+   TRANSFORM ORIGIN
 =============================== */
 
 body.multi-mode .multi-player.left,
