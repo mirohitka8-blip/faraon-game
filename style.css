@@ -1082,7 +1082,7 @@ body.multi-mode .multi-player.top .card-row {
 
 body.multi-mode .multi-player.left {
   top: 50%;
-  left: 25px;
+  left: 80px;
   transform: translateY(-50%);
   flex-direction: row;
   align-items: center;
@@ -1105,7 +1105,7 @@ body.multi-mode .multi-player.left .card {
 
 body.multi-mode .multi-player.right {
   top: 50%;
-  right: 25px;
+  right: 80px;
   transform: translateY(-50%);
   flex-direction: row-reverse;
   align-items: center;
@@ -1188,9 +1188,6 @@ body.multi-mode .multi-player.right .card img {
   transform-origin: center;
 }
 
-/* ===============================
-   MULTIPLAYER – SIDE CARD ROTATION FIX
-=============================== */
 
 /* ľavý hráč – karty smerujú k stolu */
 body.multi-mode .multi-player.left .card,
@@ -1205,10 +1202,6 @@ body.multi-mode .multi-player.right .pc-card {
   transform: rotate(-90deg);
   transform-origin: center;
 }
-
-/* ===============================
-   MULTIPLAYER – SIDE NAME ROTATION
-=============================== */
 
 /* ľavý hráč – meno smeruje ku stolu */
 body.multi-mode .multi-player.left .name-bar {
