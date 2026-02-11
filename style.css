@@ -992,7 +992,7 @@ body.single-mode #forcedSuitIndicator {
 
 
 /* ===============================
-   MULTIPLAYER BASE
+   MULTIPLAYER MODE – BASE
 =============================== */
 
 body.multi-mode #gameInner {
@@ -1010,6 +1010,10 @@ body.multi-mode #multiGameUI {
   display: block;
 }
 
+/* ===============================
+   TABLE (CENTER)
+=============================== */
+
 body.multi-mode #table {
   position: fixed;
   top: 50%;
@@ -1017,6 +1021,10 @@ body.multi-mode #table {
   transform: translate(-50%, -50%);
   z-index: 50;
 }
+
+/* ===============================
+   PLAYER HAND (BOTTOM – YOU)
+=============================== */
 
 body.multi-mode #playerCards {
   position: fixed;
@@ -1035,105 +1043,6 @@ body.multi-mode #controls {
 }
 
 /* ===============================
-   PLAYER HUD – COMMON
-=============================== */
-
-body.multi-mode .multi-player {
-  position: absolute;
-  background: rgba(15, 23, 42, 0.85);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 18px;
-  padding: 12px;
-  backdrop-filter: blur(6px);
-  box-shadow: 0 10px 30px rgba(0,0,0,.4);
-  display: flex;
-  gap: 10px;
-  opacity: 0.75;
-  transition: all .2s ease;
-}
-
-body.multi-mode .multi-player.active {
-  opacity: 1;
-  box-shadow:
-    0 0 0 2px rgba(59,130,246,.6),
-    0 0 30px rgba(59,130,246,.7);
-}
-
-/* ===============================
-   TOP PLAYER (oproti)
-=============================== */
-
-body.multi-mode .multi-player.top {
-  top: 25px;
-  left: 50%;
-  transform: translateX(-50%);
-  flex-direction: column;
-  align-items: center;
-}
-
-body.multi-mode .multi-player.top .card-row {
-  display: flex;
-  gap: 6px;
-}
-
-/* ===============================
-   LEFT PLAYER
-=============================== */
-
-body.multi-mode .multi-player.left {
-  top: 50%;
-  left: 80px;
-  transform: translateY(-50%);
-  flex-direction: row;
-  align-items: center;
-}
-
-body.multi-mode .multi-player.left .card-row {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-/* 👉 OTOČENIE KARIET SMEROM KU STOLU */
-body.multi-mode .multi-player.left .card {
-  transform: rotate(90deg);
-}
-
-/* ===============================
-   RIGHT PLAYER
-=============================== */
-
-body.multi-mode .multi-player.right {
-  top: 50%;
-  right: 80px;
-  transform: translateY(-50%);
-  flex-direction: row-reverse;
-  align-items: center;
-}
-
-body.multi-mode .multi-player.right .card-row {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-/* 👉 OTOČENIE KARIET SMEROM KU STOLU */
-body.multi-mode .multi-player.right .card {
-  transform: rotate(-90deg);
-}
-
-/* ===============================
-   NAME BAR
-=============================== */
-
-body.multi-mode .name-bar {
-  font-weight: 600;
-  font-size: 13px;
-  opacity: 0.85;
-  white-space: nowrap;
-}
-
-/* ===============================
    TURN INDICATOR
 =============================== */
 
@@ -1147,72 +1056,131 @@ body.multi-mode .turn-indicator {
 }
 
 /* ===============================
-   MULTIPLAYER – CARD ROTATION FIX
+   MULTI PLAYER – BASE CARD
 =============================== */
 
-/* LEFT PLAYER – karty smerujú doprava (ku stolu) */
-body.multi-mode .multi-player.left .card,
-body.multi-mode .multi-player.left .card-back {
-  transform: rotate(90deg);
-  transform-origin: center;
+body.multi-mode .multi-player {
+  position: absolute;
+
+  display: flex;
+  flex-direction: column;     /* 🔑 JEDNOTNÝ LAYOUT */
+  align-items: center;
+  gap: 8px;
+
+  padding: 12px;
+  border-radius: 16px;
+
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(6px);
+
+  box-shadow: 0 10px 30px rgba(0,0,0,.4);
+  opacity: 0.85;
+
+  transition: transform .2s ease, opacity .2s ease;
 }
 
-/* RIGHT PLAYER – karty smerujú doľava (ku stolu) */
-body.multi-mode .multi-player.right .card,
-body.multi-mode .multi-player.right .card-back {
-  transform: rotate(-90deg);
-  transform-origin: center;
+body.multi-mode .multi-player.active {
+  opacity: 1;
+  box-shadow:
+    0 0 0 2px rgba(59,130,246,.6),
+    0 0 30px rgba(59,130,246,.7);
 }
 
 /* ===============================
-   MULTIPLAYER – SIDE CARD FIX (FINAL)
+   PLAYER NAME
 =============================== */
 
-/* ZRUŠ hover/selected animácie pre side hráčov */
-body.multi-mode .multi-player.left .card:hover,
-body.multi-mode .multi-player.left .card.selected,
-body.multi-mode .multi-player.right .card:hover,
-body.multi-mode .multi-player.right .card.selected {
-  transform: none !important;
+body.multi-mode .multi-player .name-bar {
+  font-size: 13px;
+  font-weight: 600;
+  opacity: .85;
+  white-space: nowrap;
 }
 
-/* LEFT PLAYER – karty otočené smerom ku stolu */
-body.multi-mode .multi-player.left .card img {
-  transform: rotate(90deg) scale(var(--card-scale)) !important;
-  transform-origin: center;
+/* ===============================
+   CARD ROW (DEFAULT = TOP PLAYER)
+=============================== */
+
+body.multi-mode .multi-player .card-row {
+  display: flex;
+  gap: 6px;
 }
 
-/* RIGHT PLAYER – karty otočené smerom ku stolu */
-body.multi-mode .multi-player.right .card img {
-  transform: rotate(-90deg) scale(var(--card-scale)) !important;
-  transform-origin: center;
+/* ===============================
+   TOP PLAYER (OPPOSITE)
+=============================== */
+
+body.multi-mode .multi-player.top {
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
+/* ===============================
+   LEFT PLAYER (ROTATED)
+=============================== */
 
-/* ľavý hráč – karty smerujú k stolu */
+body.multi-mode .multi-player.left {
+  top: 50%;
+  left: 80px;
+  transform:
+    translateY(-50%)
+    rotate(-90deg);
+}
+
+/* ===============================
+   RIGHT PLAYER (ROTATED)
+=============================== */
+
+body.multi-mode .multi-player.right {
+  top: 50%;
+  right: 80px;
+  transform:
+    translateY(-50%)
+    rotate(90deg);
+}
+
+/* ===============================
+   SIDE PLAYERS – CARDS STACK
+   (cards under each other)
+=============================== */
+
+body.multi-mode .multi-player.left .card-row,
+body.multi-mode .multi-player.right .card-row {
+  flex-direction: column;
+}
+
+/* ===============================
+   SIDE PLAYERS – CARD ORIENTATION
+   (cards face the table)
+=============================== */
+
 body.multi-mode .multi-player.left .card,
-body.multi-mode .multi-player.left .pc-card {
+body.multi-mode .multi-player.right .card {
   transform: rotate(90deg);
-  transform-origin: center;
 }
 
-/* pravý hráč – karty smerujú k stolu */
-body.multi-mode .multi-player.right .card,
-body.multi-mode .multi-player.right .pc-card {
-  transform: rotate(-90deg);
-  transform-origin: center;
-}
-
-/* ľavý hráč – meno smeruje ku stolu */
-body.multi-mode .multi-player.left .name-bar {
+/* ak používaš card-back namiesto .card */
+body.multi-mode .multi-player.left .card-back,
+body.multi-mode .multi-player.right .card-back {
   transform: rotate(90deg);
-  transform-origin: center;
-  white-space: nowrap;
 }
 
-/* pravý hráč – meno smeruje ku stolu */
+/* ===============================
+   SIDE PLAYERS – NAME ORIENTATION
+=============================== */
+
+body.multi-mode .multi-player.left .name-bar,
 body.multi-mode .multi-player.right .name-bar {
-  transform: rotate(-90deg);
+  transform: rotate(180deg);
+}
+
+/* ===============================
+   SMALL POLISH
+=============================== */
+
+body.multi-mode .multi-player.left,
+body.multi-mode .multi-player.right {
   transform-origin: center;
-  white-space: nowrap;
 }
