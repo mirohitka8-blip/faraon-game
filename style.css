@@ -1205,3 +1205,21 @@ body.multi-mode .multi-player.right .pc-card {
   transform: rotate(-90deg);
   transform-origin: center;
 }
+
+/* ===============================
+   MULTIPLAYER – SIDE NAME ROTATION
+=============================== */
+
+/* ľavý hráč – meno smeruje ku stolu */
+body.multi-mode .multi-player.left .name-bar {
+  transform: rotate(90deg);
+  transform-origin: center;
+  white-space: nowrap;
+}
+
+/* pravý hráč – meno smeruje ku stolu */
+body.multi-mode .multi-player.right .name-bar {
+  transform: rotate(-90deg);
+  transform-origin: center;
+  white-space: nowrap;
+}
