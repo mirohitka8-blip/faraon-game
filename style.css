@@ -990,169 +990,140 @@ body.single-mode #forcedSuitIndicator {
 }
 
 /* ===============================
-   MULTIPLAYER BASE
+   MODERN MULTIPLAYER UI
 =============================== */
-
-body.multi-mode #gameInner {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
+:root {
+  --accent-color: #6ee7b7;
+  --bg-dark: rgba(15, 23, 42, 0.9);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.5);
 }
 
-body.multi-mode #pcArea { display: none; }
-body.multi-mode #multiGameUI { display: block; }
+body.multi-mode #gameInner {
+  background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+  perspective: 1000px; /* Pridá hĺbku pri animáciách kariet */
+}
 
 /* ===============================
-   TABLE
+   TABLE & TURN INDICATOR
 =============================== */
-
 body.multi-mode #table {
   position: fixed;
-  top: 50%;
+  top: 45%; /* Posunuté mierne hore kvôli veľkej ruke dole */
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 50;
+  transition: all 0.3s ease;
+}
+
+body.multi-mode .turn-indicator {
+  position: fixed;
+  top: 20px;
+  right: 20px; /* Presunul som ho do rohu, aby nezavadzal v strede */
+  background: var(--bg-dark);
+  border: 1px solid var(--accent-color);
+  color: var(--accent-color);
+  padding: 8px 20px;
+  border-radius: 50px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 0 15px rgba(110, 231, 183, 0.2);
 }
 
 /* ===============================
-   MY CARDS (BOTTOM)
+   PLAYER CONTAINERS
 =============================== */
-
-body.multi-mode #playerCards {
-  position: fixed;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 40;
-}
-
-body.multi-mode #controls {
-  position: fixed;
-  bottom: 25px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 45;
-}
-
-/* ===============================
-   PLAYER CONTAINER (COMMON)
-=============================== */
-
 body.multi-mode .multi-player {
   position: absolute;
-  background: rgba(15, 23, 42, 0.85);
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 16px;
-  padding: 12px;
-  backdrop-filter: blur(6px);
-  box-shadow: 0 10px 30px rgba(0,0,0,.4);
+  background: var(--bg-dark);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 15px;
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-lg);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
 
+/* Indikátor aktívneho hráča */
+body.multi-mode .multi-player.active {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 20px rgba(110, 231, 183, 0.3);
+  transform: scale(1.05);
+}
+
+/* KARTY V RUKE (Prekrývanie) */
+.card-row {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  justify-content: center;
+}
+
+.top .card-row, .bottom .card-row {
+  gap: -20px; /* Negatívny gap vytvorí vejárový efekt */
+}
+
+.card-row .card {
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.card-row .card:hover {
+  transform: translateY(-15px) scale(1.1) !important;
+  z-index: 100;
 }
 
 /* ===============================
-   TOP PLAYER
+   POZÍCIE HRÁČOV
 =============================== */
 
+/* TOP */
 body.multi-mode .multi-player.top {
-  top: 24px;
+  top: 30px;
   left: 50%;
   transform: translateX(-50%);
-  flex-direction: column;
+  flex-direction: column-reverse;
 }
 
-body.multi-mode .multi-player.top .card-row {
-  display: flex;
-  gap: 8px;
-}
-
-/* ===============================
-   LEFT PLAYER
-=============================== */
-
+/* LEFT & RIGHT (Otočenie vyriešené cez flex-direction a origin) */
 body.multi-mode .multi-player.left {
-  left: 24px;
+  left: 40px;
   top: 50%;
   transform: translateY(-50%);
+  flex-direction: row;
 }
-
-body.multi-mode .multi-player.left .card-row {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-/* ⬅️ OTOČENIE KARIET K STOLU */
-body.multi-mode .multi-player.left .card {
-  transform: rotate(90deg);
-}
-
-/* meno hráča – tiež ku stolu */
-body.multi-mode .multi-player.left .name-bar {
-  transform: rotate(90deg);
-  white-space: nowrap;
-}
-
-/* ===============================
-   RIGHT PLAYER
-=============================== */
 
 body.multi-mode .multi-player.right {
-  right: 24px;
+  right: 40px;
   top: 50%;
   transform: translateY(-50%);
   flex-direction: row-reverse;
 }
 
-body.multi-mode .multi-player.right .card-row {
-  display: flex;
+/* Fix pre vertikálne karty na bokoch */
+.left .card-row, .right .card-row {
   flex-direction: column;
-  gap: 8px;
-}
-
-/* ➡️ OTOČENIE KARIET K STOLU */
-body.multi-mode .multi-player.right .card {
-  transform: rotate(-90deg);
-}
-
-/* meno hráča – tiež ku stolu */
-body.multi-mode .multi-player.right .name-bar {
-  transform: rotate(-90deg);
-  white-space: nowrap;
+  gap: -40px;
 }
 
 /* ===============================
-   NAME BAR
+   PLAYER INFO (NAME BAR)
 =============================== */
-
 body.multi-mode .name-bar {
-  background: rgba(2, 6, 23, 0.85);
-  border-radius: 999px;
-  padding: 6px 14px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #6ee7b7;
-  text-align: center;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 5px 15px;
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
-/* ===============================
-   TURN INDICATOR
-=============================== */
-
-body.multi-mode .turn-indicator {
+/* SPODNÁ ČASŤ (TY) */
+body.multi-mode #playerCards {
   position: fixed;
-  top: calc(50% - 140px);
+  bottom: 100px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 60;
-
-  background: rgba(2, 6, 23, 0.85);
-  border-radius: 999px;
-  padding: 6px 14px;
-  font-size: 14px;
-
-  box-shadow: 0 6px 20px rgba(0,0,0,.4);
+  display: flex;
+  gap: 10px;
+  z-index: 100;
 }
