@@ -1,25 +1,17 @@
-// ui/multiUI.js
 window.updateMultiUI = function () {
 
+  // ===== ACTIVE PLAYER HIGHLIGHT =====
   document
-  .querySelectorAll(".multi-player")
-  .forEach(el => el.classList.remove("active"));
+    .querySelectorAll(".multi-player")
+    .forEach(el => el.classList.remove("active"));
 
-const active = document.querySelector(
-  `.multi-player[data-player="${multiplayerTurnPlayer}"]`
-);
-
-players.forEach(p => {
-  const el = document.querySelector(
-    `.multi-player[data-player="${p.id}"] .player-cards`
+  const active = document.querySelector(
+    `.multi-player.${multiplayerTurnPlayer}`
   );
-  if (el) el.textContent = `🃏 ${p.handCount}`;
-});
 
+  if (active) active.classList.add("active");
 
-if (active) active.classList.add("active");
-
-
+  // ===== TURN INDICATOR =====
   const turn = document.getElementById("turnIndicator");
 
   if (turn) {
@@ -32,29 +24,25 @@ if (active) active.classList.add("active");
     }
   }
 
-
-  window.updateMultiUI = function () {
-  renderTurnIndicatorMulti();
-  renderPlayerHand();
-  renderTableCard();
-  renderAceDecision();
-  renderForcedSuit();
-  renderControls();
-
-
 };
 
-};
+function renderTurnIndicatorMulti() {
 
-function updatePlayerHUD(player, nameEl, cardsEl) {
-  if (!player) return;
+  if (!multiplayerMode) return;
 
-  nameEl.innerHTML = `
-    ${player.name}
-    <div class="card-count">🃏 ${player.handCount}</div>
-  `;
+  const ids = Object.keys(multiplayerHands || {});
+  const current = multiplayerTurnPlayer;
 
-  // protihráč nemá viditeľné karty
-  cardsEl.innerHTML = "";
+  ids.forEach(id => {
+
+    const el = document.querySelector(`[data-player-id="${id}"]`);
+    if (!el) return;
+
+    if (id === current) {
+      el.classList.add("active-turn");
+    } else {
+      el.classList.remove("active-turn");
+    }
+
+  });
 }
-
