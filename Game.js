@@ -202,22 +202,41 @@ function canPlayMultiple(cards) {
 
   const value = cards[0].slice(0, -1);
 
+  // všetky rovnaká hodnota
   if (!cards.every(c => c.slice(0, -1) === value)) {
     return false;
   }
 
-  // KAŽDÁ karta musí byť platná
-  for (const card of cards) {
-    if (!canPlay(card)) {
+  // prvá karta sa kontroluje normálne
+  if (!canPlay(cards[0])) {
+    return false;
+  }
+
+  // ďalšie karty sa kontrolujú postupne
+  let simulatedTop = cards[0];
+
+  for (let i = 1; i < cards.length; i++) {
+    if (!canPlayOn(simulatedTop, cards[i])) {
       return false;
     }
+    simulatedTop = cards[i];
   }
 
   return true;
 }
 
+function canPlayOn(top, card) {
+  const topValue = top.slice(0, -1);
+  const topSuit = top.slice(-1);
+  const value = card.slice(0, -1);
+  const suit = card.slice(-1);
 
-
+  return (
+    value === topValue ||
+    suit === topSuit ||
+    forcedSuit === suit
+  );
+}
 
 socket.on("connect", () => {
   console.log("SOCKET CONNECTED:", socket.id);
@@ -312,7 +331,7 @@ function playSelected() {
   // MULTIPLAYER
   // =========================
 
- if (multiplayerMode) {
+if (multiplayerMode) {
 
   const cards = selected.map(i => playerHand[i]);
 
@@ -787,8 +806,9 @@ function applyPlayedCard(card, isPlayer) {
 
   // ===== PRESUNIEME STARÚ STOLNÚ KARTU DO DISCARD =====
   if (tableCard !== null) {
-    discardPile.push(tableCard);
-  }
+  discardPile.push(tableCard);
+}
+
 
   // ===== NOVÁ KARTA IDE NA STÔL =====
   tableCard = card;
@@ -796,10 +816,9 @@ function applyPlayedCard(card, isPlayer) {
   const v = card.slice(0, -1);
   const s = card.slice(-1);
 
-  // ===== RESET FORCED SUIT AK NIE JE HORNÍK =====
-  if (v !== "Q") {
-    forcedSuit = null;
-  }
+if (forcedSuit && s === forcedSuit) {
+  forcedSuit = null;
+}
 
   // ===== ZELENÝ DOLNÍK (J♣) — ZRUŠÍ TREST =====
   if (v === "J" && s === "♣") {
