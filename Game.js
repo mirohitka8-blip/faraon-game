@@ -198,6 +198,25 @@ function canPlay(card) {
   return v === tv || s === ts;
 }
 
+function canPlayMultiple(cards) {
+
+  const value = cards[0].slice(0, -1);
+
+  if (!cards.every(c => c.slice(0, -1) === value)) {
+    return false;
+  }
+
+  // KAŽDÁ karta musí byť platná
+  for (const card of cards) {
+    if (!canPlay(card)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+
 
 
 socket.on("connect", () => {
@@ -293,19 +312,33 @@ function playSelected() {
   // MULTIPLAYER
   // =========================
 
-  if (multiplayerMode) {
+ if (multiplayerMode) {
 
-    socket.emit("playCard", {
-      room: currentRoomCode,
-      cards: selected.map(i => playerHand[i])
-    });
+  const cards = selected.map(i => playerHand[i]);
 
-    // okamžite zruš výber (server pošle nový stav)
-    selected = [];
-    updateUI();
-
+  // 🔴 VALIDÁCIA PÁRU / VIACERÝCH KARIET
+  if (cards.length > 1 && !canPlayMultiple(cards)) {
+    alert("Neplatná kombinácia kariet");
     return;
   }
+
+  // 🔴 VALIDÁCIA JEDNEJ KARTY
+  if (cards.length === 1 && !canPlay(cards[0])) {
+    alert("Táto karta nemôže ísť na stôl");
+    return;
+  }
+
+  socket.emit("playCard", {
+    room: currentRoomCode,
+    cards
+  });
+
+  selected = [];
+  updateUI();
+  return;
+}
+
+
 
   // =========================
   // SINGLEPLAYER
