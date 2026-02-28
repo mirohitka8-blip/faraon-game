@@ -248,7 +248,12 @@ socket.on("disconnect", () => {
 
 
 socket.on("roomJoined", data => {
-  console.log("ROOM JOINED RECEIVED", data);
+
+  console.log("ROOM JOINED DATA:", data);
+
+  currentRoomCode = data.roomCode;  // toto musí existovať
+  isHost = data.isHost;
+
 });
 
 /* ==================================================
@@ -2539,22 +2544,19 @@ if (joinRoomBtn) {
 const readyBtn = document.getElementById("readyBtn");
 
 if (readyBtn) {
-  const readyBtn = document.getElementById("readyBtn");
-
-if (readyBtn) {
   readyBtn.onclick = () => {
 
+    console.log("READY CLICKED");
+
     if (!currentRoomCode) {
-      console.warn("NO ROOM CODE");
+      console.warn("ROOM CODE IS NULL");
       return;
     }
 
-    console.log("READY CLICK:", currentRoomCode);
-
-    socket.emit("playerReady", currentRoomCode);
+    socket.emit("playerReady", {
+      room: currentRoomCode
+    });
   };
-}
-
 }
 
 const startGameBtn = document.getElementById("startGameBtn");
