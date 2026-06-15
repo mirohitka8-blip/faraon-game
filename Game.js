@@ -8,7 +8,7 @@ console.log("Game.js loaded");
 const socket = io("https://faraon-server.onrender.com");
 
 socket.on("connect", () => {
-  console.log("CONNECTED TO FARAON MULTIPLAYER SERVER");
+    console.log("CONNECTED TO FARAON MULTIPLAYER SERVER");
 });
 
 
@@ -16,23 +16,23 @@ socket.on("connect", () => {
 const sounds = {};
 
 function loadSound(name, volume = 1) {
-  const audio = new Audio(`/sounds/${name}`);
-  audio.volume = volume;
-  audio.preload = "auto";
-  sounds[name] = audio;
+    const audio = new Audio(`/sounds/${name}`);
+    audio.volume = volume;
+    audio.preload = "auto";
+    sounds[name] = audio;
 }
 
 function playSound(name) {
 
-  const s = sounds[name];
-  if (!s) return;
+    const s = sounds[name];
+    if (!s) return;
 
-  s.currentTime = 0;
-  s.play().catch(()=>{});
+    s.currentTime = 0;
+    s.play().catch(() => { });
 }
 
-const suits = ["♥","♦","♣","♠"];
-const values = ["7","8","9","10","J","Q","K","A"];
+const suits = ["♥", "♦", "♣", "♠"];
+const values = ["7", "8", "9", "10", "J", "Q", "K", "A"];
 
 let discardPile = [];
 let deck = [];
@@ -65,9 +65,9 @@ let selected = [];
 ================================================== */
 
 function createDeck() {
-  deck = [];
-  suits.forEach(s => values.forEach(v => deck.push(v + s)));
-  deck.sort(() => Math.random() - 0.5);
+    deck = [];
+    suits.forEach(s => values.forEach(v => deck.push(v + s)));
+    deck.sort(() => Math.random() - 0.5);
 }
 
 /* ==================================================
@@ -76,71 +76,71 @@ function createDeck() {
 
 function startGame() {
 
-  // RESET CARD TRANSFORMS
-  document.querySelectorAll(".card, .pc-card").forEach(el => {
-    el.style.transform = "";
-    el.style.opacity = "";
-    el.style.transition = "";
-  });
+    // RESET CARD TRANSFORMS
+    document.querySelectorAll(".card, .pc-card").forEach(el => {
+        el.style.transform = "";
+        el.style.opacity = "";
+        el.style.transition = "";
+    });
 
-  // RESET END SCREEN (WIN + LOSE)
-  const end = document.getElementById("endScreen");
-  if (end) {
-    end.style.display = "none";
-    end.classList.remove("active");
-  }
+    // RESET END SCREEN (WIN + LOSE)
+    const end = document.getElementById("endScreen");
+    if (end) {
+        end.style.display = "none";
+        end.classList.remove("active");
+    }
 
-  // RESET DARK OVERLAY (LOSE)
-  const dark = document.getElementById("darkOverlay");
-  if (dark) dark.classList.remove("active");
+    // RESET DARK OVERLAY (LOSE)
+    const dark = document.getElementById("darkOverlay");
+    if (dark) dark.classList.remove("active");
 
-  // RESET WIN GLOW
-  const box = document.querySelector("#endScreen .endBox");
-  if (box) box.classList.remove("win-gold-glow");
+    // RESET WIN GLOW
+    const box = document.querySelector("#endScreen .endBox");
+    if (box) box.classList.remove("win-gold-glow");
 
-  // CLEAN OLD FX STATES
-  hideWinOutline();
-  const title = document.getElementById("endTitle");
-if (title) {
-  title.classList.remove("win-pulse");
-  title.classList.remove("lose-pulse");
-}
-  hideLoseEdge();
-  clearLoseButtonGlow();
+    // CLEAN OLD FX STATES
+    hideWinOutline();
+    const title = document.getElementById("endTitle");
+    if (title) {
+        title.classList.remove("win-pulse");
+        title.classList.remove("lose-pulse");
+    }
+    hideLoseEdge();
+    clearLoseButtonGlow();
 
-  // RESET GAME STATE
-  discardPile = [];
-  freePlay = false;
+    // RESET GAME STATE
+    discardPile = [];
+    freePlay = false;
 
-  createDeck();
+    createDeck();
 
-  playerHand = deck.splice(0, 5);
-  pcHand = deck.splice(0, 5);
-  tableCard = deck.pop();
+    playerHand = deck.splice(0, 5);
+    pcHand = deck.splice(0, 5);
+    tableCard = deck.pop();
 
-  pendingDraw = 0;
-  skipCount = 0;
-  forcedSuit = null;
+    pendingDraw = 0;
+    skipCount = 0;
+    forcedSuit = null;
 
-  waitingForSuit = false;
-  waitingForAceDecision = false;
+    waitingForSuit = false;
+    waitingForAceDecision = false;
 
-  selected = [];
+    selected = [];
 
     gameOver = false;
-  playerTurn = true;
+    playerTurn = true;
 
-  // ===== SET BODY MODE (SINGLE / MULTI) =====
-  document.body.classList.remove("single-mode", "multi-mode");
+    // ===== SET BODY MODE (SINGLE / MULTI) =====
+    document.body.classList.remove("single-mode", "multi-mode");
 
-  if (multiplayerMode) {
-    document.body.classList.add("multi-mode");
-  } else {
-    document.body.classList.add("single-mode");
-  }
+    if (multiplayerMode) {
+        document.body.classList.add("multi-mode");
+    } else {
+        document.body.classList.add("single-mode");
+    }
 
-  // UPDATE UI
-  updateUI();
+    // UPDATE UI
+    updateUI();
 }
 
 
@@ -150,11 +150,11 @@ if (title) {
 ================================================== */
 
 function cardToFile(card) {
-  const v = card.slice(0,-1);
-  const s = card.slice(-1);
-  const sm = {"♠":"acorn","♥":"heart","♦":"bell","♣":"leaf"};
-  const vm = {"7":"seven","8":"eight","9":"nine","10":"ten","J":"unter","Q":"ober","K":"king","A":"ace"};
-  return sm[s] + "-" + vm[v] + ".png";
+    const v = card.slice(0, -1);
+    const s = card.slice(-1);
+    const sm = { "♠": "acorn", "♥": "heart", "♦": "bell", "♣": "leaf" };
+    const vm = { "7": "seven", "8": "eight", "9": "nine", "10": "ten", "J": "unter", "Q": "ober", "K": "king", "A": "ace" };
+    return sm[s] + "-" + vm[v] + ".png";
 }
 
 /* ==================================================
@@ -163,96 +163,96 @@ function cardToFile(card) {
 
 function canPlay(card) {
 
-  if (freePlay) return true;
-  const v = card.slice(0, -1);
-  const s = card.slice(-1);
+    if (freePlay) return true;
+    const v = card.slice(0, -1);
+    const s = card.slice(-1);
 
-  const tv = tableCard.slice(0, -1);
-  const ts = tableCard.slice(-1);
+    const tv = tableCard.slice(0, -1);
+    const ts = tableCard.slice(-1);
 
-  // ===== ESO STOP REŽIM =====
-  if (skipCount > 0 && waitingForAceDecision) {
-    return v === "A";
-  }
+    // ===== ESO STOP REŽIM =====
+    if (skipCount > 0 && waitingForAceDecision) {
+        return v === "A";
+    }
 
-  // ===== SEDMIČKOVÝ TREST =====
-  if (pendingDraw > 0) {
-    if (v === "7") return true;
+    // ===== SEDMIČKOVÝ TREST =====
+    if (pendingDraw > 0) {
+        if (v === "7") return true;
+        if (v === "J" && s === "♣") return true;
+        return false;
+    }
+
+    // ===== AK JE NA STOLE ZELENÝ DOLNÍK → VŠETKO IDE =====
+    if (tv === "J" && ts === "♣") return true;
+
+    // ===== ZELENÝ DOLNÍK JE VŽDY HRATEĽNÝ =====
     if (v === "J" && s === "♣") return true;
-    return false;
-  }
 
-  // ===== AK JE NA STOLE ZELENÝ DOLNÍK → VŠETKO IDE =====
-  if (tv === "J" && ts === "♣") return true;
+    // ===== HORNÍK =====
+    if (v === "Q") return true;
 
-  // ===== ZELENÝ DOLNÍK JE VŽDY HRATEĽNÝ =====
-  if (v === "J" && s === "♣") return true;
+    // ===== VYNÚTENÁ FARBA =====
+    if (forcedSuit) return s === forcedSuit;
 
-  // ===== HORNÍK =====
-  if (v === "Q") return true;
-
-  // ===== VYNÚTENÁ FARBA =====
-  if (forcedSuit) return s === forcedSuit;
-
-  // ===== ŠTANDARD =====
-  return v === tv || s === ts;
+    // ===== ŠTANDARD =====
+    return v === tv || s === ts;
 }
 
 function canPlayMultiple(cards) {
 
-  const value = cards[0].slice(0, -1);
+    const value = cards[0].slice(0, -1);
 
-  // všetky rovnaká hodnota
-  if (!cards.every(c => c.slice(0, -1) === value)) {
-    return false;
-  }
-
-  // prvá karta sa kontroluje normálne
-  if (!canPlay(cards[0])) {
-    return false;
-  }
-
-  // ďalšie karty sa kontrolujú postupne
-  let simulatedTop = cards[0];
-
-  for (let i = 1; i < cards.length; i++) {
-    if (!canPlayOn(simulatedTop, cards[i])) {
-      return false;
+    // všetky rovnaká hodnota
+    if (!cards.every(c => c.slice(0, -1) === value)) {
+        return false;
     }
-    simulatedTop = cards[i];
-  }
 
-  return true;
+    // prvá karta sa kontroluje normálne
+    if (!canPlay(cards[0])) {
+        return false;
+    }
+
+    // ďalšie karty sa kontrolujú postupne
+    let simulatedTop = cards[0];
+
+    for (let i = 1; i < cards.length; i++) {
+        if (!canPlayOn(simulatedTop, cards[i])) {
+            return false;
+        }
+        simulatedTop = cards[i];
+    }
+
+    return true;
 }
 
 function canPlayOn(top, card) {
-  const topValue = top.slice(0, -1);
-  const topSuit = top.slice(-1);
-  const value = card.slice(0, -1);
-  const suit = card.slice(-1);
+    const topValue = top.slice(0, -1);
+    const topSuit = top.slice(-1);
+    const value = card.slice(0, -1);
+    const suit = card.slice(-1);
 
-  return (
-    value === topValue ||
-    suit === topSuit ||
-    forcedSuit === suit
-  );
+    return (
+        value === topValue ||
+        suit === topSuit ||
+        forcedSuit === suit
+    );
 }
 
 socket.on("connect", () => {
-  console.log("SOCKET CONNECTED:", socket.id);
+    console.log("SOCKET CONNECTED:", socket.id);
 });
 
 socket.on("disconnect", () => {
-  console.log("SOCKET DISCONNECTED");
+    console.log("SOCKET DISCONNECTED");
 });
 
 
 socket.on("roomJoined", data => {
 
-  console.log("ROOM JOINED DATA:", data);
+    console.log("ROOM JOINED DATA:", data);
 
-  currentRoomCode = data.roomCode;  // toto musí existovať
-  isHost = data.isHost;
+    currentRoomCode = data.roomCode;  // toto musí existovať
+    isHost = data.isHost;
 
 });
 
@@ -261,61 +261,61 @@ socket.on("roomJoined", data => {
 ================================================== */
 
 function toggleSelect(i) {
-  if (!playerTurn || gameOver || waitingForSuit || waitingForAceDecision) return;
+    if (!playerTurn || gameOver || waitingForSuit || waitingForAceDecision) return;
 
-  selected.includes(i)
-    ? selected = selected.filter(x=>x!==i)
-    : selected.push(i);
+    selected.includes(i)
+        ? selected = selected.filter(x => x !== i)
+        : selected.push(i);
 
-  updateUI();
+    updateUI();
 }
 
-  function playAce() {
+function playAce() {
 
-  console.log("PLAY ACE CLICK");
+    console.log("PLAY ACE CLICK");
 
-  if (!waitingForAceDecision || gameOver) return;
+    if (!waitingForAceDecision || gameOver) return;
 
-  const aceIndex = playerHand.findIndex(c => c.startsWith("A"));
-  if (aceIndex === -1) return;
+    const aceIndex = playerHand.findIndex(c => c.startsWith("A"));
+    if (aceIndex === -1) return;
 
-  waitingForAceDecision = false;
+    waitingForAceDecision = false;
 
-  /* =========================
-     MULTIPLAYER
-  ========================= */
+    /* =========================
+       MULTIPLAYER
+    ========================= */
 
-  if (multiplayerMode) {
+    if (multiplayerMode) {
 
-    socket.emit("playCard", {
-      room: currentRoomCode,
-      cards: [ playerHand[aceIndex] ]
-    });
+        socket.emit("playCard", {
+            room: currentRoomCode,
+            cards: [playerHand[aceIndex]]
+        });
 
-    return;
-  }
+        return;
+    }
 
-  /* =========================
-     SINGLEPLAYER
-  ========================= */
+    /* =========================
+       SINGLEPLAYER
+    ========================= */
 
-  const card = playerHand.splice(aceIndex, 1)[0];
+    const card = playerHand.splice(aceIndex, 1)[0];
 
-  animatePlay(card, true);
-  applyPlayedCard(card, true);
+    animatePlay(card, true);
+    applyPlayedCard(card, true);
 
-  // WIN CHECK
-  if (playerHand.length === 0) {
+    // WIN CHECK
+    if (playerHand.length === 0) {
 
-    cinematicFinish = true;
-    showEndScreenDelayed(true, 1200);
-    return;
-  }
+        cinematicFinish = true;
+        showEndScreenDelayed(true, 1200);
+        return;
+    }
 
-  playerTurn = false;
-  updateUI();
+    playerTurn = false;
+    updateUI();
 
-  setTimeout(pcTurn, 600);
+    setTimeout(pcTurn, 600);
 }
 
 
@@ -329,139 +329,139 @@ function toggleSelect(i) {
 
 function playSelected() {
 
-  if (!playerTurn || waitingForAceDecision || waitingForSuit || gameOver) return;
-  if (!selected.length) return;
+    if (!playerTurn || waitingForAceDecision || waitingForSuit || gameOver) return;
+    if (!selected.length) return;
 
-  // =========================
-  // MULTIPLAYER
-  // =========================
+    // =========================
+    // MULTIPLAYER
+    // =========================
 
-if (multiplayerMode) {
+    if (multiplayerMode) {
 
-  const cards = selected.map(i => playerHand[i]);
+        const cards = selected.map(i => playerHand[i]);
 
-  // 🔴 VALIDÁCIA PÁRU / VIACERÝCH KARIET
-  if (cards.length > 1 && !canPlayMultiple(cards)) {
-    alert("Neplatná kombinácia kariet");
-    return;
-  }
+        // 🔴 VALIDÁCIA PÁRU / VIACERÝCH KARIET
+        if (cards.length > 1 && !canPlayMultiple(cards)) {
+            alert("Neplatná kombinácia kariet");
+            return;
+        }
 
-  // 🔴 VALIDÁCIA JEDNEJ KARTY
-  if (cards.length === 1 && !canPlay(cards[0])) {
-    alert("Táto karta nemôže ísť na stôl");
-    return;
-  }
+        // 🔴 VALIDÁCIA JEDNEJ KARTY
+        if (cards.length === 1 && !canPlay(cards[0])) {
+            alert("Táto karta nemôže ísť na stôl");
+            return;
+        }
 
-  socket.emit("playCard", {
-    room: currentRoomCode,
-    cards
-  });
+        socket.emit("playCard", {
+            room: currentRoomCode,
+            cards
+        });
 
-  selected = [];
-  updateUI();
-  return;
-}
-
-
-
-  // =========================
-  // SINGLEPLAYER
-  // =========================
-
-  const cards = selected.map(i => playerHand[i]);
-
-  const sameValue = cards.every(
-    c => c.slice(0,-1) === cards[0].slice(0,-1)
-  );
-
-  const sameSuit = cards.every(
-    c => c.slice(-1) === cards[0].slice(-1)
-  );
-
-  if (!sameValue && !sameSuit) {
-    alert("Zlá kombinácia kariet");
-    return;
-  }
-
-  const isBurned = sameValue && cards.length === 4;
-
-  if (!isBurned && !canPlay(cards[0])) {
-    alert("Spodná karta nemôže ísť na stôl");
-    return;
-  }
-
-  cards.forEach((card, i) => {
-    animatePlay(card, true, i * 120);
-  });
-
-  selected.sort((a,b)=>b-a).forEach(i => {
-    playerHand.splice(i,1);
-  });
-
-  selected = [];
-
-  for (const card of cards) {
-    applyPlayedCard(card, true);
-  }
-
-  if (isBurned) {
-
-    freePlay = true;
-    pendingDraw = 0;
-    skipCount = 0;
-    forcedSuit = null;
-
-    clearPenaltyUI();
-    showBurnAnimation();
-
-    if (playerHand.length === 0) {
-      cinematicFinish = true;
-      showEndScreenDelayed(true, 1300);
-      return;
+        selected = [];
+        updateUI();
+        return;
     }
 
-    playerTurn = true;
-    updateUI();
-    return;
-  }
 
-  if (playerHand.length === 0) {
 
-    cinematicFinish = true;
+    // =========================
+    // SINGLEPLAYER
+    // =========================
+
+    const cards = selected.map(i => playerHand[i]);
+
+    const sameValue = cards.every(
+        c => c.slice(0, -1) === cards[0].slice(0, -1)
+    );
+
+    const sameSuit = cards.every(
+        c => c.slice(-1) === cards[0].slice(-1)
+    );
+
+    if (!sameValue && !sameSuit) {
+        alert("Zlá kombinácia kariet");
+        return;
+    }
+
+    const isBurned = sameValue && cards.length === 4;
+
+    if (!isBurned && !canPlay(cards[0])) {
+        alert("Spodná karta nemôže ísť na stôl");
+        return;
+    }
+
+    cards.forEach((card, i) => {
+        animatePlay(card, true, i * 120);
+    });
+
+    selected.sort((a, b) => b - a).forEach(i => {
+        playerHand.splice(i, 1);
+    });
+
+    selected = [];
+
+    for (const card of cards) {
+        applyPlayedCard(card, true);
+    }
+
+    if (isBurned) {
+
+        freePlay = true;
+        pendingDraw = 0;
+        skipCount = 0;
+        forcedSuit = null;
+
+        clearPenaltyUI();
+        showBurnAnimation();
+
+        if (playerHand.length === 0) {
+            cinematicFinish = true;
+            showEndScreenDelayed(true, 1300);
+            return;
+        }
+
+        playerTurn = true;
+        updateUI();
+        return;
+    }
+
+    if (playerHand.length === 0) {
+
+        cinematicFinish = true;
+        playerTurn = false;
+        updateUI();
+
+        showEndScreenDelayed(true, 1300);
+        return;
+    }
+
+    const lastCard = cards[cards.length - 1];
+
+    if (lastCard.slice(0, -1) === "Q") {
+
+        waitingForSuit = true;
+        const chooser = document.getElementById("suitChooser");
+        if (chooser) chooser.style.display = "flex";
+
+        updateUI();
+        return;
+    }
+
     playerTurn = false;
     updateUI();
+    setTimeout(pcTurn, 700);
 
-    showEndScreenDelayed(true, 1300);
-    return;
-  }
-
-  const lastCard = cards[cards.length - 1];
-
-  if (lastCard.slice(0,-1) === "Q") {
-
-    waitingForSuit = true;
-    const chooser = document.getElementById("suitChooser");
-    if (chooser) chooser.style.display = "flex";
-
-    updateUI();
-    return;
-  }
-
-  playerTurn = false;
-  updateUI();
-  setTimeout(pcTurn, 700);
-
-  validateDeckIntegrity();
+    validateDeckIntegrity();
 }
 
 
 socket.on("gameOver", data => {
 
-  multiplayerMode = false;
+    multiplayerMode = false;
 
-  const won = data.winner === socket.id;
+    const won = data.winner === socket.id;
 
-  showEndScreen(won);
+    showEndScreen(won);
 });
 
 
@@ -469,334 +469,334 @@ socket.on("gameOver", data => {
 function showBurnAnimation() {
 
 
-  playSound("fire.wav");
+    playSound("fire.wav");
 
-  console.log("🔥 BURN EFFECT TRIGGERED");
-  spawnFireParticles(120);
-  spawnSmokeParticles(100);
+    console.log("🔥 BURN EFFECT TRIGGERED");
+    spawnFireParticles(120);
+    spawnSmokeParticles(100);
 
-  const text = document.createElement("div");
-  text.textContent = "SPÁLENÁ";
+    const text = document.createElement("div");
+    text.textContent = "SPÁLENÁ";
 
-  text.style.position = "fixed";
-  text.style.left = "50%";
-  text.style.top = "50%";
-  text.style.transform = "translate(-50%,-50%) scale(0.6)";
-  text.style.fontSize = "64px";
-  text.style.fontWeight = "900";
-  text.style.letterSpacing = "4px";
-  text.style.color = "#ffae00";
-  text.style.pointerEvents = "none";
-  text.style.zIndex = "99999999";
-  text.style.opacity = "0";
-
-  text.style.textShadow =
-    "0 0 20px rgba(255,140,0,.9), 0 0 60px rgba(255,60,0,.8)";
-
-  text.style.transition =
-    "transform .35s cubic-bezier(.2,1.4,.4,1), opacity .35s ease";
-
-  document.body.appendChild(text);
-
-  // FORCE REFLOW
-  text.getBoundingClientRect();
-
-  requestAnimationFrame(() => {
-    text.style.opacity = "1";
-    text.style.transform = "translate(-50%,-50%) scale(1)";
-  });
-
-  setTimeout(() => {
+    text.style.position = "fixed";
+    text.style.left = "50%";
+    text.style.top = "50%";
+    text.style.transform = "translate(-50%,-50%) scale(0.6)";
+    text.style.fontSize = "64px";
+    text.style.fontWeight = "900";
+    text.style.letterSpacing = "4px";
+    text.style.color = "#ffae00";
+    text.style.pointerEvents = "none";
+    text.style.zIndex = "99999999";
     text.style.opacity = "0";
-    text.style.transform = "translate(-50%,-50%) scale(1.2)";
-  }, 700);
 
-  setTimeout(() => text.remove(), 1100);
+    text.style.textShadow =
+        "0 0 20px rgba(255,140,0,.9), 0 0 60px rgba(255,60,0,.8)";
 
-  // SCREEN SHAKE
-  const game = document.getElementById("game");
+    text.style.transition =
+        "transform .35s cubic-bezier(.2,1.4,.4,1), opacity .35s ease";
 
-  if (game) {
+    document.body.appendChild(text);
 
-    game.classList.remove("shake-strong");
-    void game.offsetWidth;
-    game.classList.add("shake-strong");
+    // FORCE REFLOW
+    text.getBoundingClientRect();
+
+    requestAnimationFrame(() => {
+        text.style.opacity = "1";
+        text.style.transform = "translate(-50%,-50%) scale(1)";
+    });
 
     setTimeout(() => {
-      game.classList.remove("shake-strong");
-    }, 500);
-  }
+        text.style.opacity = "0";
+        text.style.transform = "translate(-50%,-50%) scale(1.2)";
+    }, 700);
+
+    setTimeout(() => text.remove(), 1100);
+
+    // SCREEN SHAKE
+    const game = document.getElementById("game");
+
+    if (game) {
+
+        game.classList.remove("shake-strong");
+        void game.offsetWidth;
+        game.classList.add("shake-strong");
+
+        setTimeout(() => {
+            game.classList.remove("shake-strong");
+        }, 500);
+    }
 }
 
 function spawnFireParticles(count = 30) {
 
-  const cx = window.innerWidth / 2;
-  const cy = window.innerHeight / 2;
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
 
-  for (let i = 0; i < count; i++) {
+    for (let i = 0; i < count; i++) {
 
-    const p = document.createElement("div");
+        const p = document.createElement("div");
 
-    const size = 10 + Math.random() * 16;
+        const size = 10 + Math.random() * 16;
 
-    p.style.position = "fixed";
-    p.style.left = cx + "px";
-    p.style.top = cy + "px";
-    p.style.width = size + "px";
-    p.style.height = size + "px";
-    p.style.borderRadius = "50%";
-    p.style.pointerEvents = "none";
-    p.style.zIndex = "99999998";
+        p.style.position = "fixed";
+        p.style.left = cx + "px";
+        p.style.top = cy + "px";
+        p.style.width = size + "px";
+        p.style.height = size + "px";
+        p.style.borderRadius = "50%";
+        p.style.pointerEvents = "none";
+        p.style.zIndex = "99999998";
 
-    p.style.background =
-      "radial-gradient(circle, #fff7c2, #ff9a00, #ff2a00)";
+        p.style.background =
+            "radial-gradient(circle, #fff7c2, #ff9a00, #ff2a00)";
 
-    const angle = Math.random() * Math.PI * 2;
-    const dist = 120 + Math.random() * 200;
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 120 + Math.random() * 200;
 
-    const tx = Math.cos(angle) * dist;
-    const ty = Math.sin(angle) * dist;
+        const tx = Math.cos(angle) * dist;
+        const ty = Math.sin(angle) * dist;
 
-    p.style.transform = "translate(-50%,-50%) scale(1)";
-    p.style.transition =
-      "transform .9s ease-out, opacity .9s ease-out";
+        p.style.transform = "translate(-50%,-50%) scale(1)";
+        p.style.transition =
+            "transform .9s ease-out, opacity .9s ease-out";
 
-    document.body.appendChild(p);
+        document.body.appendChild(p);
 
-    p.getBoundingClientRect();
+        p.getBoundingClientRect();
 
-    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
 
-      p.style.transform =
-        `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0.2)`;
+            p.style.transform =
+                `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0.2)`;
 
-      p.style.opacity = "0";
-    });
+            p.style.opacity = "0";
+        });
 
-    setTimeout(() => p.remove(), 1000);
-  }
+        setTimeout(() => p.remove(), 1000);
+    }
 }
 
 function spawnSmokeParticles(count = 18) {
 
-  const cx = window.innerWidth / 2;
-  const cy = window.innerHeight / 2;
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
 
-  for (let i = 0; i < count; i++) {
+    for (let i = 0; i < count; i++) {
 
-    const p = document.createElement("div");
+        const p = document.createElement("div");
 
-    const size = 40 + Math.random() * 60;
+        const size = 40 + Math.random() * 60;
 
-    p.style.position = "fixed";
-    p.style.left = cx + "px";
-    p.style.top = cy + "px";
-    p.style.width = size + "px";
-    p.style.height = size + "px";
-    p.style.borderRadius = "50%";
-    p.style.pointerEvents = "none";
-    p.style.zIndex = "99999997";
+        p.style.position = "fixed";
+        p.style.left = cx + "px";
+        p.style.top = cy + "px";
+        p.style.width = size + "px";
+        p.style.height = size + "px";
+        p.style.borderRadius = "50%";
+        p.style.pointerEvents = "none";
+        p.style.zIndex = "99999997";
 
-    p.style.background =
-      "radial-gradient(circle, rgba(200,200,200,.5), rgba(80,80,80,.25), transparent)";
+        p.style.background =
+            "radial-gradient(circle, rgba(200,200,200,.5), rgba(80,80,80,.25), transparent)";
 
-    const angle = Math.random() * Math.PI * 2;
-    const dist = 80 + Math.random() * 120;
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 80 + Math.random() * 120;
 
-    const tx = Math.cos(angle) * dist;
-    const ty = Math.sin(angle) * dist - 120; // ide hore
+        const tx = Math.cos(angle) * dist;
+        const ty = Math.sin(angle) * dist - 120; // ide hore
 
-    p.style.transform = "translate(-50%,-50%) scale(0.7)";
-    p.style.opacity = "0.7";
+        p.style.transform = "translate(-50%,-50%) scale(0.7)";
+        p.style.opacity = "0.7";
 
-    p.style.transition =
-      "transform 1.4s ease-out, opacity 1.4s ease-out";
+        p.style.transition =
+            "transform 1.4s ease-out, opacity 1.4s ease-out";
 
-    document.body.appendChild(p);
+        document.body.appendChild(p);
 
-    p.getBoundingClientRect();
+        p.getBoundingClientRect();
 
-    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
 
-      p.style.transform =
-        `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(1.4)`;
+            p.style.transform =
+                `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(1.4)`;
 
-      p.style.opacity = "0";
-    });
+            p.style.opacity = "0";
+        });
 
-    setTimeout(() => p.remove(), 1500);
-  }
+        setTimeout(() => p.remove(), 1500);
+    }
 }
 
 
 function launchWinConfetti() {
 
-  const overlay = document.getElementById("tableOverlay");
-  if (!overlay) return;
+    const overlay = document.getElementById("tableOverlay");
+    if (!overlay) return;
 
-  const colors = [
-    "#ffd700",
-    "#ffae00",
-    "#22c55e",
-    "#16a34a",
-    "#facc15",
-    "#ffffff"
-  ];
+    const colors = [
+        "#ffd700",
+        "#ffae00",
+        "#22c55e",
+        "#16a34a",
+        "#facc15",
+        "#ffffff"
+    ];
 
-  
 
-  const spawnWave = (amount, delay) => {
 
-    setTimeout(() => {
+    const spawnWave = (amount, delay) => {
 
-      for (let i = 0; i < amount; i++) {
+        setTimeout(() => {
 
-        const conf = document.createElement("div");
+            for (let i = 0; i < amount; i++) {
 
-        const size = 6 + Math.random() * 12;
+                const conf = document.createElement("div");
 
-        let x = Math.random() * window.innerWidth;
-        let y = -30;
+                const size = 6 + Math.random() * 12;
 
-        let speedY = 2 + Math.random() * 3;
-        let speedX = -2 + Math.random() * 4;
+                let x = Math.random() * window.innerWidth;
+                let y = -30;
 
-        let rot = Math.random() * 360;
-        let rotSpeed = -8 + Math.random() * 16;
+                let speedY = 2 + Math.random() * 3;
+                let speedX = -2 + Math.random() * 4;
 
-        const wobble = Math.random() * 0.06 + 0.02;
+                let rot = Math.random() * 360;
+                let rotSpeed = -8 + Math.random() * 16;
 
-        conf.style.position = "absolute";
-        conf.style.left = x + "px";
-        conf.style.top = y + "px";
-        conf.style.width = size + "px";
-        conf.style.height = size + "px";
+                const wobble = Math.random() * 0.06 + 0.02;
 
-        conf.style.background =
-          colors[Math.floor(Math.random() * colors.length)];
+                conf.style.position = "absolute";
+                conf.style.left = x + "px";
+                conf.style.top = y + "px";
+                conf.style.width = size + "px";
+                conf.style.height = size + "px";
 
-        conf.style.borderRadius = "2px";
-        conf.style.pointerEvents = "none";
-        conf.style.opacity = "0.95";
-        conf.style.zIndex = "999999";
+                conf.style.background =
+                    colors[Math.floor(Math.random() * colors.length)];
 
-        overlay.appendChild(conf);
+                conf.style.borderRadius = "2px";
+                conf.style.pointerEvents = "none";
+                conf.style.opacity = "0.95";
+                conf.style.zIndex = "999999";
 
-        let t = 0;
+                overlay.appendChild(conf);
 
-        function fall() {
+                let t = 0;
 
-          t += wobble;
+                function fall() {
 
-          speedY += 0.035; // gravity
+                    t += wobble;
 
-          y += speedY;
-          x += speedX + Math.sin(t) * 2.2;
+                    speedY += 0.035; // gravity
 
-          rot += rotSpeed;
+                    y += speedY;
+                    x += speedX + Math.sin(t) * 2.2;
 
-          conf.style.top = y + "px";
-          conf.style.left = x + "px";
-          conf.style.transform = `rotate(${rot}deg)`;
+                    rot += rotSpeed;
 
-          if (y < window.innerHeight + 50) {
-            requestAnimationFrame(fall);
-          } else {
-            conf.remove();
-          }
-        }
+                    conf.style.top = y + "px";
+                    conf.style.left = x + "px";
+                    conf.style.transform = `rotate(${rot}deg)`;
 
-        requestAnimationFrame(fall);
-      }
+                    if (y < window.innerHeight + 50) {
+                        requestAnimationFrame(fall);
+                    } else {
+                        conf.remove();
+                    }
+                }
 
-    }, delay);
-  };
+                requestAnimationFrame(fall);
+            }
 
-  // ===== MULTI WAVE CONFETTI =====
-  spawnWave(120, 0);      // instant burst
-  spawnWave(100, 350);   // follow up
-  spawnWave(80, 800);    // rain tail
+        }, delay);
+    };
+
+    // ===== MULTI WAVE CONFETTI =====
+    spawnWave(120, 0);      // instant burst
+    spawnWave(100, 350);   // follow up
+    spawnWave(80, 800);    // rain tail
 }
 
 
 function clearPenaltyUI() {
 
-  const el = document.querySelector(".penalty-text");
-  if (el) el.remove();
+    const el = document.querySelector(".penalty-text");
+    if (el) el.remove();
 
 }
 
 
 function backToMenu() {
 
-  // ===== RESET MULTIPLAYER STATE =====
-  multiplayerMode = false;
-  multiplayerInitialized = false;
+    // ===== RESET MULTIPLAYER STATE =====
+    multiplayerMode = false;
+    multiplayerInitialized = false;
 
-  currentRoomCode = null;
-  isHost = false;
-  playerNames = {};
+    currentRoomCode = null;
+    isHost = false;
+    playerNames = {};
 
-  const end = document.getElementById("endScreen");
-  const game = document.getElementById("game");
-  const menu = document.getElementById("menuScreen");
+    const end = document.getElementById("endScreen");
+    const game = document.getElementById("game");
+    const menu = document.getElementById("menuScreen");
 
-  const singleUI = document.getElementById("singleGameUI");
-  const multiUI = document.getElementById("multiGameUI");
-  const pcArea = document.getElementById("pcArea");
+    const singleUI = document.getElementById("singleGameUI");
+    const multiUI = document.getElementById("multiGameUI");
+    const pcArea = document.getElementById("pcArea");
 
-  // ===== REMOVE MULTIPLAYER LAYOUT =====
-  if (game) {
-    game.classList.remove("multiplayer");
-  }
+    // ===== REMOVE MULTIPLAYER LAYOUT =====
+    if (game) {
+        game.classList.remove("multiplayer");
+    }
 
-  // ===== RESET UI =====
-  if (multiUI) multiUI.style.display = "none";
-  if (singleUI) singleUI.style.display = "block";
-  if (pcArea) pcArea.style.display = "block";
+    // ===== RESET UI =====
+    if (multiUI) multiUI.style.display = "none";
+    if (singleUI) singleUI.style.display = "block";
+    if (pcArea) pcArea.style.display = "block";
 
-  // ===== CLOSE END SCREEN =====
-  if (end) end.classList.remove("active");
+    // ===== CLOSE END SCREEN =====
+    if (end) end.classList.remove("active");
 
-  const dark = document.getElementById("darkOverlay");
-  if (dark) dark.classList.remove("active");
+    const dark = document.getElementById("darkOverlay");
+    if (dark) dark.classList.remove("active");
 
-  // ===== HIDE GAME =====
-  if (game) game.style.display = "none";
+    // ===== HIDE GAME =====
+    if (game) game.style.display = "none";
 
-  // ===== SHOW MENU =====
-  if (menu) menu.style.display = "flex";
+    // ===== SHOW MENU =====
+    if (menu) menu.style.display = "flex";
 
-  // ===== RESET GAME FLAGS =====
-  gameOver = false;
-  selected = [];
-  waitingForSuit = false;
-  waitingForAceDecision = false;
+    // ===== RESET GAME FLAGS =====
+    gameOver = false;
+    selected = [];
+    waitingForSuit = false;
+    waitingForAceDecision = false;
 
-  // ===== CLEAN FX =====
-  document.querySelectorAll(
-    ".confetti, .damage-flash, .rage-flash, #loseDarkOverlay"
-  ).forEach(e => e.remove());
+    // ===== CLEAN FX =====
+    document.querySelectorAll(
+        ".confetti, .damage-flash, .rage-flash, #loseDarkOverlay"
+    ).forEach(e => e.remove());
 }
 
 
 
 function impactShake() {
 
-  if (cinematicLose) {
-  playSound("boom.wav");
-}
+    if (cinematicLose) {
+        playSound("boom.wav");
+    }
 
-  const board = document.getElementById("gameInner");
-  if (!board) return;
+    const board = document.getElementById("gameInner");
+    if (!board) return;
 
-  board.classList.remove("shake-strong");
-  void board.offsetWidth;
-  board.classList.add("shake-strong");
-
-  setTimeout(() => {
     board.classList.remove("shake-strong");
-  }, 500);
+    void board.offsetWidth;
+    board.classList.add("shake-strong");
+
+    setTimeout(() => {
+        board.classList.remove("shake-strong");
+    }, 500);
 }
 
 
@@ -809,69 +809,69 @@ function applyPlayedCard(card, isPlayer) {
 
     freePlay = false;
 
-  // ===== PRESUNIEME STARÚ STOLNÚ KARTU DO DISCARD =====
-  if (tableCard !== null) {
-  discardPile.push(tableCard);
-}
+    // ===== PRESUNIEME STARÚ STOLNÚ KARTU DO DISCARD =====
+    if (tableCard !== null) {
+        discardPile.push(tableCard);
+    }
 
 
-  // ===== NOVÁ KARTA IDE NA STÔL =====
-  tableCard = card;
+    // ===== NOVÁ KARTA IDE NA STÔL =====
+    tableCard = card;
 
-  const v = card.slice(0, -1);
-  const s = card.slice(-1);
+    const v = card.slice(0, -1);
+    const s = card.slice(-1);
 
-if (forcedSuit && s === forcedSuit) {
-  forcedSuit = null;
-}
+    if (forcedSuit && s === forcedSuit) {
+        forcedSuit = null;
+    }
 
-  // ===== ZELENÝ DOLNÍK (J♣) — ZRUŠÍ TREST =====
-  if (v === "J" && s === "♣") {
+    // ===== ZELENÝ DOLNÍK (J♣) — ZRUŠÍ TREST =====
+    if (v === "J" && s === "♣") {
 
-    pendingDraw = 0;
-    skipCount = 0;
+        pendingDraw = 0;
+        skipCount = 0;
 
-    clearPenaltyUI();
+        clearPenaltyUI();
 
-    showGreenFlash();
-    greenWave();
+        showGreenFlash();
+        greenWave();
 
-    return;
-  }
+        return;
+    }
 
-  // ===== SEDMIČKA (+3 STACK) =====
-  if (v === "7") {
-    pendingDraw += 3;
-    showPenalty(pendingDraw);
-  }
+    // ===== SEDMIČKA (+3 STACK) =====
+    if (v === "7") {
+        pendingDraw += 3;
+        showPenalty(pendingDraw);
+    }
 
-  // ===== ESO (STOPKA) =====
-  if (v === "A") {
-    skipCount++;
-  }
+    // ===== ESO (STOPKA) =====
+    if (v === "A") {
+        skipCount++;
+    }
 
-  // ===== HORNÍK (Q) — PC SI VYBERIE FARBU =====
-  if (v === "Q" && !isPlayer) {
-    forcedSuit = choosePcSuit();
-  }
+    // ===== HORNÍK (Q) — PC SI VYBERIE FARBU =====
+    if (v === "Q" && !isPlayer) {
+        forcedSuit = choosePcSuit();
+    }
 }
 
 
 function adjustHandSpacing() {
 
-  const hand = document.getElementById("playerCards");
-  if (!hand) return;
+    const hand = document.getElementById("playerCards");
+    if (!hand) return;
 
-  const count = playerHand.length;
+    const count = playerHand.length;
 
-  let gap = 18;
+    let gap = 18;
 
-  if (count >= 10) gap = 4;
-  if (count >= 14) gap = -8;
-  if (count >= 18) gap = -18;
-  if (count >= 22) gap = -28;
+    if (count >= 10) gap = 4;
+    if (count >= 14) gap = -8;
+    if (count >= 18) gap = -18;
+    if (count >= 22) gap = -28;
 
-  hand.style.setProperty("--card-gap", gap + "px");
+    hand.style.setProperty("--card-gap", gap + "px");
 }
 
 
@@ -883,91 +883,91 @@ function adjustHandSpacing() {
 
 function debugCardCount() {
 
-  const total =
-    deck.length +
-    playerHand.length +
-    pcHand.length +
-    discardPile.length +
-    (tableCard ? 1 : 0);
+    const total =
+        deck.length +
+        playerHand.length +
+        pcHand.length +
+        discardPile.length +
+        (tableCard ? 1 : 0);
 
-  console.log("TOTAL CARDS:", total);
+    console.log("TOTAL CARDS:", total);
 }
 
 function drawCard() {
 
-  if (!playerTurn || gameOver || waitingForSuit || waitingForAceDecision) return;
+    if (!playerTurn || gameOver || waitingForSuit || waitingForAceDecision) return;
 
-  // ===== MULTIPLAYER =====
-  if (multiplayerMode) {
+    // ===== MULTIPLAYER =====
+    if (multiplayerMode) {
 
-    socket.emit("drawCard", currentRoomCode);
-    return;
-  }
-
-  // ===== SINGLEPLAYER =====
-
-  // REFILL
-  if (deck.length === 0) {
-    refillDeck();
-  }
-
-  if (deck.length === 0) {
-    triggerLoseSequence();
-    return;
-  }
-
-  // ESO STOP FIX
-  if (skipCount > 0) {
-    skipCount = 0;
-  }
-
-  // +3 PENALTY
-  if (pendingDraw > 0) {
-
-    for (let i = 0; i < pendingDraw && deck.length; i++) {
-      animateDraw(true, i * 120);
-      playerHand.push(deck.pop());
+        socket.emit("drawCard", currentRoomCode);
+        return;
     }
 
-    pendingDraw = 0;
+    // ===== SINGLEPLAYER =====
+
+    // REFILL
+    if (deck.length === 0) {
+        refillDeck();
+    }
+
+    if (deck.length === 0) {
+        triggerLoseSequence();
+        return;
+    }
+
+    // ESO STOP FIX
+    if (skipCount > 0) {
+        skipCount = 0;
+    }
+
+    // +3 PENALTY
+    if (pendingDraw > 0) {
+
+        for (let i = 0; i < pendingDraw && deck.length; i++) {
+            animateDraw(true, i * 120);
+            playerHand.push(deck.pop());
+        }
+
+        pendingDraw = 0;
+
+        playerTurn = false;
+        updateUI();
+        setTimeout(pcTurn, 700);
+
+        validateDeckIntegrity();
+        return;
+    }
+
+    // NORMAL DRAW
+    animateDraw(true);
+    playerHand.push(deck.pop());
 
     playerTurn = false;
     updateUI();
-    setTimeout(pcTurn, 700);
+    setTimeout(pcTurn, 600);
 
     validateDeckIntegrity();
-    return;
-  }
-
-  // NORMAL DRAW
-  animateDraw(true);
-  playerHand.push(deck.pop());
-
-  playerTurn = false;
-  updateUI();
-  setTimeout(pcTurn, 600);
-
-  validateDeckIntegrity();
 }
 
 
 
-window.testConfetti = function() {
+window.testConfetti = function () {
 
-  const c = document.createElement("div");
+    const c = document.createElement("div");
 
-  c.style.position = "fixed";
-  c.style.top = "50%";
-  c.style.left = "50%";
-  c.style.width = "30px";
-  c.style.height = "30px";
-  c.style.background = "gold";
-  c.style.zIndex = "999999999";
-  c.style.transform = "translate(-50%,-50%)";
+    c.style.position = "fixed";
+    c.style.top = "50%";
+    c.style.left = "50%";
+    c.style.width = "30px";
+    c.style.height = "30px";
+    c.style.background = "gold";
+    c.style.zIndex = "999999999";
+    c.style.transform = "translate(-50%,-50%)";
 
-  document.body.appendChild(c);
+    document.body.appendChild(c);
 
-  setTimeout(() => c.remove(), 3000);
+    setTimeout(() => c.remove(), 3000);
 }
 
 
@@ -977,179 +977,179 @@ window.testConfetti = function() {
 
 function pcTurn() {
 
-  if (multiplayerMode) return;
-  if (gameOver) return;
+    if (multiplayerMode) return;
+    if (gameOver) return;
 
-  // ===== PC NEMÁ KARTY (PREHRA HRÁČA) =====
-  if (!pcHand.length) {
-
-    cinematicFinish = true;
-
-    setTimeout(() => {
-      finishGame(false);
-    }, 1200);
-
-    return;
-  }
-
-  // ===== STOP (ESO) CHAIN =====
-  if (skipCount > 0) {
-
-    const aceIdx = pcHand.findIndex(c => c.startsWith("A"));
-
-    // PC ODBIJE ESOM
-    if (aceIdx !== -1) {
-
-      const card = pcHand.splice(aceIdx, 1)[0];
-
-      animatePlay(card, false);
-      applyPlayedCard(card, false);
-
-      waitingForAceDecision = true;
-      playerTurn = true;
-
-      const box = document.getElementById("aceDecision");
-      const playBtn = document.getElementById("playAceBtn");
-
-      if (box) box.style.display = "flex";
-
-      if (playBtn) {
-        playBtn.style.display =
-          playerHand.some(c => c.startsWith("A"))
-            ? "inline-block"
-            : "none";
-      }
-
-      updateUI();
-      return;
-    }
-
-    // PC NEMÁ ESO → STOJÍ
-    skipCount = Math.max(0, skipCount - 1);
-
-    waitingForAceDecision = false;
-
-    playerTurn = true;
-    updateUI();
-
-    return;
-  }
-
-  // ===== +3 TREST =====
-  if (pendingDraw > 0) {
-
-    // GREEN JACK RUŠÍ
-    const greenIdx = pcHand.indexOf("J♣");
-
-    if (greenIdx !== -1) {
-
-      const card = pcHand.splice(greenIdx, 1)[0];
-
-      animatePlay(card, false);
-
-      pendingDraw = 0;
-      skipCount = 0;
-      forcedSuit = null;
-
-      clearPenaltyUI();
-
-      applyPlayedCard(card, false);
-
-      playerTurn = true;
-      updateUI();
-
-      return;
-    }
-
-    // REŤAZ SEDMOU
-    const sevenIdx = pcHand.findIndex(c => c.startsWith("7"));
-
-    if (sevenIdx !== -1) {
-
-      const card = pcHand.splice(sevenIdx, 1)[0];
-
-      animatePlay(card, false);
-      applyPlayedCard(card, false);
-
-      playerTurn = true;
-      updateUI();
-      return;
-    }
-
-    // PC MUSÍ ŤAHAŤ
-    const amount = pendingDraw;
-
-    for (let i = 0; i < amount && deck.length; i++) {
-      animateDraw(false, i * 120);
-      pcHand.push(deck.pop());
-    }
-
-    pendingDraw = 0;
-
-    playerTurn = true;
-    updateUI();
-    return;
-  }
-
-  // ===== NORMÁLNY ŤAH =====
-  for (let i = 0; i < pcHand.length; i++) {
-
-    if (canPlay(pcHand[i])) {
-
-      const card = pcHand.splice(i, 1)[0];
-
-      animatePlay(card, false);
-      applyPlayedCard(card, false);
-
-      // ===== ESO → DECISION =====
-      if (card.startsWith("A")) {
-
-        waitingForAceDecision = true;
-        playerTurn = true;
-
-        const box = document.getElementById("aceDecision");
-        const playBtn = document.getElementById("playAceBtn");
-
-        if (box) box.style.display = "flex";
-
-        if (playBtn) {
-          playBtn.style.display =
-            playerHand.some(c => c.startsWith("A"))
-              ? "inline-block"
-              : "none";
-        }
-
-        updateUI();
-        return;
-      }
-
-      // ===== PC VYHRAL POSLEDNOU KARTOU =====
-      if (!pcHand.length) {
+    // ===== PC NEMÁ KARTY (PREHRA HRÁČA) =====
+    if (!pcHand.length) {
 
         cinematicFinish = true;
 
         setTimeout(() => {
-          finishGame(false);
+            finishGame(false);
         }, 1200);
 
         return;
-      }
-
-      playerTurn = true;
-      updateUI();
-      return;
     }
-  }
 
-  // ===== PC NEMÁ ŤAH → ŤAHÁ =====
-  if (deck.length) {
-    animateDraw(false);
-    pcHand.push(deck.pop());
-  }
+    // ===== STOP (ESO) CHAIN =====
+    if (skipCount > 0) {
 
-  playerTurn = true;
-  updateUI();
-  validateDeckIntegrity();
+        const aceIdx = pcHand.findIndex(c => c.startsWith("A"));
+
+        // PC ODBIJE ESOM
+        if (aceIdx !== -1) {
+
+            const card = pcHand.splice(aceIdx, 1)[0];
+
+            animatePlay(card, false);
+            applyPlayedCard(card, false);
+
+            waitingForAceDecision = true;
+            playerTurn = true;
+
+            const box = document.getElementById("aceDecision");
+            const playBtn = document.getElementById("playAceBtn");
+
+            if (box) box.style.display = "flex";
+
+            if (playBtn) {
+                playBtn.style.display =
+                    playerHand.some(c => c.startsWith("A"))
+                        ? "inline-block"
+                        : "none";
+            }
+
+            updateUI();
+            return;
+        }
+
+        // PC NEMÁ ESO → STOJÍ
+        skipCount = Math.max(0, skipCount - 1);
+
+        waitingForAceDecision = false;
+
+        playerTurn = true;
+        updateUI();
+
+        return;
+    }
+
+    // ===== +3 TREST =====
+    if (pendingDraw > 0) {
+
+        // GREEN JACK RUŠÍ
+        const greenIdx = pcHand.indexOf("J♣");
+
+        if (greenIdx !== -1) {
+
+            const card = pcHand.splice(greenIdx, 1)[0];
+
+            animatePlay(card, false);
+
+            pendingDraw = 0;
+            skipCount = 0;
+            forcedSuit = null;
+
+            clearPenaltyUI();
+
+            applyPlayedCard(card, false);
+
+            playerTurn = true;
+            updateUI();
+
+            return;
+        }
+
+        // REŤAZ SEDMOU
+        const sevenIdx = pcHand.findIndex(c => c.startsWith("7"));
+
+        if (sevenIdx !== -1) {
+
+            const card = pcHand.splice(sevenIdx, 1)[0];
+
+            animatePlay(card, false);
+            applyPlayedCard(card, false);
+
+            playerTurn = true;
+            updateUI();
+            return;
+        }
+
+        // PC MUSÍ ŤAHAŤ
+        const amount = pendingDraw;
+
+        for (let i = 0; i < amount && deck.length; i++) {
+            animateDraw(false, i * 120);
+            pcHand.push(deck.pop());
+        }
+
+        pendingDraw = 0;
+
+        playerTurn = true;
+        updateUI();
+        return;
+    }
+
+    // ===== NORMÁLNY ŤAH =====
+    for (let i = 0; i < pcHand.length; i++) {
+
+        if (canPlay(pcHand[i])) {
+
+            const card = pcHand.splice(i, 1)[0];
+
+            animatePlay(card, false);
+            applyPlayedCard(card, false);
+
+            // ===== ESO → DECISION =====
+            if (card.startsWith("A")) {
+
+                waitingForAceDecision = true;
+                playerTurn = true;
+
+                const box = document.getElementById("aceDecision");
+                const playBtn = document.getElementById("playAceBtn");
+
+                if (box) box.style.display = "flex";
+
+                if (playBtn) {
+                    playBtn.style.display =
+                        playerHand.some(c => c.startsWith("A"))
+                            ? "inline-block"
+                            : "none";
+                }
+
+                updateUI();
+                return;
+            }
+
+            // ===== PC VYHRAL POSLEDNOU KARTOU =====
+            if (!pcHand.length) {
+
+                cinematicFinish = true;
+
+                setTimeout(() => {
+                    finishGame(false);
+                }, 1200);
+
+                return;
+            }
+
+            playerTurn = true;
+            updateUI();
+            return;
+        }
+    }
+
+    // ===== PC NEMÁ ŤAH → ŤAHÁ =====
+    if (deck.length) {
+        animateDraw(false);
+        pcHand.push(deck.pop());
+    }
+
+    playerTurn = true;
+    updateUI();
+    validateDeckIntegrity();
 }
 
 
@@ -1158,41 +1158,41 @@ function pcTurn() {
    FINISH GAME (SAFE DELAY)
 ================================================== */
 
-function finishGame(won){
+function finishGame(won) {
 
-  if (gameOver) return;
+    if (gameOver) return;
 
-  if (won) {
+    if (won) {
 
-    gameOver = true;
+        gameOver = true;
 
-    setTimeout(()=>{
-      showEndScreen(true);
-    },1000);
+        setTimeout(() => {
+            showEndScreen(true);
+        }, 1000);
 
-  } else {
+    } else {
 
-    triggerLoseSequence("");
+        triggerLoseSequence("");
 
-  }
+    }
 }
 
 
 function refillDeck() {
 
-  // nechávame poslednú kartu na stole
-  if (discardPile.length === 0) {
-    console.warn("NO CARDS TO REFILL");
-    return;
-  }
+    // nechávame poslednú kartu na stole
+    if (discardPile.length === 0) {
+        console.warn("NO CARDS TO REFILL");
+        return;
+    }
 
-  console.log("♻ REFILLING DECK:", discardPile.length);
+    console.log("♻ REFILLING DECK:", discardPile.length);
 
-  deck = discardPile.slice();
-  discardPile = [];
+    deck = discardPile.slice();
+    discardPile = [];
 
-  // zamiešaj
-  deck.sort(() => Math.random() - 0.5);
+    // zamiešaj
+    deck.sort(() => Math.random() - 0.5);
 }
 
 
@@ -1202,694 +1202,694 @@ function refillDeck() {
 
 function showPenalty(amount) {
 
-  playSound("hit.wav");
+    playSound("hit.wav");
 
-  console.log("SHOW PENALTY", amount);
+    console.log("SHOW PENALTY", amount);
 
-  // ===== TEXT POP =====
-  const old = document.getElementById("penaltyPop");
-  if (old) old.remove();
+    // ===== TEXT POP =====
+    const old = document.getElementById("penaltyPop");
+    if (old) old.remove();
 
-  const el = document.createElement("div");
-  el.id = "penaltyPop";
-  el.textContent = "+" + amount;
+    const el = document.createElement("div");
+    el.id = "penaltyPop";
+    el.textContent = "+" + amount;
 
-  // STYLE
-  el.style.position = "fixed";
-  el.style.left = "50%";
-  el.style.top = "45%";
-  el.style.transform = "translate(-50%, -50%) scale(0.4)";
-  el.style.fontSize = "72px";
-  el.style.fontWeight = "900";
-  el.style.color = "#ff3333";
-  el.style.pointerEvents = "none";
-  el.style.zIndex = "99999999";
-  el.style.opacity = "0";
-
-  el.style.textShadow =
-    "0 0 15px rgba(255,0,0,.9), 0 0 40px rgba(255,0,0,.6)";
-
-  el.style.transition =
-    "transform .35s cubic-bezier(.2,1.4,.4,1), opacity .35s ease";
-
-  document.body.appendChild(el);
-
-  // FORCE RENDER
-  el.getBoundingClientRect();
-
-  // POP IN
-  requestAnimationFrame(() => {
-    el.style.opacity = "1";
-    el.style.transform = "translate(-50%, -50%) scale(1.3)";
-  });
-
-  // SETTLE
-  setTimeout(() => {
-    el.style.transform = "translate(-50%, -50%) scale(1)";
-  }, 160);
-
-  // FADE OUT
-  setTimeout(() => {
+    // STYLE
+    el.style.position = "fixed";
+    el.style.left = "50%";
+    el.style.top = "45%";
+    el.style.transform = "translate(-50%, -50%) scale(0.4)";
+    el.style.fontSize = "72px";
+    el.style.fontWeight = "900";
+    el.style.color = "#ff3333";
+    el.style.pointerEvents = "none";
+    el.style.zIndex = "99999999";
     el.style.opacity = "0";
-    el.style.transform = "translate(-50%, -50%) scale(0.9)";
-  }, 520);
 
-  // CLEANUP
-  setTimeout(() => {
-    el.remove();
-  }, 900);
+    el.style.textShadow =
+        "0 0 15px rgba(255,0,0,.9), 0 0 40px rgba(255,0,0,.6)";
 
+    el.style.transition =
+        "transform .35s cubic-bezier(.2,1.4,.4,1), opacity .35s ease";
 
-  // ===== SCREEN SHAKE =====
-  const game = document.getElementById("game");
+    document.body.appendChild(el);
 
-  if (game) {
+    // FORCE RENDER
+    el.getBoundingClientRect();
 
-    // RESET
-    game.classList.remove("shake-light","shake-medium","shake-strong");
-    void game.offsetWidth;
+    // POP IN
+    requestAnimationFrame(() => {
+        el.style.opacity = "1";
+        el.style.transform = "translate(-50%, -50%) scale(1.3)";
+    });
 
-   if (amount >= 12) {
-  game.classList.add("shake-ultra");     // TOTAL WAR
-}
-else if (amount >= 9) {
-  game.classList.add("shake-strong");    // HARD HIT
-}
-else if (amount >= 6) {
-  game.classList.add("shake-medium");    // MEDIUM HIT
-}
-else {
-  game.classList.add("shake-light");     // LIGHT TAP
-}
+    // SETTLE
+    setTimeout(() => {
+        el.style.transform = "translate(-50%, -50%) scale(1)";
+    }, 160);
+
+    // FADE OUT
+    setTimeout(() => {
+        el.style.opacity = "0";
+        el.style.transform = "translate(-50%, -50%) scale(0.9)";
+    }, 520);
 
     // CLEANUP
     setTimeout(() => {
-      game.classList.remove("shake-light","shake-medium","shake-strong");
-    }, 600);
-  }
+        el.remove();
+    }, 900);
+
+
+    // ===== SCREEN SHAKE =====
+    const game = document.getElementById("game");
+
+    if (game) {
+
+        // RESET
+        game.classList.remove("shake-light", "shake-medium", "shake-strong");
+        void game.offsetWidth;
+
+        if (amount >= 12) {
+            game.classList.add("shake-ultra");     // TOTAL WAR
+        }
+        else if (amount >= 9) {
+            game.classList.add("shake-strong");    // HARD HIT
+        }
+        else if (amount >= 6) {
+            game.classList.add("shake-medium");    // MEDIUM HIT
+        }
+        else {
+            game.classList.add("shake-light");     // LIGHT TAP
+        }
+
+        // CLEANUP
+        setTimeout(() => {
+            game.classList.remove("shake-light", "shake-medium", "shake-strong");
+        }, 600);
+    }
 }
 
- function updateUI() {
+function updateUI() {
 
-  updateUIController();
+    updateUIController();
 
-  if (multiplayerMode && window.updateMultiUI) {
-    updateMultiUI();
-  }
+    if (multiplayerMode && window.updateMultiUI) {
+        updateMultiUI();
+    }
 }
 
 
 function getPlayerPosition(id) {
 
-  const ids = Object.keys(multiplayerHands);
-  const others = ids.filter(x => x !== socket.id);
+    const ids = Object.keys(multiplayerHands);
+    const others = ids.filter(x => x !== socket.id);
 
-  if (id === others[0]) return "top";
-  if (id === others[1]) return "left";
-  if (id === others[2]) return "right";
+    if (id === others[0]) return "top";
+    if (id === others[1]) return "left";
+    if (id === others[2]) return "right";
 
-  return null;
+    return null;
 }
 
 
 
 function validateDeckIntegrity() {
 
-  const all = [
-    ...deck,
-    ...playerHand,
-    ...pcHand,
-    ...discardPile,
-    tableCard
-  ].filter(Boolean);
+    const all = [
+        ...deck,
+        ...playerHand,
+        ...pcHand,
+        ...discardPile,
+        tableCard
+    ].filter(Boolean);
 
-  const unique = new Set(all);
+    const unique = new Set(all);
 
-  if (all.length !== unique.size || all.length !== 32) {
-  gameOver = true;
-  alert("CARD ENGINE ERROR — STOPPING GAME");
-}
+    if (all.length !== unique.size || all.length !== 32) {
+        gameOver = true;
+        alert("CARD ENGINE ERROR — STOPPING GAME");
+    }
 
-  if (all.length !== unique.size) {
-    console.error("❌ DUPLICATE CARD DETECTED", all);
-  }
+    if (all.length !== unique.size) {
+        console.error("❌ DUPLICATE CARD DETECTED", all);
+    }
 
-  if (all.length !== 32) {
-    console.error("❌ CARD COUNT ERROR:", all.length);
-  }
+    if (all.length !== 32) {
+        console.error("❌ CARD COUNT ERROR:", all.length);
+    }
 }
 
 
 function adjustHandLayout() {
 
-  const hand = document.getElementById("playerCards");
-  if (!hand) return;
+    const hand = document.getElementById("playerCards");
+    if (!hand) return;
 
-  const count = playerHand.length;
+    const count = playerHand.length;
 
-  let gap = 18;
-  let scale = 1;
+    let gap = 18;
+    let scale = 1;
 
-  if (count >= 10) {
-    gap = 14;
-    scale = 0.97;
-  }
+    if (count >= 10) {
+        gap = 14;
+        scale = 0.97;
+    }
 
-  if (count >= 14) {
-    gap = 8;
-    scale = 0.94;
-  }
+    if (count >= 14) {
+        gap = 8;
+        scale = 0.94;
+    }
 
-  if (count >= 18) {
-    gap = 2;
-    scale = 0.9;
-  }
+    if (count >= 18) {
+        gap = 2;
+        scale = 0.9;
+    }
 
-  if (count >= 22) {
-    gap = -6;
-    scale = 0.85;
-  }
+    if (count >= 22) {
+        gap = -6;
+        scale = 0.85;
+    }
 
-  hand.style.setProperty("--card-gap", gap + "px");
-  hand.style.setProperty("--card-scale", scale);
+    hand.style.setProperty("--card-gap", gap + "px");
+    hand.style.setProperty("--card-scale", scale);
 }
 
 
 
 function restartGame() {
 
-  const end = document.getElementById("endScreen");
+    const end = document.getElementById("endScreen");
 
-  if (end) {
-    end.style.display = "none";
-    end.classList.remove("active");
-  }
+    if (end) {
+        end.style.display = "none";
+        end.classList.remove("active");
+    }
 
-  const dark = document.getElementById("darkOverlay");
-  if (dark) dark.classList.remove("active");
+    const dark = document.getElementById("darkOverlay");
+    if (dark) dark.classList.remove("active");
 
-  gameOver = false;
+    gameOver = false;
 
-  startGame();
+    startGame();
 }
 
 function setSuit(suit) {
 
-  if (gameOver) return;
+    if (gameOver) return;
 
-  /* =========================
-     MULTIPLAYER
-  ========================= */
+    /* =========================
+       MULTIPLAYER
+    ========================= */
 
-  if (multiplayerMode) {
+    if (multiplayerMode) {
 
-    socket.emit("setSuit", {
-      room: currentRoomCode,
-      suit
-    });
+        socket.emit("setSuit", {
+            room: currentRoomCode,
+            suit
+        });
 
-    // lokálne len zavri UI
+        // lokálne len zavri UI
+        waitingForSuit = false;
+
+        const chooser = document.getElementById("suitChooser");
+        if (chooser) chooser.style.display = "none";
+
+        return;
+    }
+
+    /* =========================
+       SINGLEPLAYER (PC MODE)
+    ========================= */
+
+    forcedSuit = suit;
     waitingForSuit = false;
 
     const chooser = document.getElementById("suitChooser");
     if (chooser) chooser.style.display = "none";
 
-    return;
-  }
+    // ide PC
+    playerTurn = false;
+    updateUI();
 
-  /* =========================
-     SINGLEPLAYER (PC MODE)
-  ========================= */
-
-  forcedSuit = suit;
-  waitingForSuit = false;
-
-  const chooser = document.getElementById("suitChooser");
-  if (chooser) chooser.style.display = "none";
-
-  // ide PC
-  playerTurn = false;
-  updateUI();
-
-  setTimeout(pcTurn, 600);
+    setTimeout(pcTurn, 600);
 }
 
 
 function standAce() {
 
-  console.log("STAND ACE CLICK");
+    console.log("STAND ACE CLICK");
 
-  if (!waitingForAceDecision || gameOver) return;
+    if (!waitingForAceDecision || gameOver) return;
 
-  waitingForAceDecision = false;
+    waitingForAceDecision = false;
 
-  /* =========================
-     MULTIPLAYER
-  ========================= */
+    /* =========================
+       MULTIPLAYER
+    ========================= */
 
-  if (multiplayerMode) {
+    if (multiplayerMode) {
 
-    socket.emit("standAce", {
-      room: currentRoomCode
-    });
+        socket.emit("standAce", {
+            room: currentRoomCode
+        });
 
-    return;
-  }
+        return;
+    }
 
-  /* =========================
-     SINGLEPLAYER
-  ========================= */
+    /* =========================
+       SINGLEPLAYER
+    ========================= */
 
-  // spotrebuj stopku
-  skipCount = Math.max(0, skipCount - 1);
+    // spotrebuj stopku
+    skipCount = Math.max(0, skipCount - 1);
 
-  playerTurn = false;
-  updateUI();
+    playerTurn = false;
+    updateUI();
 
-  setTimeout(pcTurn, 600);
+    setTimeout(pcTurn, 600);
 }
 
 
 
 
 
-function showGreenFlash(){
-  const f=document.createElement("div");
-  f.style.position="fixed";
-  f.style.inset="0";
-  f.style.background="rgba(0,255,120,.6)";
-  f.style.zIndex="999999";
-  f.style.opacity="0";
-  f.style.transition=".15s";
+function showGreenFlash() {
+    const f = document.createElement("div");
+    f.style.position = "fixed";
+    f.style.inset = "0";
+    f.style.background = "rgba(0,255,120,.6)";
+    f.style.zIndex = "999999";
+    f.style.opacity = "0";
+    f.style.transition = ".15s";
 
-  document.body.appendChild(f);
+    document.body.appendChild(f);
 
-  requestAnimationFrame(()=>f.style.opacity="1");
+    requestAnimationFrame(() => f.style.opacity = "1");
 
-  setTimeout(()=>f.style.opacity="0",120);
-  setTimeout(()=>f.remove(),300);
+    setTimeout(() => f.style.opacity = "0", 120);
+    setTimeout(() => f.remove(), 300);
 }
 
 function greenWave() {
 
-  const wave = document.createElement("div");
+    const wave = document.createElement("div");
 
-  wave.style.position = "fixed";
-  wave.style.left = "50%";
-  wave.style.top = "50%";
-  wave.style.width = "20px";
-  wave.style.height = "20px";
-  wave.style.borderRadius = "50%";
-  wave.style.border = "4px solid rgba(0,255,120,.9)";
-  wave.style.transform = "translate(-50%,-50%) scale(0)";
-  wave.style.pointerEvents = "none";
-  wave.style.zIndex = "9999999";
-  wave.style.opacity = "1";
+    wave.style.position = "fixed";
+    wave.style.left = "50%";
+    wave.style.top = "50%";
+    wave.style.width = "20px";
+    wave.style.height = "20px";
+    wave.style.borderRadius = "50%";
+    wave.style.border = "4px solid rgba(0,255,120,.9)";
+    wave.style.transform = "translate(-50%,-50%) scale(0)";
+    wave.style.pointerEvents = "none";
+    wave.style.zIndex = "9999999";
+    wave.style.opacity = "1";
 
-  wave.style.transition =
-    "transform .45s ease-out, opacity .45s ease-out";
+    wave.style.transition =
+        "transform .45s ease-out, opacity .45s ease-out";
 
-  document.body.appendChild(wave);
+    document.body.appendChild(wave);
 
-  requestAnimationFrame(() => {
-    wave.style.transform = "translate(-50%,-50%) scale(18)";
-    wave.style.opacity = "0";
-  });
+    requestAnimationFrame(() => {
+        wave.style.transform = "translate(-50%,-50%) scale(18)";
+        wave.style.opacity = "0";
+    });
 
-  setTimeout(() => wave.remove(), 500);
+    setTimeout(() => wave.remove(), 500);
 }
 
 
 function animatePlay(card, fromPlayer = true, delay = 0) {
 
-  const overlay = document.getElementById("tableOverlay");
-  const tableImg = document.querySelector("#tableCard img");
-  if (!overlay || !tableImg) return;
+    const overlay = document.getElementById("tableOverlay");
+    const tableImg = document.querySelector("#tableCard img");
+    if (!overlay || !tableImg) return;
 
-  const rect = tableImg.getBoundingClientRect();
-
-  setTimeout(() => {
-
-    playSound("card.wav");
-
-    const el = document.createElement("div");
-
-    const rot = (Math.random() * 10 - 5);
-
-    el.style.position = "fixed";
-    el.style.width = "90px";
-    el.style.height = "130px";
-    el.style.background = `url("/cards/${cardToFile(card)}") center/cover`;
-    el.style.borderRadius = "10px";
-    el.style.pointerEvents = "none";
-    el.style.zIndex = "9999";
-
-    // GPU hint
-    el.style.willChange = "transform, opacity";
-
-    const startX = window.innerWidth / 2;
-    const startY = fromPlayer
-      ? window.innerHeight * 0.82
-      : window.innerHeight * 0.18;
-
-    const targetX = rect.left + rect.width / 2;
-    const targetY = rect.top + rect.height / 2;
-
-    // START STATE (ONLY TRANSFORM)
-    el.style.transform =
-      `translate3d(${startX}px, ${startY}px, 0) rotate(${rot}deg) scale(1.05)`;
-
-    el.style.opacity = "1";
-
-    const speed = cinematicFinish ? 1.2 : 0.42;
-
-el.style.transition =
-  `transform ${speed}s cubic-bezier(.2,.9,.2,1), opacity .2s ease`;
-
-
-    overlay.appendChild(el);
-
-    requestAnimationFrame(() => {
-
-      el.style.transform =
-        `translate3d(${targetX}px, ${targetY}px, 0) rotate(${rot * 0.3}deg) scale(1)`;
-
-    });
-
-    setTimeout(() => {
-      el.style.opacity = "0";
-    }, 280);
+    const rect = tableImg.getBoundingClientRect();
 
     setTimeout(() => {
 
-  el.remove();
+        playSound("card.wav");
 
-  if (cinematicFinish) {
+        const el = document.createElement("div");
 
-    impactShake();
+        const rot = (Math.random() * 10 - 5);
 
-    
-    cinematicFinish = false;
-  }
+        el.style.position = "fixed";
+        el.style.width = "90px";
+        el.style.height = "130px";
+        el.style.background = `url("/cards/${cardToFile(card)}") center/cover`;
+        el.style.borderRadius = "10px";
+        el.style.pointerEvents = "none";
+        el.style.zIndex = "9999";
 
-}, cinematicFinish ? 1300 : 520);
+        // GPU hint
+        el.style.willChange = "transform, opacity";
+
+        const startX = window.innerWidth / 2;
+        const startY = fromPlayer
+            ? window.innerHeight * 0.82
+            : window.innerHeight * 0.18;
+
+        const targetX = rect.left + rect.width / 2;
+        const targetY = rect.top + rect.height / 2;
+
+        // START STATE (ONLY TRANSFORM)
+        el.style.transform =
+            `translate3d(${startX}px, ${startY}px, 0) rotate(${rot}deg) scale(1.05)`;
+
+        el.style.opacity = "1";
+
+        const speed = cinematicFinish ? 1.2 : 0.42;
+
+        el.style.transition =
+            `transform ${speed}s cubic-bezier(.2,.9,.2,1), opacity .2s ease`;
+
+
+        overlay.appendChild(el);
+
+        requestAnimationFrame(() => {
+
+            el.style.transform =
+                `translate3d(${targetX}px, ${targetY}px, 0) rotate(${rot * 0.3}deg) scale(1)`;
+
+        });
+
+        setTimeout(() => {
+            el.style.opacity = "0";
+        }, 280);
+
+        setTimeout(() => {
+
+            el.remove();
+
+            if (cinematicFinish) {
+
+                impactShake();
+
+
+                cinematicFinish = false;
+            }
+
+        }, cinematicFinish ? 1300 : 520);
 
 
 
-  }, delay);
+    }, delay);
 }
 
 function triggerLoseSequence() {
 
-  cinematicLose = true;
-  playSound("lose.wav");
+    cinematicLose = true;
+    playSound("lose.wav");
 
-  if (gameOver) return;
-  gameOver = true;
+    if (gameOver) return;
+    gameOver = true;
 
-  // RED FLASH
-const flash = document.createElement("div");
+    // RED FLASH
+    const flash = document.createElement("div");
 
-flash.style.position = "fixed";
-flash.style.inset = "0";
-flash.style.background = "rgba(255,0,0,.35)";
-flash.style.zIndex = "9999999";
-flash.style.pointerEvents = "none";
-flash.style.opacity = "0";
-flash.style.transition = "opacity .12s";
+    flash.style.position = "fixed";
+    flash.style.inset = "0";
+    flash.style.background = "rgba(255,0,0,.35)";
+    flash.style.zIndex = "9999999";
+    flash.style.pointerEvents = "none";
+    flash.style.opacity = "0";
+    flash.style.transition = "opacity .12s";
 
-document.body.appendChild(flash);
+    document.body.appendChild(flash);
 
-requestAnimationFrame(() => flash.style.opacity = "1");
+    requestAnimationFrame(() => flash.style.opacity = "1");
 
-setTimeout(() => flash.style.opacity = "0", 120);
-setTimeout(() => flash.remove(), 260);
-
-
-  // screen shake
-  const board = document.getElementById("gameInner");
-
-if (board) {
-
-  board.classList.remove("shake");
-  void board.offsetWidth;
-  board.classList.add("shake");
-
-  setTimeout(() => {
-    board.classList.remove("shake");
-  }, 300);
-}
+    setTimeout(() => flash.style.opacity = "0", 120);
+    setTimeout(() => flash.remove(), 260);
 
 
-  setTimeout(() => {
-    board.classList.remove("shake");
-  }, 300);
+    // screen shake
+    const board = document.getElementById("gameInner");
 
-  // dark overlay
-  document.getElementById("darkOverlay").classList.add("active");
+    if (board) {
 
-  const dark = document.getElementById("darkOverlay");
-if (dark) {
-  dark.style.pointerEvents = "none";
-}
+        board.classList.remove("shake");
+        void board.offsetWidth;
+        board.classList.add("shake");
 
-  // text
- const title = document.getElementById("endTitle");
-
-title.innerText = "💀 PREHRAL SI";
-title.classList.add("lose-pulse");
-
-  const reasonBox = document.getElementById("loseReason");
-
-if (reasonBox) {
-  reasonBox.innerText = "";
-  reasonBox.style.display = "none";
-}
+        setTimeout(() => {
+            board.classList.remove("shake");
+        }, 300);
+    }
 
 
-  // show screen
- const end = document.getElementById("endScreen");
+    setTimeout(() => {
+        board.classList.remove("shake");
+    }, 300);
 
-if (end) {
-  end.style.display = "flex";
-  end.classList.add("active");
-  // CARD EXPLOSION
-  explodeCards();
+    // dark overlay
+    document.getElementById("darkOverlay").classList.add("active");
 
-  // FORCE ABOVE DARK OVERLAY
-  end.style.zIndex = "10000000";
-}
+    const dark = document.getElementById("darkOverlay");
+    if (dark) {
+        dark.style.pointerEvents = "none";
+    }
+
+    // text
+    const title = document.getElementById("endTitle");
+
+    title.innerText = "💀 PREHRAL SI";
+    title.classList.add("lose-pulse");
+
+    const reasonBox = document.getElementById("loseReason");
+
+    if (reasonBox) {
+        reasonBox.innerText = "";
+        reasonBox.style.display = "none";
+    }
+
+
+    // show screen
+    const end = document.getElementById("endScreen");
+
+    if (end) {
+        end.style.display = "flex";
+        end.classList.add("active");
+        // CARD EXPLOSION
+        explodeCards();
+
+        // FORCE ABOVE DARK OVERLAY
+        end.style.zIndex = "10000000";
+    }
 
 }
 
 
 function launchConfetti() {
 
-  const colors = [
-    "#ffd700", // gold
-    "#22c55e",
-    "#3b82f6",
-    "#ef4444",
-    "#a855f7",
-    "#f97316",
-    "#ffffff"
-  ];
+    const colors = [
+        "#ffd700", // gold
+        "#22c55e",
+        "#3b82f6",
+        "#ef4444",
+        "#a855f7",
+        "#f97316",
+        "#ffffff"
+    ];
 
-  const total = 420;          // celkový počet konfiet
-  const duration = 6000;     // ako dlho sa budú spawnovať (ms)
-  const interval = duration / total;
+    const total = 420;          // celkový počet konfiet
+    const duration = 6000;     // ako dlho sa budú spawnovať (ms)
+    const interval = duration / total;
 
-  let spawned = 0;
+    let spawned = 0;
 
-  const spawnTimer = setInterval(() => {
+    const spawnTimer = setInterval(() => {
 
-    if (spawned >= total) {
-      clearInterval(spawnTimer);
-      return;
-    }
+        if (spawned >= total) {
+            clearInterval(spawnTimer);
+            return;
+        }
 
-    spawned++;
+        spawned++;
 
-    const conf = document.createElement("div");
-    conf.className = "confetti";
+        const conf = document.createElement("div");
+        conf.className = "confetti";
 
-    const size = 6 + Math.random() * 10;
+        const size = 6 + Math.random() * 10;
 
-    let x = Math.random() * window.innerWidth;
-    let y = -40;
+        let x = Math.random() * window.innerWidth;
+        let y = -40;
 
-    const fallTime = 6 + Math.random() * 4; // pomalý pád
+        const fallTime = 6 + Math.random() * 4; // pomalý pád
 
-    const drift = (Math.random() - 0.5) * 220;
-    const rotate = Math.random() * 720;
+        const drift = (Math.random() - 0.5) * 220;
+        const rotate = Math.random() * 720;
 
-    conf.style.position = "fixed";
-    conf.style.width = size + "px";
-    conf.style.height = size * 1.4 + "px";
-    conf.style.borderRadius = "2px";
+        conf.style.position = "fixed";
+        conf.style.width = size + "px";
+        conf.style.height = size * 1.4 + "px";
+        conf.style.borderRadius = "2px";
 
-    conf.style.left = x + "px";
-    conf.style.top = y + "px";
+        conf.style.left = x + "px";
+        conf.style.top = y + "px";
 
-    conf.style.background =
-      colors[Math.floor(Math.random() * colors.length)];
+        conf.style.background =
+            colors[Math.floor(Math.random() * colors.length)];
 
-    conf.style.pointerEvents = "none";
-    conf.style.opacity = "0.95";
-    conf.style.zIndex = "9999999";
+        conf.style.pointerEvents = "none";
+        conf.style.opacity = "0.95";
+        conf.style.zIndex = "9999999";
 
-    conf.style.transition =
-      `transform ${fallTime}s cubic-bezier(.18,.8,.22,1), opacity ${fallTime}s ease`;
+        conf.style.transition =
+            `transform ${fallTime}s cubic-bezier(.18,.8,.22,1), opacity ${fallTime}s ease`;
 
-    document.body.appendChild(conf);
+        document.body.appendChild(conf);
 
-    // force render
-    conf.getBoundingClientRect();
+        // force render
+        conf.getBoundingClientRect();
 
-    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
 
-      conf.style.transform =
-        `translate(${drift}px, ${window.innerHeight + 200}px) rotate(${rotate}deg)`;
+            conf.style.transform =
+                `translate(${drift}px, ${window.innerHeight + 200}px) rotate(${rotate}deg)`;
 
-      conf.style.opacity = "0.6";
-    });
+            conf.style.opacity = "0.6";
+        });
 
-    setTimeout(() => conf.remove(), fallTime * 1000 + 200);
+        setTimeout(() => conf.remove(), fallTime * 1000 + 200);
 
-  }, interval);
+    }, interval);
 }
 
 
 
 function playLoseAnimation() {
 
-  const game = document.getElementById("game");
+    const game = document.getElementById("game");
 
-  if (!game) return;
+    if (!game) return;
 
-  // ===== RAGE FLASH =====
-  const flash = document.createElement("div");
+    // ===== RAGE FLASH =====
+    const flash = document.createElement("div");
 
-  flash.style.position = "fixed";
-  flash.style.inset = "0";
-  flash.style.background = "rgba(255, 0, 0, 0.35)";
-  flash.style.zIndex = "99999999";
-  flash.style.pointerEvents = "none";
-  flash.style.opacity = "0";
-  flash.style.transition = "opacity .12s";
-
-  document.body.appendChild(flash);
-
-  requestAnimationFrame(() => {
-    flash.style.opacity = "1";
-  });
-
-  setTimeout(() => {
+    flash.style.position = "fixed";
+    flash.style.inset = "0";
+    flash.style.background = "rgba(255, 0, 0, 0.35)";
+    flash.style.zIndex = "99999999";
+    flash.style.pointerEvents = "none";
     flash.style.opacity = "0";
-  }, 120);
+    flash.style.transition = "opacity .12s";
 
-  setTimeout(() => flash.remove(), 260);
+    document.body.appendChild(flash);
 
-  // ===== BRUTAL SHAKE =====
-  game.classList.remove("shake-strong");
-  void game.offsetWidth;
-  game.classList.add("shake-strong");
+    requestAnimationFrame(() => {
+        flash.style.opacity = "1";
+    });
 
-  setTimeout(() => {
+    setTimeout(() => {
+        flash.style.opacity = "0";
+    }, 120);
+
+    setTimeout(() => flash.remove(), 260);
+
+    // ===== BRUTAL SHAKE =====
     game.classList.remove("shake-strong");
-  }, 500);
+    void game.offsetWidth;
+    game.classList.add("shake-strong");
 
-  // ===== THROW CARDS =====
-  const cards = document.querySelectorAll(
-    "#playerCards .card, #pcHand .pc-card"
-  );
+    setTimeout(() => {
+        game.classList.remove("shake-strong");
+    }, 500);
 
-  cards.forEach(card => {
+    // ===== THROW CARDS =====
+    const cards = document.querySelectorAll(
+        "#playerCards .card, #pcHand .pc-card"
+    );
 
-    const rx = (Math.random() - 0.5) * 600;
-    const ry = (Math.random() - 0.5) * 400;
-    const rot = (Math.random() - 0.5) * 720;
+    cards.forEach(card => {
 
-    card.style.transition =
-      "transform .6s cubic-bezier(.2,.8,.2,1), opacity .6s";
+        const rx = (Math.random() - 0.5) * 600;
+        const ry = (Math.random() - 0.5) * 400;
+        const rot = (Math.random() - 0.5) * 720;
 
-    card.style.transform =
-      `translate(${rx}px, ${ry}px) rotate(${rot}deg) scale(0.3)`;
+        card.style.transition =
+            "transform .6s cubic-bezier(.2,.8,.2,1), opacity .6s";
 
-    card.style.opacity = "0";
-  });
+        card.style.transform =
+            `translate(${rx}px, ${ry}px) rotate(${rot}deg) scale(0.3)`;
 
-  // ===== DARKEN SCREEN =====
-  const dark = document.createElement("div");
+        card.style.opacity = "0";
+    });
 
-  dark.id = "loseDarkOverlay";
-  dark.style.position = "fixed";
-  dark.style.inset = "0";
-  dark.style.background = "rgba(0,0,0,.6)";
-  dark.style.zIndex = "5000";
-  dark.style.pointerEvents = "none";
-  dark.style.opacity = "0";
-  dark.style.transition = "opacity .4s";
+    // ===== DARKEN SCREEN =====
+    const dark = document.createElement("div");
 
-  document.body.appendChild(dark);
+    dark.id = "loseDarkOverlay";
+    dark.style.position = "fixed";
+    dark.style.inset = "0";
+    dark.style.background = "rgba(0,0,0,.6)";
+    dark.style.zIndex = "5000";
+    dark.style.pointerEvents = "none";
+    dark.style.opacity = "0";
+    dark.style.transition = "opacity .4s";
 
-  requestAnimationFrame(() => {
-    dark.style.opacity = "1";
-  });
+    document.body.appendChild(dark);
+
+    requestAnimationFrame(() => {
+        dark.style.opacity = "1";
+    });
 
 }
 
 
 function animateDraw(toPlayer = true, delay = 0) {
 
-  const overlay = document.getElementById("tableOverlay");
-  const deckEl = document.getElementById("deck");
-  if (!overlay || !deckEl) return;
+    const overlay = document.getElementById("tableOverlay");
+    const deckEl = document.getElementById("deck");
+    if (!overlay || !deckEl) return;
 
-  const d = deckEl.getBoundingClientRect();
+    const d = deckEl.getBoundingClientRect();
 
-  setTimeout(() => {
+    setTimeout(() => {
 
-    playSound("draw.wav");
+        playSound("draw.wav");
 
-    const el = document.createElement("div");
+        const el = document.createElement("div");
 
-    el.style.position = "fixed";
-    el.style.width = "70px";
-    el.style.height = "100px";
-    el.style.background = 'url("/cards/back.png") center/cover';
-    el.style.borderRadius = "8px";
-    el.style.pointerEvents = "none";
-    el.style.zIndex = "9999";
+        el.style.position = "fixed";
+        el.style.width = "70px";
+        el.style.height = "100px";
+        el.style.background = 'url("/cards/back.png") center/cover';
+        el.style.borderRadius = "8px";
+        el.style.pointerEvents = "none";
+        el.style.zIndex = "9999";
 
-    el.style.willChange = "transform, opacity";
+        el.style.willChange = "transform, opacity";
 
-    const startX = d.left + d.width / 2;
-    const startY = d.top + d.height / 2;
+        const startX = d.left + d.width / 2;
+        const startY = d.top + d.height / 2;
 
-    const endY = toPlayer
-      ? window.innerHeight * 0.78
-      : window.innerHeight * 0.22;
+        const endY = toPlayer
+            ? window.innerHeight * 0.78
+            : window.innerHeight * 0.22;
 
-    el.style.transform =
-      `translate3d(${startX}px, ${startY}px, 0)`;
+        el.style.transform =
+            `translate3d(${startX}px, ${startY}px, 0)`;
 
-    el.style.transition =
-      "transform .38s cubic-bezier(.2,.8,.2,1), opacity .18s";
+        el.style.transition =
+            "transform .38s cubic-bezier(.2,.8,.2,1), opacity .18s";
 
-    overlay.appendChild(el);
+        overlay.appendChild(el);
 
-    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
 
-      el.style.transform =
-        `translate3d(${startX}px, ${endY}px, 0)`;
+            el.style.transform =
+                `translate3d(${startX}px, ${endY}px, 0)`;
 
-      el.style.opacity = "0";
-    });
+            el.style.opacity = "0";
+        });
 
-    setTimeout(() => el.remove(), 420);
+        setTimeout(() => el.remove(), 420);
 
-  }, delay);
+    }, delay);
 }
 
 
@@ -1899,109 +1899,109 @@ function animateDraw(toPlayer = true, delay = 0) {
 
 function showEndScreen(won) {
 
-  gameOver = true;
-  cinematicLose = false;
+    gameOver = true;
+    cinematicLose = false;
 
-  const screen = document.getElementById("endScreen");
-  const title = document.getElementById("endTitle");
-  const restartBtn = document.getElementById("restartBtn");
-  const menuBtn = document.getElementById("menuBtn");
-  const game = document.getElementById("game");
+    const screen = document.getElementById("endScreen");
+    const title = document.getElementById("endTitle");
+    const restartBtn = document.getElementById("restartBtn");
+    const menuBtn = document.getElementById("menuBtn");
+    const game = document.getElementById("game");
 
-  if (!screen || !title || !restartBtn || !menuBtn || !game) {
-    console.error("END SCREEN ELEMENT MISSING");
-    return;
-  }
+    if (!screen || !title || !restartBtn || !menuBtn || !game) {
+        console.error("END SCREEN ELEMENT MISSING");
+        return;
+    }
 
-  // ===== RESET =====
-  title.className = "";
-  restartBtn.className = "";
-  menuBtn.className = "";
-  game.classList.remove("lose-rage");
+    // ===== RESET =====
+    title.className = "";
+    restartBtn.className = "";
+    menuBtn.className = "";
+    game.classList.remove("lose-rage");
 
-  if (won) {
+    if (won) {
 
-    playSound("win.wav");
+        playSound("win.wav");
 
-    // ===== TEXT =====
-    title.textContent = "🏆 VYHRAL SI!";
-title.classList.add("win-pulse");
+        // ===== TEXT =====
+        title.textContent = "🏆 VYHRAL SI!";
+        title.classList.add("win-pulse");
 
 
-    // ===== GLOW =====
-    title.classList.add("win-glow");
+        // ===== GLOW =====
+        title.classList.add("win-glow");
 
-    // ===== BUTTON STYLE =====
-    restartBtn.classList.add("win");
-    menuBtn.classList.add("win");
+        // ===== BUTTON STYLE =====
+        restartBtn.classList.add("win");
+        menuBtn.classList.add("win");
 
-    // ===== CONFETTI =====
-    launchConfetti();
+        // ===== CONFETTI =====
+        launchConfetti();
 
-  } else {
+    } else {
 
-    // ===== TEXT =====
-    title.textContent = "💀 PREHRAL SI";
+        // ===== TEXT =====
+        title.textContent = "💀 PREHRAL SI";
 
-    // ===== RED GLOW =====
-    title.classList.add("lose-glow");
+        // ===== RED GLOW =====
+        title.classList.add("lose-glow");
 
-    // ===== BUTTON STYLE =====
-    restartBtn.classList.add("lose");
-    menuBtn.classList.add("lose");
+        // ===== BUTTON STYLE =====
+        restartBtn.classList.add("lose");
+        menuBtn.classList.add("lose");
 
-    // ===== RAGE SHAKE =====
-    void game.offsetWidth;
-    game.classList.add("lose-rage");
-    // ===== CARD EXPLOSION =====
-    explodeCards();
+        // ===== RAGE SHAKE =====
+        void game.offsetWidth;
+        game.classList.add("lose-rage");
+        // ===== CARD EXPLOSION =====
+        explodeCards();
 
-  }
-  // ===== SHOW SCREEN =====
-screen.style.display = "flex";
-screen.classList.add("active");
+    }
+    // ===== SHOW SCREEN =====
+    screen.style.display = "flex";
+    screen.classList.add("active");
 
 }
 
 function explodeCards() {
 
-  const cards = document.querySelectorAll(
-    "#playerCards .card, #pcHand .pc-card"
-  );
+    const cards = document.querySelectorAll(
+        "#playerCards .card, #pcHand .pc-card"
+    );
 
-  cards.forEach(card => {
+    cards.forEach(card => {
 
-    const rx = (Math.random() - 0.5) * 800;
-    const ry = (Math.random() - 0.5) * 600;
-    const rot = (Math.random() - 0.5) * 720;
+        const rx = (Math.random() - 0.5) * 800;
+        const ry = (Math.random() - 0.5) * 600;
+        const rot = (Math.random() - 0.5) * 720;
 
-    card.style.transition =
-      "transform .8s cubic-bezier(.2,.8,.2,1), opacity .8s ease";
+        card.style.transition =
+            "transform .8s cubic-bezier(.2,.8,.2,1), opacity .8s ease";
 
-    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
 
-      card.style.transform =
-        `translate(${rx}px, ${ry}px) rotate(${rot}deg) scale(0.6)`;
+            card.style.transform =
+                `translate(${rx}px, ${ry}px) rotate(${rot}deg) scale(0.6)`;
 
-      card.style.opacity = "0";
+            card.style.opacity = "0";
+        });
+
     });
-
-  });
 
 }
 
 
 function showEndScreenDelayed(won, delay = 1000) {
 
-  // necháme dobehnúť animácie poslednej karty
-  setTimeout(() => {
+    // necháme dobehnúť animácie poslednej karty
+    setTimeout(() => {
 
-    if (gameOver) return;
+        if (gameOver) return;
 
-    gameOver = true;
-    showEndScreen(won);
+        gameOver = true;
+        showEndScreen(won);
 
-  }, delay);
+    }, delay);
 
 }
 
@@ -2011,66 +2011,66 @@ let multiplayerTurnPlayer = null;
 
 function initMultiplayerGame(data) {
 
-  multiplayerMode = true;
+    multiplayerMode = true;
 
-  multiplayerHands = data.hands;
-  tableCard = data.tableCard;
-  multiplayerTurnPlayer = data.turnPlayer;
+    multiplayerHands = data.hands;
+    tableCard = data.tableCard;
+    multiplayerTurnPlayer = data.turnPlayer;
 
-  playerHand = multiplayerHands[socket.id];
+    playerHand = multiplayerHands[socket.id];
 
-  playerTurn = multiplayerTurnPlayer === socket.id;
+    playerTurn = multiplayerTurnPlayer === socket.id;
 
-  playerTurn = multiplayerTurnPlayer === socket.id;
-selected = [];
+    playerTurn = multiplayerTurnPlayer === socket.id;
+    selected = [];
 
 
-  updateUI();
+    updateUI();
 }
 
 /* ==================================================
    HELPERS
 ================================================== */
 
-function choosePcSuit(){
-  const c={"♥":0,"♦":0,"♣":0,"♠":0};
-  pcHand.forEach(k=>c[k.slice(-1)]++);
-  return Object.keys(c).sort((a,b)=>c[b]-c[a])[0];
+function choosePcSuit() {
+    const c = { "♥": 0, "♦": 0, "♣": 0, "♠": 0 };
+    pcHand.forEach(k => c[k.slice(-1)]++);
+    return Object.keys(c).sort((a, b) => c[b] - c[a])[0];
 }
 
-function hideWinOutline(){}
-function hideLoseEdge(){}
-function clearLoseButtonGlow(){}
+function hideWinOutline() { }
+function hideLoseEdge() { }
+function clearLoseButtonGlow() { }
 
 socket.on("roomJoined", data => {
 
-  console.log("ROOM JOINED RAW:", data);
+    console.log("ROOM JOINED RAW:", data);
 
-  // SAFE READ
-  const code = data.roomCode;
+    // SAFE READ
+    const code = data.roomCode;
 
-  currentRoomCode = code;
-  isHost = data.isHost;
+    currentRoomCode = code;
+    isHost = data.isHost;
 
-  // UI SHOW
-  const lobby = document.getElementById("multiplayerLobby");
-  const roomInfo = document.getElementById("roomInfo");
-  const codeLabel = document.getElementById("roomCodeLabel");
+    // UI SHOW
+    const lobby = document.getElementById("multiplayerLobby");
+    const roomInfo = document.getElementById("roomInfo");
+    const codeLabel = document.getElementById("roomCodeLabel");
 
-  if (lobby) lobby.style.display = "flex";
-  if (roomInfo) roomInfo.style.display = "block";
+    if (lobby) lobby.style.display = "flex";
+    if (roomInfo) roomInfo.style.display = "block";
 
-  if (codeLabel) {
-    codeLabel.textContent = code;
-  }
+    if (codeLabel) {
+        codeLabel.textContent = code;
+    }
 
-  updatePlayerList(data.players || []);
+    updatePlayerList(data.players || []);
 
-  // HOST BUTTON
-  const startBtn = document.getElementById("startGameBtn");
-  if (startBtn) {
-    startBtn.style.display = isHost ? "block" : "none";
-  }
+    // HOST BUTTON
+    const startBtn = document.getElementById("startGameBtn");
+    if (startBtn) {
+        startBtn.style.display = isHost ? "block" : "none";
+    }
 
 });
 
@@ -2078,345 +2078,345 @@ socket.on("roomJoined", data => {
 
 socket.on("roomUpdate", data => {
 
-  playerNames = {};
+    playerNames = {};
 
-  if (data.players) {
-    data.players.forEach(p => {
-      playerNames[p.id] = p.name;
-    });
-  }
+    if (data.players) {
+        data.players.forEach(p => {
+            playerNames[p.id] = p.name;
+        });
+    }
 
-  updatePlayerList(data.players, data.host);
+    updatePlayerList(data.players, data.host);
 
-  // === HOST CHECK ===
-  isHost = data.host === socket.id;
+    // === HOST CHECK ===
+    isHost = data.host === socket.id;
 
-  const startBtn = document.getElementById("startGameBtn");
-  if (startBtn) {
-    startBtn.style.display = isHost ? "block" : "none";
-  }
+    const startBtn = document.getElementById("startGameBtn");
+    if (startBtn) {
+        startBtn.style.display = isHost ? "block" : "none";
+    }
 
 });
 
 function updateMultiPlayerUI() {
 
-  if (!multiplayerMode) return;
+    if (!multiplayerMode) return;
 
-  const ids = Object.keys(multiplayerHands);
+    const ids = Object.keys(multiplayerHands);
 
-  const myIndex = ids.indexOf(socket.id);
+    const myIndex = ids.indexOf(socket.id);
 
-  // ostatní hráči v poradí
-  const others = ids.filter(id => id !== socket.id);
+    // ostatní hráči v poradí
+    const others = ids.filter(id => id !== socket.id);
 
-  // reference na sloty
-  const topSlot = document.querySelector(".multi-player.top");
-  const leftSlot = document.querySelector(".multi-player.left");
-  const rightSlot = document.querySelector(".multi-player.right");
+    // reference na sloty
+    const topSlot = document.querySelector(".multi-player.top");
+    const leftSlot = document.querySelector(".multi-player.left");
+    const rightSlot = document.querySelector(".multi-player.right");
 
-  // reset všetkých
-  if (topSlot) topSlot.style.display = "none";
-  if (leftSlot) leftSlot.style.display = "none";
-  if (rightSlot) rightSlot.style.display = "none";
+    // reset všetkých
+    if (topSlot) topSlot.style.display = "none";
+    if (leftSlot) leftSlot.style.display = "none";
+    if (rightSlot) rightSlot.style.display = "none";
 
-  // ===== 1 súper =====
-  if (others.length === 1) {
+    // ===== 1 súper =====
+    if (others.length === 1) {
 
-    setMultiSlot("Top", others[0]);
-    if (topSlot) topSlot.style.display = "flex";
+        setMultiSlot("Top", others[0]);
+        if (topSlot) topSlot.style.display = "flex";
 
-  }
+    }
 
-  // ===== 2 súperi =====
-  else if (others.length === 2) {
+    // ===== 2 súperi =====
+    else if (others.length === 2) {
 
-    setMultiSlot("Top", others[0]);
-    setMultiSlot("Left", others[1]);
+        setMultiSlot("Top", others[0]);
+        setMultiSlot("Left", others[1]);
 
-    if (topSlot) topSlot.style.display = "flex";
-    if (leftSlot) leftSlot.style.display = "flex";
+        if (topSlot) topSlot.style.display = "flex";
+        if (leftSlot) leftSlot.style.display = "flex";
 
-  }
+    }
 
-  // ===== 3 súperi =====
-  else if (others.length === 3) {
+    // ===== 3 súperi =====
+    else if (others.length === 3) {
 
-    setMultiSlot("Top", others[0]);
-    setMultiSlot("Left", others[1]);
-    setMultiSlot("Right", others[2]);
+        setMultiSlot("Top", others[0]);
+        setMultiSlot("Left", others[1]);
+        setMultiSlot("Right", others[2]);
 
-    if (topSlot) topSlot.style.display = "flex";
-    if (leftSlot) leftSlot.style.display = "flex";
-    if (rightSlot) rightSlot.style.display = "flex";
-  }
+        if (topSlot) topSlot.style.display = "flex";
+        if (leftSlot) leftSlot.style.display = "flex";
+        if (rightSlot) rightSlot.style.display = "flex";
+    }
 
 }
 
 
 function setMultiSlot(pos, id) {
 
-  const nameEl = document.getElementById("player"+pos+"Name");
-  const cardsEl = document.getElementById("player"+pos+"Cards");
+    const nameEl = document.getElementById("player" + pos + "Name");
+    const cardsEl = document.getElementById("player" + pos + "Cards");
 
-  if (!id || !multiplayerHands[id]) {
-    if (nameEl) nameEl.textContent = "";
-    if (cardsEl) cardsEl.innerHTML = "";
-    return;
-  }
+    if (!id || !multiplayerHands[id]) {
+        if (nameEl) nameEl.textContent = "";
+        if (cardsEl) cardsEl.innerHTML = "";
+        return;
+    }
 
-  nameEl.textContent = playerNames[id] || "Hráč";
+    nameEl.textContent = playerNames[id] || "Hráč";
 
-  cardsEl.innerHTML = "";
+    cardsEl.innerHTML = "";
 
-  multiplayerHands[id].forEach(() => {
+    multiplayerHands[id].forEach(() => {
 
-    const back = document.createElement("div");
-    back.className = "pc-card";
-    cardsEl.appendChild(back);
+        const back = document.createElement("div");
+        back.className = "pc-card";
+        cardsEl.appendChild(back);
 
-  });
+    });
 }
 
 
 
 socket.on("gameStarted", data => {
 
-  // ===== FORCE MULTIPLAYER BODY MODE =====
-document.body.classList.remove("single-mode", "multi-mode");
-document.body.classList.add("multi-mode");
+    // ===== FORCE MULTIPLAYER BODY MODE =====
+    document.body.classList.remove("single-mode", "multi-mode");
+    document.body.classList.add("multi-mode");
 
 
-  console.log("GAME STARTED", data);
+    console.log("GAME STARTED", data);
 
-  // ===== MULTIPLAYER MODE =====
-  multiplayerMode = true;
-  multiplayerInitialized = false;
+    // ===== MULTIPLAYER MODE =====
+    multiplayerMode = true;
+    multiplayerInitialized = false;
 
-  // ===== ENABLE MULTIPLAYER LAYOUT =====
-  const game = document.getElementById("game");
-  game.classList.add("multiplayer");
+    // ===== ENABLE MULTIPLAYER LAYOUT =====
+    const game = document.getElementById("game");
+    game.classList.add("multiplayer");
 
-  // ===== UI VISIBILITY =====
+    // ===== UI VISIBILITY =====
 
-  // show multiplayer players
-  document.getElementById("multiGameUI").style.display = "block";
+    // show multiplayer players
+    document.getElementById("multiGameUI").style.display = "block";
 
-  // KEEP singleGameUI (contains table + your hand)
-  document.getElementById("singleGameUI").style.display = "block";
+    // KEEP singleGameUI (contains table + your hand)
+    document.getElementById("singleGameUI").style.display = "block";
 
-  // hide PC only
-  const pcArea = document.getElementById("pcArea");
-  if (pcArea) pcArea.style.display = "none";
+    // hide PC only
+    const pcArea = document.getElementById("pcArea");
+    if (pcArea) pcArea.style.display = "none";
 
-  // hide lobby
-  document.getElementById("multiplayerLobby").style.display = "none";
+    // hide lobby
+    document.getElementById("multiplayerLobby").style.display = "none";
 
-  // show game
-  game.style.display = "block";
+    // show game
+    game.style.display = "block";
 
-  // ===== INIT SERVER STATE =====
+    // ===== INIT SERVER STATE =====
 
-  multiplayerHands = data.hands;
-  tableCard = data.tableCard;
+    multiplayerHands = data.hands;
+    tableCard = data.tableCard;
 
-  forcedSuit = data.forcedSuit ?? null;
-  pendingDraw = data.pendingDraw ?? 0;
-  skipCount = data.skipCount ?? 0;
+    forcedSuit = data.forcedSuit ?? null;
+    pendingDraw = data.pendingDraw ?? 0;
+    skipCount = data.skipCount ?? 0;
 
-  multiplayerTurnPlayer = data.order[data.turnIndex];
+    multiplayerTurnPlayer = data.order[data.turnIndex];
 
-  playerHand = multiplayerHands[socket.id] || [];
-  playerTurn = multiplayerTurnPlayer === socket.id;
+    playerHand = multiplayerHands[socket.id] || [];
+    playerTurn = multiplayerTurnPlayer === socket.id;
 
-  selected = [];
-  waitingForSuit = false;
-  waitingForAceDecision = false;
+    selected = [];
+    waitingForSuit = false;
+    waitingForAceDecision = false;
 
-  gameOver = false;
+    gameOver = false;
 
-  // ===== FIRST RENDER =====
-  updateMultiPlayerUI();
-  updateUI();
+    // ===== FIRST RENDER =====
+    updateMultiPlayerUI();
+    updateUI();
 
 });
 
 
 
 
-  let lastServerState = null;
+let lastServerState = null;
 
 socket.on("gameUpdate", data => {
 
-  multiplayerTurnPlayer = getPlayerPosition(data.turnPlayer);
+    multiplayerTurnPlayer = getPlayerPosition(data.turnPlayer);
 
-  console.log("GAME UPDATE:", data);
+    console.log("GAME UPDATE:", data);
 
-  const firstSync = !multiplayerInitialized;
+    const firstSync = !multiplayerInitialized;
 
-  if (!multiplayerInitialized) {
-    multiplayerInitialized = true;
-  }
+    if (!multiplayerInitialized) {
+        multiplayerInitialized = true;
+    }
 
-  /* =========================
-     SAVE OLD STATE
-  ========================= */
+    /* =========================
+       SAVE OLD STATE
+    ========================= */
 
-  const prevHands = JSON.parse(JSON.stringify(multiplayerHands || {}));
-  const prevTable = tableCard;
-  const prevTurn = multiplayerTurnPlayer;
+    const prevHands = JSON.parse(JSON.stringify(multiplayerHands || {}));
+    const prevTable = tableCard;
+    const prevTurn = multiplayerTurnPlayer;
 
-  /* =========================
-     APPLY SERVER STATE
-  ========================= */
+    /* =========================
+       APPLY SERVER STATE
+    ========================= */
 
-  multiplayerHands = data.hands || {};
-  tableCard = data.tableCard || null;
+    multiplayerHands = data.hands || {};
+    tableCard = data.tableCard || null;
 
-  forcedSuit = data.forcedSuit ?? null;
-  pendingDraw = data.pendingDraw ?? 0;
-  skipCount = data.skipCount ?? 0;
+    forcedSuit = data.forcedSuit ?? null;
+    pendingDraw = data.pendingDraw ?? 0;
+    skipCount = data.skipCount ?? 0;
 
-  multiplayerTurnPlayer = data.turnPlayer || null;
+    multiplayerTurnPlayer = data.turnPlayer || null;
 
-  playerHand = multiplayerHands[socket.id] || [];
-  playerTurn = multiplayerTurnPlayer === socket.id;
-  updateMultiPlayerUI();
-
-
-  /* =========================
-     PLAY CARD ANIMATION
-  ========================= */
-
-  if (
-    !firstSync &&
-    tableCard &&
-    tableCard !== prevTable
-  ) {
-
-    const fromMe = prevTurn === socket.id;
-
-    animatePlay(tableCard, fromMe);
-    playSound("card");
-  }
-
-  if (
-    !firstSync &&
-    prevHands[socket.id] &&
-    multiplayerHands[socket.id] &&
-    multiplayerHands[socket.id].length > prevHands[socket.id].length
-  ) {
-
-    animateDraw(true);
-    playSound("draw");
-  }
-
-  selected = [];
-  waitingForSuit = false;
-  waitingForAceDecision = false;
-
-  if (data.aceDecision === true && playerTurn) {
-    waitingForAceDecision = true;
-  }
-
-  const chooser = document.getElementById("suitChooser");
-
-  if (data.queenDecision === true && playerTurn) {
-
-    waitingForSuit = true;
-    if (chooser) chooser.style.display = "flex";
-
-  } else {
-
-    if (chooser) chooser.style.display = "none";
-  }
-
-  updateUI();
+    playerHand = multiplayerHands[socket.id] || [];
+    playerTurn = multiplayerTurnPlayer === socket.id;
+    updateMultiPlayerUI();
 
 
-  if (data.effects?.burn) {
-    showBurnAnimation();
-    playSound("fire");
-  }
+    /* =========================
+       PLAY CARD ANIMATION
+    ========================= */
 
-  if (data.effects?.seven) {
-    showPenalty(data.effects.penaltyValue);
-    playSound("hit");
-  }
+    if (
+        !firstSync &&
+        tableCard &&
+        tableCard !== prevTable
+    ) {
 
-  if (data.effects?.greenJack) {
-    showGreenFlash();
-    greenWave();
-    playSound("fire");
-  }
+        const fromMe = prevTurn === socket.id;
+
+        animatePlay(tableCard, fromMe);
+        playSound("card");
+    }
+
+    if (
+        !firstSync &&
+        prevHands[socket.id] &&
+        multiplayerHands[socket.id] &&
+        multiplayerHands[socket.id].length > prevHands[socket.id].length
+    ) {
+
+        animateDraw(true);
+        playSound("draw");
+    }
+
+    selected = [];
+    waitingForSuit = false;
+    waitingForAceDecision = false;
+
+    if (data.aceDecision === true && playerTurn) {
+        waitingForAceDecision = true;
+    }
+
+    const chooser = document.getElementById("suitChooser");
+
+    if (data.queenDecision === true && playerTurn) {
+
+        waitingForSuit = true;
+        if (chooser) chooser.style.display = "flex";
+
+    } else {
+
+        if (chooser) chooser.style.display = "none";
+    }
+
+    updateUI();
+
+
+    if (data.effects?.burn) {
+        showBurnAnimation();
+        playSound("fire");
+    }
+
+    if (data.effects?.seven) {
+        showPenalty(data.effects.penaltyValue);
+        playSound("hit");
+    }
+
+    if (data.effects?.greenJack) {
+        showGreenFlash();
+        greenWave();
+        playSound("fire");
+    }
 
 });
 
 
 
-  socket.on("errorMessage", msg => {
-  alert(msg);
-  });
+socket.on("errorMessage", msg => {
+    alert(msg);
+});
 
-  socket.on("kicked", () => {
+socket.on("kicked", () => {
 
-  alert("Bol si vyhodený z miestnosti");
+    alert("Bol si vyhodený z miestnosti");
 
-  currentRoomCode = null;
+    currentRoomCode = null;
 
-  document.getElementById("multiplayerLobby").style.display = "none";
-  document.getElementById("menuScreen").style.display = "flex";
-  });
+    document.getElementById("multiplayerLobby").style.display = "none";
+    document.getElementById("menuScreen").style.display = "flex";
+});
 
-  function updatePlayerList(players = [], hostId) {
+function updatePlayerList(players = [], hostId) {
 
-  if (!Array.isArray(players)) return;
+    if (!Array.isArray(players)) return;
 
-  const list = document.getElementById("playerList");
-  if (!list) return;
+    const list = document.getElementById("playerList");
+    if (!list) return;
 
-  list.innerHTML = "";
+    list.innerHTML = "";
 
-  players.forEach(p => {
+    players.forEach(p => {
 
-    const row = document.createElement("div");
-    row.className = "player-row";
+        const row = document.createElement("div");
+        row.className = "player-row";
 
-    let name = p.name;
+        let name = p.name;
 
-    if (p.id === socket.id) {
-      name += " (TY)";
-    }
+        if (p.id === socket.id) {
+            name += " (TY)";
+        }
 
-    if (p.id === hostId) {
-      row.classList.add("player-host");
-      name = "👑 " + name;
-    }
+        if (p.id === hostId) {
+            row.classList.add("player-host");
+            name = "👑 " + name;
+        }
 
-    row.innerHTML = `
+        row.innerHTML = `
       <span>${name}</span>
       <span>${p.ready ? "✅" : "⏳"}</span>
     `;
 
-    if (isHost && p.id !== socket.id) {
+        if (isHost && p.id !== socket.id) {
 
-      const kickBtn = document.createElement("button");
-      kickBtn.textContent = "❌";
-      kickBtn.style.background = "none";
-      kickBtn.style.border = "none";
-      kickBtn.style.cursor = "pointer";
+            const kickBtn = document.createElement("button");
+            kickBtn.textContent = "❌";
+            kickBtn.style.background = "none";
+            kickBtn.style.border = "none";
+            kickBtn.style.cursor = "pointer";
 
-      kickBtn.onclick = () => {
-        socket.emit("kickPlayer", {
-          code: currentRoomCode,
-          playerId: p.id
-        });
-      };
+            kickBtn.onclick = () => {
+                socket.emit("kickPlayer", {
+                    code: currentRoomCode,
+                    playerId: p.id
+                });
+            };
 
-      row.appendChild(kickBtn);
-    }
+            row.appendChild(kickBtn);
+        }
 
-    list.appendChild(row);
-  });
+        list.appendChild(row);
+    });
 }
 
 
@@ -2428,216 +2428,213 @@ socket.on("gameUpdate", data => {
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  // =============================
-  // LOAD GAME SOUNDS
-  // =============================
+    // =============================
+    // LOAD GAME SOUNDS
+    // =============================
 
-  loadSound("boom.wav", 0.9);
-  loadSound("card.wav", 0.7);
-  loadSound("click.wav", 0.5);
-  loadSound("draw.wav", 0.6);
-  loadSound("fire.wav", 0.9);
-  loadSound("hit.wav", 0.8);
-  loadSound("lose.wav", 0.8);
-  loadSound("win.wav", 0.8);
+    loadSound("boom.wav", 0.9);
+    loadSound("card.wav", 0.7);
+    loadSound("click.wav", 0.5);
+    loadSound("draw.wav", 0.6);
+    loadSound("fire.wav", 0.9);
+    loadSound("hit.wav", 0.8);
+    loadSound("lose.wav", 0.8);
+    loadSound("win.wav", 0.8);
 
-  // =============================
-  // UI ELEMENTS
-  // =============================
+    // =============================
+    // UI ELEMENTS
+    // =============================
 
-  const singleBtn = document.getElementById("singlePlayerBtn");
-  
-  singleBtn.onclick = () => {
+    const singleBtn = document.getElementById("singlePlayerBtn");
 
-  const game = document.getElementById("game");
+    singleBtn.onclick = () => {
 
-  // ===== RESET MULTIPLAYER STATE =====
-  game.classList.remove("multiplayer");
+        const game = document.getElementById("game");
 
-  multiplayerMode = false;
-  multiplayerInitialized = false;
+        // ===== RESET MULTIPLAYER STATE =====
+        game.classList.remove("multiplayer");
 
-  // ===== SKRY MENU =====
-  document.getElementById("menuScreen").style.display = "none";
+        multiplayerMode = false;
+        multiplayerInitialized = false;
 
-  // ===== ZOBRAZ HRU =====
-  document.getElementById("game").style.display = "block";
+        // ===== SKRY MENU =====
+        document.getElementById("menuScreen").style.display = "none";
 
-  // ===== ZAPNI SINGLE UI =====
-  document.getElementById("singleGameUI").style.display = "block";
-  document.getElementById("multiGameUI").style.display = "none";
+        // ===== ZOBRAZ HRU =====
+        document.getElementById("game").style.display = "block";
 
-  // ===== START SINGLEPLAYER =====
-  startGame(); // alebo tvoja singleplayer init funkcia
-};
+        // ===== ZAPNI SINGLE UI =====
+        document.getElementById("singleGameUI").style.display = "block";
+        document.getElementById("multiGameUI").style.display = "none";
 
-  const multiplayerBtn = document.getElementById("multiplayerBtn");
-  if (multiplayerBtn) {
-  multiplayerBtn.onclick = () => {
+        // ===== START SINGLEPLAYER =====
+        startGame(); // alebo tvoja singleplayer init funkcia
+    };
 
-    document.getElementById("menuScreen").style.display = "none";
-    document.getElementById("multiplayerLobby").style.display = "flex";
+    const multiplayerBtn = document.getElementById("multiplayerBtn");
+    if (multiplayerBtn) {
+        multiplayerBtn.onclick = () => {
 
-  };
-}
+            document.getElementById("menuScreen").style.display = "none";
+            document.getElementById("multiplayerLobby").style.display = "flex";
 
-const backLobbyBtn = document.getElementById("backFromLobbyBtn");
-
-if (backLobbyBtn) {
-  backLobbyBtn.onclick = () => {
-
-    document.getElementById("multiplayerLobby").style.display = "none";
-    document.getElementById("menuScreen").style.display = "flex";
-
-  };
-}
-
-
-  const multiBtn = document.querySelector(".menu-btn.disabled") || document.getElementById("multiBtn");
-
-  const playBtn = document.getElementById("playSelectedBtn");
-  const deckBtn = document.getElementById("deck");
-  const restartBtn = document.getElementById("restartBtn");
-  const menuBtn = document.getElementById("menuBtn");
-  const acePlayBtn = document.getElementById("playAceBtn");
-  const aceStandBtn = document.getElementById("standAceBtn");
-
-  const createRoomBtn = document.getElementById("createRoomBtn");
-  if (createRoomBtn) {
-  createRoomBtn.onclick = () => {
-
-    currentRoomCode = null;
-
-  console.log("CREATE ROOM CLICK");
-
-  const name = document.getElementById("playerNameInput").value.trim();
-
-  if (!name) {
-    alert("Zadaj meno");
-    return;
-  }
-
-  console.log("SENDING createRoom", name);
-
-  socket.emit("createRoom", name);
-};
-
-  }
-
-  const joinRoomBtn = document.getElementById("joinRoomBtn");
-
-if (joinRoomBtn) {
-  joinRoomBtn.onclick = () => {
-
-    const name = document.getElementById("playerNameInput").value.trim();
-    const code = document.getElementById("roomCodeInput").value.trim().toUpperCase();
-
-    if (!name || !code) {
-      alert("Zadaj meno a kód miestnosti");
-      return;
+        };
     }
 
-    socket.emit("joinRoom", { name, code });
-  };
-}
+    const backLobbyBtn = document.getElementById("backFromLobbyBtn");
 
-const readyBtn = document.getElementById("readyBtn");
+    if (backLobbyBtn) {
+        backLobbyBtn.onclick = () => {
 
-if (readyBtn) {
-  readyBtn.onclick = () => {
+            document.getElementById("multiplayerLobby").style.display = "none";
+            document.getElementById("menuScreen").style.display = "flex";
 
-    console.log("READY CLICKED");
-
-    if (!currentRoomCode) {
-      console.warn("ROOM CODE IS NULL");
-      return;
+        };
     }
 
-    socket.emit("playerReady", {
-      room: currentRoomCode
-    });
-  };
-}
 
-const startGameBtn = document.getElementById("startGameBtn");
+    const multiBtn = document.querySelector(".menu-btn.disabled") || document.getElementById("multiBtn");
 
-if (startGameBtn) {
-  startGameBtn.onclick = () => {
-    console.log("START GAME CLICK", currentRoomCode);
-    if (!currentRoomCode) return;
+    const playBtn = document.getElementById("playSelectedBtn");
+    const deckBtn = document.getElementById("deck");
+    const restartBtn = document.getElementById("restartBtn");
+    const menuBtn = document.getElementById("menuBtn");
+    const acePlayBtn = document.getElementById("playAceBtn");
+    const aceStandBtn = document.getElementById("standAceBtn");
 
-    socket.emit("startGame", currentRoomCode);
-  };
-}
+    const createRoomBtn = document.getElementById("createRoomBtn");
+    if (createRoomBtn) {
+        createRoomBtn.onclick = () => {
+
+            currentRoomCode = null;
+
+            console.log("CREATE ROOM CLICK");
+
+            const name = document.getElementById("playerNameInput").value.trim();
+
+            if (!name) {
+                alert("Zadaj meno");
+                return;
+            }
+
+            console.log("SENDING createRoom", name);
+
+            socket.emit("createRoom", name);
+        };
+
+    }
+
+    const joinRoomBtn = document.getElementById("joinRoomBtn");
+
+    if (joinRoomBtn) {
+        joinRoomBtn.onclick = () => {
+
+            const name = document.getElementById("playerNameInput").value.trim();
+            const code = document.getElementById("roomCodeInput").value.trim().toUpperCase();
+
+            if (!name || !code) {
+                alert("Zadaj meno a kód miestnosti");
+                return;
+            }
+
+            socket.emit("joinRoom", { name, code });
+        };
+    }
+
+    const readyBtn = document.getElementById("readyBtn");
+
+    if (readyBtn) {
+        readyBtn.onclick = () => {
+
+            console.log("READY CLICKED");
+
+            if (!currentRoomCode) {
+                console.warn("ROOM CODE IS NULL");
+                return;
+            }
+
+            socket.emit("playerReady", {
+                room: currentRoomCode
+            });
+        };
+    }
+
+    const startGameBtn = document.getElementById("startGameBtn");
+
+    if (startGameBtn) {
+        startGameBtn.onclick = () => {
+            console.log("START GAME CLICK", currentRoomCode);
+            if (!currentRoomCode) return;
+
+            socket.emit("startGame", currentRoomCode);
+        };
+    }
 
 
 
-  // =============================
-  // BUTTON EVENTS WITH SOUND
-  // =============================
+    // =============================
+    // BUTTON EVENTS WITH SOUND
+    // =============================
 
-  if (singleBtn) {
-  singleBtn.onclick = () => {
+    if (singleBtn) {
+        singleBtn.onclick = () => {
 
-    playSound("click.wav");
+            playSound("click.wav");
 
-    // ✅ SWITCH TO SINGLE MODE
-    multiplayerMode = false;
+            // ✅ SWITCH TO SINGLE MODE
+            multiplayerMode = false;
 
-    document.getElementById("singleGameUI").style.display = "block";
-    document.getElementById("multiGameUI").style.display = "none";
+            document.getElementById("singleGameUI").style.display = "block";
+            document.getElementById("multiGameUI").style.display = "none";
 
-    document.getElementById("menuScreen").style.display = "none";
-    document.getElementById("game").style.display = "block";
+            document.getElementById("menuScreen").style.display = "none";
+            document.getElementById("game").style.display = "block";
 
-    startGame();
-  };
-}
+            startGame();
+        };
+    }
 
 
-  if (playBtn) {
-    playBtn.onclick = () => {
-      playSelected();
-    };
-  }
+    if (playBtn) {
+        playBtn.onclick = () => {
+            playSelected();
+        };
+    }
 
-  if (deckBtn) {
-    deckBtn.onclick = (e) => {
-      e.stopPropagation();
-      playSound("draw.wav");
-      drawCard();
-    };
-  }
+    if (deckBtn) {
+        deckBtn.onclick = (e) => {
+            e.stopPropagation();
+            playSound("draw.wav");
+            drawCard();
+        };
+    }
 
-  if (restartBtn) {
-    restartBtn.onclick = () => {
-      playSound("click.wav");
-      restartGame();
-    };
-  }
+    if (restartBtn) {
+        restartBtn.onclick = () => {
+            playSound("click.wav");
+            restartGame();
+        };
+    }
 
-  if (menuBtn) {
-    menuBtn.onclick = () => {
-      playSound("click.wav");
-      backToMenu();
-    };
-  }
+    if (menuBtn) {
+        menuBtn.onclick = () => {
+            playSound("click.wav");
+            backToMenu();
+        };
+    }
 
-  if (acePlayBtn) {
-    acePlayBtn.onclick = () => {
-      playSound("click.wav");
-      playAce();
-    };
-  }
+    if (acePlayBtn) {
+        acePlayBtn.onclick = () => {
+            playSound("click.wav");
+            playAce();
+        };
+    }
 
-  if (aceStandBtn) {
-    aceStandBtn.onclick = () => {
-      playSound("click.wav");
-      standAce();
-    };
-  }
+    if (aceStandBtn) {
+        aceStandBtn.onclick = () => {
+            playSound("click.wav");
+            standAce();
+        };
+    }
 
 });
-
-
-
