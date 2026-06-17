@@ -2247,6 +2247,11 @@ let lastServerState = null;
 
 socket.on("gameUpdate", data => {
 
+    console.log("ACE DEBUG");
+    console.log("socket.id =", socket.id);
+    console.log("turnPlayer =", data.turnPlayer);
+    console.log("aceDecision =", data.aceDecision);
+
     multiplayerTurnPlayer = getPlayerPosition(data.turnPlayer);
 
     console.log("GAME UPDATE:", data);
