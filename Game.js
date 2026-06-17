@@ -457,8 +457,6 @@ function playSelected() {
 
 socket.on("gameOver", data => {
 
-    multiplayerMode = false;
-
     const won = data.winner === socket.id;
 
     showEndScreen(won);
@@ -1378,6 +1376,14 @@ function adjustHandLayout() {
 
 function restartGame() {
 
+    if (multiplayerMode) {
+
+        socket.emit("rematch", currentRoomCode);
+
+        alert("Čaká sa na ostatných hráčov...");
+        return;
+    }
+
     const end = document.getElementById("endScreen");
 
     if (end) {
@@ -2180,6 +2186,15 @@ function setMultiSlot(pos, id) {
 
 
 socket.on("gameStarted", data => {
+
+    const end = document.getElementById("endScreen");
+
+    if (end) {
+        end.style.display = "none";
+        end.classList.remove("active");
+    }
+
+    gameOver = false;
 
     // ===== FORCE MULTIPLAYER BODY MODE =====
     document.body.classList.remove("single-mode", "multi-mode");
