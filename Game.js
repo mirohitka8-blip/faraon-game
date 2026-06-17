@@ -7,16 +7,10 @@ console.log("Game.js loaded");
 //multiplayer
 const socket = io("https://faraon-server.onrender.com");
 
-socket.on("connect", () => {
-    console.log("CONNECTED TO FARAON MULTIPLAYER SERVER");
-});
-
-
-
 const sounds = {};
 
 function loadSound(name, volume = 1) {
-    const audio = new Audio(`/sounds/${name}`);
+    const audio = new Audio(`sounds/${name}`);
     audio.volume = volume;
     audio.preload = "auto";
     sounds[name] = audio;
@@ -244,16 +238,6 @@ socket.on("connect", () => {
 
 socket.on("disconnect", () => {
     console.log("SOCKET DISCONNECTED");
-});
-
-
-socket.on("roomJoined", data => {
-
-    console.log("ROOM JOINED DATA:", data);
-
-    currentRoomCode = data.roomCode;  // toto musí existovať
-    isHost = data.isHost;
-
 });
 
 /* ==================================================
@@ -2189,12 +2173,12 @@ socket.on("gameStarted", data => {
 
     const end = document.getElementById("endScreen");
 
-    if (end) {
-        end.style.display = "none";
-        end.classList.remove("active");
-    }
+if (end) {
+    end.style.display = "none";
+    end.classList.remove("active");
+}
 
-    gameOver = false;
+gameOver = false;
 
     // ===== FORCE MULTIPLAYER BODY MODE =====
     document.body.classList.remove("single-mode", "multi-mode");
@@ -2316,7 +2300,7 @@ socket.on("gameUpdate", data => {
         const fromMe = prevTurn === socket.id;
 
         animatePlay(tableCard, fromMe);
-        playSound("card");
+        playSound("card.wav");
     }
 
     if (
@@ -2327,7 +2311,7 @@ socket.on("gameUpdate", data => {
     ) {
 
         animateDraw(true);
-        playSound("draw");
+        playSound("draw.wav");
     }
 
     selected = [];
@@ -2355,18 +2339,18 @@ socket.on("gameUpdate", data => {
 
     if (data.effects?.burn) {
         showBurnAnimation();
-        playSound("fire");
+        playSound("fire.wav");
     }
 
     if (data.effects?.seven) {
         showPenalty(data.effects.penaltyValue);
-        playSound("hit");
+        playSound("hit.wav");
     }
 
     if (data.effects?.greenJack) {
         showGreenFlash();
         greenWave();
-        playSound("fire");
+        playSound("fire.wav");
     }
 
 });
