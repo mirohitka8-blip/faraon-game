@@ -1364,7 +1364,11 @@ function restartGame() {
 
         socket.emit("rematch", currentRoomCode);
 
-        alert("Čaká sa na ostatných hráčov...");
+        const overlay =
+            document.getElementById("rematchOverlay");
+
+        if (overlay)
+            overlay.style.display = "flex";
         return;
     }
 
@@ -2171,6 +2175,13 @@ function setMultiSlot(pos, id) {
 
 socket.on("gameStarted", data => {
 
+
+    const overlay =
+        document.getElementById("rematchOverlay");
+
+    if (overlay)
+        overlay.style.display = "none";
+
     const end = document.getElementById("endScreen");
 
 if (end) {
@@ -2422,6 +2433,22 @@ function updatePlayerList(players = [], hostId) {
         list.appendChild(row);
     });
 }
+
+socket.on("rematchUpdate", data => {
+
+    const overlay =
+        document.getElementById("rematchOverlay");
+
+    const counter =
+        document.getElementById("rematchCounter");
+
+    if (overlay)
+        overlay.style.display = "flex";
+
+    if (counter)
+        counter.textContent =
+            `${data.ready}/${data.total}`;
+});
 
 
 
